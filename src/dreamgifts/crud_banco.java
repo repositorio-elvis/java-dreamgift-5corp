@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Vector;
 import javax.swing.JFrame;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -31,6 +32,10 @@ public class crud_banco extends javax.swing.JFrame {
         lista1=new Vector<String>();
         lista2=new Vector<String>();
         cargarLista1();
+        SpinnerNumberModel nm = new SpinnerNumberModel();
+        nm.setMaximum(1000);
+        nm.setMinimum(0);
+        addunits_spinner.setModel(nm);
     }
     
     private void cargarLista1(){
@@ -66,8 +71,8 @@ public class crud_banco extends javax.swing.JFrame {
         pesta_admin = new javax.swing.JTabbedPane();
         tab_clientes = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        jLabel12 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        clientname = new javax.swing.JLabel();
+        clientname_field = new javax.swing.JTextField();
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
@@ -265,7 +270,7 @@ public class crud_banco extends javax.swing.JFrame {
         );
         tab_ventasLayout.setVerticalGroup(
             tab_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 862, Short.MAX_VALUE)
+            .addGap(0, 915, Short.MAX_VALUE)
         );
 
         Panel_tab_menu.addTab("Ventas", tab_ventas);
@@ -280,7 +285,7 @@ public class crud_banco extends javax.swing.JFrame {
         );
         tab_comprasLayout.setVerticalGroup(
             tab_comprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 862, Short.MAX_VALUE)
+            .addGap(0, 915, Short.MAX_VALUE)
         );
 
         Panel_tab_menu.addTab("Compras", tab_compras);
@@ -295,7 +300,7 @@ public class crud_banco extends javax.swing.JFrame {
         );
         tab_proveedoresLayout.setVerticalGroup(
             tab_proveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 862, Short.MAX_VALUE)
+            .addGap(0, 915, Short.MAX_VALUE)
         );
 
         Panel_tab_menu.addTab("Proveedores", tab_proveedores);
@@ -315,14 +320,14 @@ public class crud_banco extends javax.swing.JFrame {
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel12.setText("Nombre cliente: ");
+        clientname.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        clientname.setText("Nombre cliente: ");
 
-        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField4.setText("Francisco Javier Tapiado Pérez");
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        clientname_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        clientname_field.setText("Francisco Javier Tapiado Pérez");
+        clientname_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                clientname_fieldActionPerformed(evt);
             }
         });
 
@@ -368,14 +373,14 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
+                            .addComponent(clientname)
                             .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField9, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField8, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
+                            .addComponent(clientname_field, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
                         .addGap(107, 107, 107)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel19)
@@ -397,8 +402,8 @@ public class crud_banco extends javax.swing.JFrame {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clientname)
+                    .addComponent(clientname_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18)
                     .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -517,7 +522,7 @@ public class crud_banco extends javax.swing.JFrame {
         tab_clientesLayout.setVerticalGroup(
             tab_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_clientesLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(30, 30, 30)
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(tab_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -1051,7 +1056,13 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         frompack_button.setText("<");
+        frompack_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                frompack_buttonActionPerformed(evt);
+            }
+        });
 
+        pricepack_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         pricepack_field.setText("54.000");
 
         javax.swing.GroupLayout packs_panelLayout = new javax.swing.GroupLayout(packs_panel);
@@ -2338,9 +2349,9 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void clientname_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientname_fieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_clientname_fieldActionPerformed
 
     private void jFormattedTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField3ActionPerformed
         // TODO add your handling code here:
@@ -2481,9 +2492,21 @@ public class crud_banco extends javax.swing.JFrame {
     private void topack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_topack_buttonActionPerformed
         int i=packeditor_list.getSelectedIndex();
         packedited_list.removeAll();
-        lista2.add(lista1.get(i));
+        lista2.add(lista1.get(i)+ "("+ addunits_spinner.getValue().toString()+")");
+        lista1.remove(i);
         packedited_list.setListData(lista2);
     }//GEN-LAST:event_topack_buttonActionPerformed
+
+    private void frompack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frompack_buttonActionPerformed
+        int i=packedited_list.getSelectedIndex();
+        packeditor_list.removeAll();
+        int x = lista2.get(i).indexOf("(");
+        int y = lista2.get(i).indexOf(")");
+        String temp = lista2.get(i).substring(0, x);
+        lista1.add(temp);
+        lista2.remove(i);
+        packeditor_list.setListData(lista1);
+    }//GEN-LAST:event_frompack_buttonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2525,6 +2548,8 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JSpinner addunits_spinner;
     private javax.swing.JButton cancelpack_button;
     private javax.swing.JButton canceluser_button;
+    private javax.swing.JLabel clientname;
+    private javax.swing.JTextField clientname_field;
     private javax.swing.JButton deactivatepack_button;
     private javax.swing.JButton editpack_button;
     private javax.swing.JButton frompack_button;
@@ -2588,7 +2613,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField jFormattedTextField9;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -2680,7 +2704,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField25;
     private javax.swing.JTextField jTextField26;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
