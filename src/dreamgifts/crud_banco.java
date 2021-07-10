@@ -245,7 +245,7 @@ public class crud_banco extends javax.swing.JFrame {
         tab_ventas.setLayout(tab_ventasLayout);
         tab_ventasLayout.setHorizontalGroup(
             tab_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1292, Short.MAX_VALUE)
+            .addGap(0, 1272, Short.MAX_VALUE)
         );
         tab_ventasLayout.setVerticalGroup(
             tab_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -260,7 +260,7 @@ public class crud_banco extends javax.swing.JFrame {
         tab_compras.setLayout(tab_comprasLayout);
         tab_comprasLayout.setHorizontalGroup(
             tab_comprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1292, Short.MAX_VALUE)
+            .addGap(0, 1272, Short.MAX_VALUE)
         );
         tab_comprasLayout.setVerticalGroup(
             tab_comprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1065,10 +1065,7 @@ public class crud_banco extends javax.swing.JFrame {
             .addComponent(jSeparator3)
             .addComponent(jSeparator4)
             .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_proveedoresLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pesta_admin1)
-                .addContainerGap())
+            .addComponent(pesta_admin1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         tab_proveedoresLayout.setVerticalGroup(
             tab_proveedoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1079,9 +1076,9 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jLabel26)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pesta_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         Panel_tab_menu.addTab("Informes", tab_proveedores);
@@ -1161,7 +1158,7 @@ public class crud_banco extends javax.swing.JFrame {
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField9, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField8, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 442, Short.MAX_VALUE))
+                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
                         .addGap(107, 107, 107)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel19)
@@ -1410,7 +1407,7 @@ public class crud_banco extends javax.swing.JFrame {
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
                             .addComponent(jTextField7))
                         .addGap(107, 107, 107)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1425,7 +1422,7 @@ public class crud_banco extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)))))
+                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)))))
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1615,7 +1612,7 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel9Layout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addGap(37, 37, 37)
-                        .addComponent(jTextField12, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
+                        .addComponent(jTextField12, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                         .addGap(93, 93, 93)
                         .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
@@ -1784,7 +1781,7 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel22)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField13, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+                        .addComponent(jTextField13, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
                         .addGap(107, 107, 107)
                         .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
@@ -2074,9 +2071,9 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(50, 50, 50))
             .addGroup(tab_bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(tab_bancosLayout.createSequentialGroup()
-                    .addGap(0, 413, Short.MAX_VALUE)
+                    .addGap(0, 403, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 413, Short.MAX_VALUE)))
+                    .addGap(0, 403, Short.MAX_VALUE)))
         );
         tab_bancosLayout.setVerticalGroup(
             tab_bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2148,7 +2145,7 @@ public class crud_banco extends javax.swing.JFrame {
                             .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(37, 37, 37)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField14, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                            .addComponent(jTextField14, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
                             .addComponent(jPasswordField1)
                             .addComponent(jPasswordField2))
                         .addGap(543, 543, 543))
