@@ -2492,7 +2492,12 @@ public class crud_banco extends javax.swing.JFrame {
     private void topack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_topack_buttonActionPerformed
         int i=packeditor_list.getSelectedIndex();
         packedited_list.removeAll();
-        lista2.add(lista1.get(i)+ "("+ addunits_spinner.getValue().toString()+")");
+        if(addunits_spinner.getValue().equals(0)){
+            lista2.add(lista1.get(i)+ "(1)");
+        }else{
+            lista2.add(lista1.get(i)+ "("+ addunits_spinner.getValue().toString()+")");
+        }
+        
         lista1.remove(i);
         packedited_list.setListData(lista2);
     }//GEN-LAST:event_topack_buttonActionPerformed
