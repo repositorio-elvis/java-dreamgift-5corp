@@ -11,11 +11,49 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.SpinnerNumberModel;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author gabri
  */
 public class crud_banco extends javax.swing.JFrame {
+    
+    // Declaramos la conexion a mysql
+    private static Connection con;
+    
+    // Declaramos los datos de conexion a la bd
+    private static final String driver="com.mysql.jdbc.Driver";
+    private static final String user="root";
+    private static final String pass="";
+    private static final String url="jdbc:mysql://127.0.0.1:3306/mydb";
+    
+      // Funcion que va conectarse a mi bd de mysql
+    public static void conector(){
+        // Reseteamos a null la conexion a la bd
+        con=null;
+        try{
+            Class.forName(driver);
+            // Nos conectamos a la bd
+            con= (Connection) DriverManager.getConnection(url, user, pass);
+            // Si la conexion fue exitosa mostramos un mensaje de conexion exitosa
+            if (con!=null){
+                System.out.println("Conexion establecida");
+            }
+        }
+        // Si la conexion NO fue exitosa mostramos un mensaje de error
+        catch (ClassNotFoundException | SQLException e){
+            System.out.println("Error de conexion" + e);
+        }
+    }
 
     /**
      * Creates new form crud_banco
@@ -24,6 +62,10 @@ public class crud_banco extends javax.swing.JFrame {
     Vector<String> lista2;
     public crud_banco() {
         initComponents();
+        Mostrar_RRSS();
+        
+        
+        
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
 	int panelY = ((getHeight() - Panel_tab_menu.getHeight() - getInsets().top - getInsets().bottom) / 2);
         //Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
@@ -36,6 +78,33 @@ public class crud_banco extends javax.swing.JFrame {
         nm.setMaximum(1000);
         nm.setMinimum(0);
         addunits_spinner.setModel(nm);
+        
+        
+        
+        
+        
+    }
+    
+    private void Mostrar_RRSS(){
+        Statement st;
+        String []datos = new String [2];   
+        DefaultTableModel modelo = (DefaultTableModel) jTable4.getModel();
+        modelo.setNumRows(0);
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE, RRS_CODIGO FROM rrss;");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                modelo.addRow(datos); 
+                
+            }
+            jTable4.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void cargarLista1(){
@@ -1252,6 +1321,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton17.setText("Guardar");
+        jButton17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton17ActionPerformed(evt);
+            }
+        });
 
         jButton18.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton18.setText("Cancelar");
@@ -1320,14 +1394,7 @@ public class crud_banco extends javax.swing.JFrame {
         jTable4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTable4.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Código RRSS", "Nombre RRSS", "Acción"
@@ -1341,6 +1408,7 @@ public class crud_banco extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
+        jTable4.setColumnSelectionAllowed(true);
         jTable4.getTableHeader().setReorderingAllowed(false);
         jTable4.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -2374,7 +2442,6 @@ public class crud_banco extends javax.swing.JFrame {
     }//GEN-LAST:event_jFormattedTextField4ActionPerformed
 
     private void jTable4ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jTable4ComponentAdded
-        // TODO add your handling code here:
     }//GEN-LAST:event_jTable4ComponentAdded
 
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
@@ -2508,6 +2575,21 @@ public class crud_banco extends javax.swing.JFrame {
         packeditor_list.setListData(lista1);
     }//GEN-LAST:event_frompack_buttonActionPerformed
 
+    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
+
+        try {
+            PreparedStatement pps = con.prepareStatement("INSERT INTO rrss (RRS_NOMBRE, RRS_CODIGO) VALUES (?,?)");
+            pps.setString(1, jTextField12.getText());
+            pps.setString(2, jTextField16.getText());
+            pps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+            Mostrar_RRSS();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton17ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2535,9 +2617,14 @@ public class crud_banco extends javax.swing.JFrame {
         }
         //</editor-fold>
         /* Create and display the form */
+        
+        conector();
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new crud_banco().setVisible(true);
+                
+                
             }
         });
     }
