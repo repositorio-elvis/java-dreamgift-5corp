@@ -140,18 +140,18 @@ public class crud_banco extends javax.swing.JFrame {
         tab_informe_ventas = new javax.swing.JPanel();
         jPanel15 = new javax.swing.JPanel();
         inf_ven_bt_buscar = new javax.swing.JButton();
-        inf_ven_rut = new javax.swing.JTextField();
         jLabel45 = new javax.swing.JLabel();
         jLabel53 = new javax.swing.JLabel();
         inf_ven_fecha_d = new com.toedter.calendar.JDateChooser();
         inf_ven_fecha_h = new com.toedter.calendar.JDateChooser();
         jLabel55 = new javax.swing.JLabel();
-        inf_ven_field_buscar_bar = new javax.swing.JFormattedTextField();
+        inf_ven_rut = new javax.swing.JTextField();
         jLabel46 = new javax.swing.JLabel();
         jScrollPane13 = new javax.swing.JScrollPane();
         inf_ven_tabla = new javax.swing.JTable();
         inf_ven_bt_desc = new javax.swing.JButton();
         inf_ven_bt_buscar_bar = new javax.swing.JButton();
+        inf_ven_field_buscar_bar = new javax.swing.JTextField();
         tab_informe_inventario = new javax.swing.JPanel();
         jPanel16 = new javax.swing.JPanel();
         inf_inv_bt_buscar = new javax.swing.JButton();
@@ -175,12 +175,12 @@ public class crud_banco extends javax.swing.JFrame {
         tab_informe_clientes = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         inf_cli_bt_buscar = new javax.swing.JButton();
-        inf_cli_rut = new javax.swing.JTextField();
         jLabel73 = new javax.swing.JLabel();
         jLabel74 = new javax.swing.JLabel();
         inf_cli_fecha_d = new com.toedter.calendar.JDateChooser();
         inf_cli_fecha_h = new com.toedter.calendar.JDateChooser();
         jLabel75 = new javax.swing.JLabel();
+        inf_cli_rut = new javax.swing.JTextField();
         jLabel76 = new javax.swing.JLabel();
         jScrollPane15 = new javax.swing.JScrollPane();
         inf_cli_tabla = new javax.swing.JTable();
@@ -190,12 +190,12 @@ public class crud_banco extends javax.swing.JFrame {
         tab_informe_cambios = new javax.swing.JPanel();
         jPanel19 = new javax.swing.JPanel();
         inf_dev_bt_buscar = new javax.swing.JButton();
-        inf_dev_rut = new javax.swing.JTextField();
         jLabel77 = new javax.swing.JLabel();
         jLabel78 = new javax.swing.JLabel();
         inf_dev_fecha_d = new com.toedter.calendar.JDateChooser();
         inf_dev_fecha_h = new com.toedter.calendar.JDateChooser();
         jLabel79 = new javax.swing.JLabel();
+        inf_dev_rut = new javax.swing.JTextField();
         jLabel83 = new javax.swing.JLabel();
         jScrollPane16 = new javax.swing.JScrollPane();
         inf_dev_tabla = new javax.swing.JTable();
@@ -446,14 +446,6 @@ public class crud_banco extends javax.swing.JFrame {
         inf_ven_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         inf_ven_bt_buscar.setText("Buscar");
 
-        inf_ven_rut.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        inf_ven_rut.setText("11.111.111-1");
-        inf_ven_rut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_ven_rutActionPerformed(evt);
-            }
-        });
-
         jLabel45.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel45.setText("Búsqueda por RUT:");
 
@@ -473,12 +465,13 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(jLabel53)
                         .addGap(18, 18, 18)
-                        .addComponent(inf_ven_fecha_d, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(inf_ven_fecha_d, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 316, Short.MAX_VALUE))
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(jLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inf_ven_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                        .addComponent(inf_ven_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(jLabel55)
@@ -502,18 +495,11 @@ public class crud_banco extends javax.swing.JFrame {
                         .addComponent(inf_ven_fecha_h, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inf_ven_rut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel45)
-                    .addComponent(inf_ven_bt_buscar))
-                .addGap(54, 54, 54))
+                    .addComponent(inf_ven_bt_buscar)
+                    .addComponent(inf_ven_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53))
         );
-
-        inf_ven_field_buscar_bar.setToolTipText("buscar...");
-        inf_ven_field_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_ven_field_buscar_barActionPerformed(evt);
-            }
-        });
 
         jLabel46.setFont(new java.awt.Font("Sitka Small", 1, 24)); // NOI18N
         jLabel46.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -547,11 +533,6 @@ public class crud_banco extends javax.swing.JFrame {
         });
         inf_ven_tabla.setColumnSelectionAllowed(true);
         inf_ven_tabla.getTableHeader().setReorderingAllowed(false);
-        inf_ven_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                inf_ven_tablaComponentAdded(evt);
-            }
-        });
         jScrollPane13.setViewportView(inf_ven_tabla);
 
         inf_ven_bt_desc.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -574,9 +555,9 @@ public class crud_banco extends javax.swing.JFrame {
                         .addGroup(tab_informe_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_informe_ventasLayout.createSequentialGroup()
                                 .addComponent(jLabel46, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(inf_ven_field_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(186, 186, 186)
+                                .addComponent(inf_ven_field_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(inf_ven_bt_buscar_bar)
                                 .addGap(8, 8, 8))
                             .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -590,9 +571,12 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(tab_informe_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(inf_ven_bt_buscar_bar, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                     .addComponent(inf_ven_field_buscar_bar, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel46))
+                    .addGroup(tab_informe_ventasLayout.createSequentialGroup()
+                        .addGroup(tab_informe_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inf_ven_bt_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel46))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -621,19 +605,9 @@ public class crud_banco extends javax.swing.JFrame {
 
         inf_inv_cat_art.setEditable(true);
         inf_inv_cat_art.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Accesorios", "Bebestibles", "Comestibles", "Cajas" }));
-        inf_inv_cat_art.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_inv_cat_artActionPerformed(evt);
-            }
-        });
 
         inf_inv_fecha_venc.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         inf_inv_fecha_venc.setText("06/06/2021");
-        inf_inv_fecha_venc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_inv_fecha_vencActionPerformed(evt);
-            }
-        });
 
         jLabel48.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel48.setText("Fecha Vencimiento");
@@ -643,11 +617,6 @@ public class crud_banco extends javax.swing.JFrame {
 
         inf_inv_prov.setEditable(true);
         inf_inv_prov.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CCU", "Prisa", "Arcor", " " }));
-        inf_inv_prov.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_inv_provActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -724,11 +693,6 @@ public class crud_banco extends javax.swing.JFrame {
         );
 
         inf_inv_field_buscar_bar.setToolTipText("buscar...");
-        inf_inv_field_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_inv_field_buscar_barActionPerformed(evt);
-            }
-        });
 
         jLabel59.setFont(new java.awt.Font("Sitka Small", 1, 24)); // NOI18N
         jLabel59.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -761,11 +725,6 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
         inf_inv_tabla.getTableHeader().setReorderingAllowed(false);
-        inf_inv_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                inf_inv_tablaComponentAdded(evt);
-            }
-        });
         jScrollPane14.setViewportView(inf_inv_tabla);
 
         inf_inv_bt_desc.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -820,14 +779,6 @@ public class crud_banco extends javax.swing.JFrame {
         inf_cli_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         inf_cli_bt_buscar.setText("Buscar");
 
-        inf_cli_rut.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        inf_cli_rut.setText("11.111.111-1");
-        inf_cli_rut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_cli_rutActionPerformed(evt);
-            }
-        });
-
         jLabel73.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel73.setText("Búsqueda por RUT:");
 
@@ -876,10 +827,10 @@ public class crud_banco extends javax.swing.JFrame {
                         .addComponent(inf_cli_fecha_h, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inf_cli_rut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel73)
-                    .addComponent(inf_cli_bt_buscar))
-                .addGap(54, 54, 54))
+                    .addComponent(inf_cli_bt_buscar)
+                    .addComponent(inf_cli_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(51, 51, 51))
         );
 
         jLabel76.setFont(new java.awt.Font("Sitka Small", 1, 24)); // NOI18N
@@ -914,22 +865,12 @@ public class crud_banco extends javax.swing.JFrame {
         });
         inf_cli_tabla.setColumnSelectionAllowed(true);
         inf_cli_tabla.getTableHeader().setReorderingAllowed(false);
-        inf_cli_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                inf_cli_tablaComponentAdded(evt);
-            }
-        });
         jScrollPane15.setViewportView(inf_cli_tabla);
 
         inf_cli_bt_desc.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         inf_cli_bt_desc.setText("Descargar");
 
         inf_cli_field_buscar.setToolTipText("buscar...");
-        inf_cli_field_buscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_cli_field_buscarActionPerformed(evt);
-            }
-        });
 
         inf_cli_bt_buscar_bar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         inf_cli_bt_buscar_bar.setText("Buscar");
@@ -984,14 +925,6 @@ public class crud_banco extends javax.swing.JFrame {
         inf_dev_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         inf_dev_bt_buscar.setText("Buscar");
 
-        inf_dev_rut.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        inf_dev_rut.setText("11.111.111-1");
-        inf_dev_rut.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_dev_rutActionPerformed(evt);
-            }
-        });
-
         jLabel77.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel77.setText("Búsqueda por RUT:");
 
@@ -1040,10 +973,10 @@ public class crud_banco extends javax.swing.JFrame {
                         .addComponent(inf_dev_fecha_h, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inf_dev_rut, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel77)
-                    .addComponent(inf_dev_bt_buscar))
-                .addGap(54, 54, 54))
+                    .addComponent(inf_dev_bt_buscar)
+                    .addComponent(inf_dev_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(53, 53, 53))
         );
 
         jLabel83.setFont(new java.awt.Font("Sitka Small", 1, 24)); // NOI18N
@@ -1077,22 +1010,12 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
         inf_dev_tabla.getTableHeader().setReorderingAllowed(false);
-        inf_dev_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                inf_dev_tablaComponentAdded(evt);
-            }
-        });
         jScrollPane16.setViewportView(inf_dev_tabla);
 
         inf_dev_bt_desc.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         inf_dev_bt_desc.setText("Descargar");
 
         inf_dev_field_buscar.setToolTipText("buscar...");
-        inf_dev_field_buscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inf_dev_field_buscarActionPerformed(evt);
-            }
-        });
 
         inf_dev_bt_buscar_bar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         inf_dev_bt_buscar_bar.setText("Buscar");
@@ -3468,16 +3391,12 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> inf_inv_prov;
     private javax.swing.JTable inf_inv_tabla;
     private javax.swing.JButton inf_ven_bt_buscar;
-    private javax.swing.JButton inf_ven_bt_buscar1;
     private javax.swing.JButton inf_ven_bt_buscar_bar;
     private javax.swing.JButton inf_ven_bt_desc;
     private com.toedter.calendar.JDateChooser inf_ven_fecha_d;
-    private com.toedter.calendar.JDateChooser inf_ven_fecha_d1;
     private com.toedter.calendar.JDateChooser inf_ven_fecha_h;
-    private com.toedter.calendar.JDateChooser inf_ven_fecha_h1;
-    private javax.swing.JFormattedTextField inf_ven_field_buscar_bar;
+    private javax.swing.JTextField inf_ven_field_buscar_bar;
     private javax.swing.JTextField inf_ven_rut;
-    private javax.swing.JTextField inf_ven_rut1;
     private javax.swing.JTable inf_ven_tabla;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
@@ -3580,12 +3499,9 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel53;
-    private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
-    private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
@@ -3608,7 +3524,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
-    private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel7;
@@ -3677,7 +3592,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable packs_table;
     private javax.swing.JTabbedPane pesta_admin;
     private javax.swing.JTabbedPane pesta_admin1;
-    private javax.swing.JTabbedPane pesta_admin2;
     private javax.swing.JLabel pricepack;
     private javax.swing.JTextField pricepack_field;
     private javax.swing.JButton savepack_button;
@@ -3694,7 +3608,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JPanel tab_informe_clientes;
     private javax.swing.JPanel tab_informe_inventario;
     private javax.swing.JPanel tab_informe_ventas;
-    private javax.swing.JPanel tab_informe_ventas1;
     private javax.swing.JPanel tab_informes;
     private javax.swing.JPanel tab_packs;
     private javax.swing.JPanel tab_provee;
