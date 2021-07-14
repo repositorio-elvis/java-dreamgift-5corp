@@ -86,15 +86,19 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_RRSS(){
         Statement st;
-        String []datos = new String [2];   
+        String []datos = new String [3];   
         DefaultTableModel modelo = (DefaultTableModel) jTable4.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE, RRS_CODIGO FROM rrss;");
+            ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE, RRS_CODIGO, ESTADO FROM RRSS;");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
+                if ("1".equals(rs.getString(3))){
+                    datos[2] = "true" ;
+                }
+                else datos[2]= "false";
                 modelo.addRow(datos); 
                 
             }
@@ -544,7 +548,7 @@ public class crud_banco extends javax.swing.JFrame {
         );
         tab_ventasLayout.setVerticalGroup(
             tab_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 915, Short.MAX_VALUE)
+            .addGap(0, 916, Short.MAX_VALUE)
         );
 
         Panel_tab_menu.addTab("Ventas", tab_ventas);
@@ -559,7 +563,7 @@ public class crud_banco extends javax.swing.JFrame {
         );
         tab_comprasLayout.setVerticalGroup(
             tab_comprasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 915, Short.MAX_VALUE)
+            .addGap(0, 916, Short.MAX_VALUE)
         );
 
         Panel_tab_menu.addTab("Compras", tab_compras);
@@ -1223,7 +1227,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(pesta_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(224, Short.MAX_VALUE))
+                .addContainerGap(225, Short.MAX_VALUE))
         );
 
         Panel_tab_menu.addTab("Informes", tab_informes);
@@ -2241,11 +2245,11 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Código RRSS", "Nombre RRSS", "Acción"
+                "Código RRSS", "Nombre RRSS", "Activado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -3406,9 +3410,10 @@ public class crud_banco extends javax.swing.JFrame {
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
 
         try {
-            PreparedStatement pps = con.prepareStatement("INSERT INTO rrss (RRS_NOMBRE, RRS_CODIGO) VALUES (?,?)");
+            PreparedStatement pps = con.prepareStatement("INSERT INTO RRSS (RRS_NOMBRE, RRS_CODIGO, ESTADO) VALUES (?,?,?)");
             pps.setString(1, jTextField12.getText());
             pps.setString(2, jTextField16.getText());
+            pps.setString(3, "1");
             pps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
             Mostrar_RRSS();
