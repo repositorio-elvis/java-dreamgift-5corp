@@ -1270,7 +1270,11 @@
                   <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
                   <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
                   <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
-                  <Component id="pesta_admin" alignment="1" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="pesta_admin" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -1283,7 +1287,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="pesta_admin" min="-2" max="-2" attributes="0"/>
+                      <Component id="pesta_admin" min="-2" pref="748" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -1340,24 +1344,29 @@
                                       <Component id="jButton15" min="-2" pref="93" max="-2" attributes="0"/>
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="jButton14" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
                                           <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel21" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jFormattedTextField3" min="-2" pref="170" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton16" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="jScrollPane23" max="32767" attributes="0"/>
+                                                  <Group type="102" attributes="0">
+                                                      <Component id="jLabel21" max="32767" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jFormattedTextField3" min="-2" pref="170" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jButton16" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -1372,9 +1381,9 @@
                                   <Component id="jLabel21" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jButton16" max="32767" attributes="0"/>
                               </Group>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                              <Component id="jScrollPane23" min="-2" pref="123" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jScrollPane3" min="-2" pref="115" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jButton14" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton15" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1413,28 +1422,26 @@
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="jTextField9" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jTextField8" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="clientname_field" alignment="1" pref="442" max="32767" attributes="0"/>
+                                              <Component id="cli_email_field" alignment="0" pref="462" max="32767" attributes="0"/>
+                                              <Component id="cli_telefono_field" alignment="0" pref="462" max="32767" attributes="0"/>
+                                              <Component id="cli_nombre_field" alignment="1" pref="462" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="jLabel19" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel18" alignment="0" min="-2" pref="161" max="-2" attributes="0"/>
-                                              <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="jDateChooser2" pref="270" max="32767" attributes="0"/>
-                                              <Component id="jTextField11" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jTextField10" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="cli_rut_field" alignment="0" pref="270" max="32767" attributes="0"/>
+                                              <Component id="cli_fec_nacimiento_field" alignment="0" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           <Component id="jButton13" min="-2" pref="156" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jButton12" min="-2" pref="153" max="-2" attributes="0"/>
+                                          <Component id="cli_bt_guardar" min="-2" pref="153" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
@@ -1446,41 +1453,34 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="clientname" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="clientname_field" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cli_nombre_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel18" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField11" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cli_rut_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jDateChooser2" min="-2" pref="27" max="-2" attributes="0"/>
-                                              <Component id="jLabel19" alignment="1" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                              <Component id="jTextField10" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
-                                              </Group>
+                                          <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="3" attributes="0">
+                                              <Component id="jLabel19" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="cli_fec_nacimiento_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="jTextField8" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="cli_telefono_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel15" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="jTextField9" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="cli_email_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                               <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jButton12" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cli_bt_guardar" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jButton13" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
@@ -1497,7 +1497,7 @@
                             <Property name="text" type="java.lang.String" value="Nombre cliente: "/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="clientname_field">
+                        <Component class="javax.swing.JTextField" name="cli_nombre_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
@@ -1505,16 +1505,19 @@
                             <Property name="text" type="java.lang.String" value="Francisco Javier Tapiado P&#xe9;rez"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clientname_fieldActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cli_nombre_fieldActionPerformed"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JButton" name="jButton12">
+                        <Component class="javax.swing.JButton" name="cli_bt_guardar">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cli_bt_guardarActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="jButton13">
                           <Properties>
@@ -1532,7 +1535,7 @@
                             <Property name="text" type="java.lang.String" value="Tel&#xe9;fono:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField8">
+                        <Component class="javax.swing.JTextField" name="cli_telefono_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
@@ -1548,7 +1551,7 @@
                             <Property name="text" type="java.lang.String" value="Email:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField9">
+                        <Component class="javax.swing.JTextField" name="cli_email_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
@@ -1572,30 +1575,20 @@
                             <Property name="text" type="java.lang.String" value="Fecha de nacimiento:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel20">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="18" style="0"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Celular:"/>
-                          </Properties>
-                        </Component>
-                        <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser2">
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField10">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="18" style="0"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="95600801"/>
-                          </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField11">
+                        <Component class="javax.swing.JTextField" name="cli_rut_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="13675655-9"/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JTextField" name="cli_fec_nacimiento_field">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="18" style="0"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="1986-12-04"/>
                           </Properties>
                         </Component>
                       </SubComponents>
@@ -1617,7 +1610,34 @@
                         <Property name="text" type="java.lang.String" value="Lista Clientes"/>
                       </Properties>
                     </Component>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPane3">
+                    <Component class="javax.swing.JButton" name="jButton14">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="18" style="0"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Desactivar"/>
+                      </Properties>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="jButton15">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="18" style="0"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Editar"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton15ActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="jButton16">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="18" style="0"/>
+                        </Property>
+                        <Property name="text" type="java.lang.String" value="Buscar"/>
+                      </Properties>
+                    </Component>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane23">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="18" style="0"/>
@@ -1629,18 +1649,18 @@
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                       <SubComponents>
-                        <Component class="javax.swing.JTable" name="jTable3">
+                        <Component class="javax.swing.JTable" name="cli_tabla">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="6" rowCount="8">
-                                <Column editable="true" title="Nombre Cliente" type="java.lang.String"/>
-                                <Column editable="true" title="Celular" type="java.lang.Integer"/>
-                                <Column editable="true" title="Tel&#xe9;fono" type="java.lang.Integer"/>
-                                <Column editable="true" title="Correo electr&#xf3;nico" type="java.lang.String"/>
-                                <Column editable="true" title="RUT" type="java.lang.String"/>
+                              <Table columnCount="6" rowCount="0">
+                                <Column editable="true" title="Rut" type="java.lang.String"/>
+                                <Column editable="true" title="Nombre" type="java.lang.String"/>
+                                <Column editable="true" title="Celular" type="java.lang.String"/>
+                                <Column editable="true" title="Correo" type="java.lang.String"/>
+                                <Column editable="true" title="Fecha Nacimiento" type="java.lang.String"/>
                                 <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
                               </Table>
                             </Property>
@@ -1678,44 +1698,16 @@
                                 </Column>
                               </TableColumnModel>
                             </Property>
-                            <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                             </Property>
                           </Properties>
                           <Events>
-                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="jTable3ComponentAdded"/>
+                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="cli_tablaComponentAdded"/>
                           </Events>
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JButton" name="jButton14">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="18" style="0"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Desactivar"/>
-                      </Properties>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="jButton15">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="18" style="0"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Editar"/>
-                      </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton15ActionPerformed"/>
-                      </Events>
-                    </Component>
-                    <Component class="javax.swing.JButton" name="jButton16">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="18" style="0"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Buscar"/>
-                      </Properties>
-                    </Component>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="tab_provee">
@@ -1812,7 +1804,7 @@
                                           <Group type="103" groupAlignment="1" attributes="0">
                                               <Component id="jTextField19" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jTextField18" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jTextField15" alignment="1" pref="429" max="32767" attributes="0"/>
+                                              <Component id="jTextField15" alignment="1" pref="409" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
@@ -2214,7 +2206,7 @@
                                           <Group type="103" groupAlignment="1" attributes="0">
                                               <Component id="jTextField6" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jTextField5" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jTextField3" pref="385" max="32767" attributes="0"/>
+                                              <Component id="jTextField3" pref="375" max="32767" attributes="0"/>
                                               <Component id="jTextField7" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
@@ -2232,7 +2224,7 @@
                                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="jComboBox2" max="32767" attributes="0"/>
-                                                      <Component id="jDateChooser1" pref="297" max="32767" attributes="0"/>
+                                                      <Component id="jDateChooser1" pref="287" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -2679,7 +2671,7 @@
                                           <Component id="pricepack_field" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace min="0" pref="101" max="32767" attributes="0"/>
+                                          <EmptySpace min="0" pref="81" max="32767" attributes="0"/>
                                           <Component id="cancelpack_button" min="-2" pref="156" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="savepack_button" min="-2" pref="153" max="-2" attributes="0"/>
@@ -3049,7 +3041,7 @@
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="jLabel17" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                                          <Component id="jTextField12" pref="404" max="32767" attributes="0"/>
+                                          <Component id="jTextField12" pref="384" max="32767" attributes="0"/>
                                           <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
                                           <Component id="jLabel24" min="-2" pref="161" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
@@ -3268,16 +3260,20 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jPanel13" alignment="0" max="32767" attributes="0"/>
                                           <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel40" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jFormattedTextField8" min="-2" pref="170" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton41" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="jScrollPane20" alignment="1" max="32767" attributes="0"/>
+                                                  <Group type="102" alignment="1" attributes="0">
+                                                      <Component id="jLabel40" max="32767" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jFormattedTextField8" min="-2" pref="170" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jButton41" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="jPanel13" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jScrollPane8" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -3299,8 +3295,8 @@
                                   <Component id="jButton41" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jScrollPane8" min="-2" pref="115" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Component id="jScrollPane20" min="-2" pref="123" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jButton39" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton40" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -3334,17 +3330,17 @@
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="jLabel38" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                                          <Component id="jTextField23" pref="409" max="32767" attributes="0"/>
+                                          <Component id="cat_art_nombre_field" pref="389" max="32767" attributes="0"/>
                                           <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
                                           <Component id="jLabel39" min="-2" pref="161" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                          <Component id="jTextField24" min="-2" pref="270" max="-2" attributes="0"/>
+                                          <Component id="cat_art_codigo_field" min="-2" pref="270" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           <Component id="jButton38" min="-2" pref="156" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jButton37" min="-2" pref="153" max="-2" attributes="0"/>
+                                          <Component id="cat_art_bt_guardar" min="-2" pref="153" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
@@ -3356,13 +3352,13 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel38" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField23" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cat_art_nombre_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel39" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField24" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cat_art_codigo_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jButton37" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cat_art_bt_guardar" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jButton38" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="28" max="32767" attributes="0"/>
@@ -3379,7 +3375,7 @@
                             <Property name="text" type="java.lang.String" value="Categor&#xed;a art&#xed;culo:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField23">
+                        <Component class="javax.swing.JTextField" name="cat_art_nombre_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
@@ -3387,16 +3383,19 @@
                             <Property name="text" type="java.lang.String" value="Bebestible"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField23ActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_art_nombre_fieldActionPerformed"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JButton" name="jButton37">
+                        <Component class="javax.swing.JButton" name="cat_art_bt_guardar">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_art_bt_guardarActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="jButton38">
                           <Properties>
@@ -3414,7 +3413,7 @@
                             <Property name="text" type="java.lang.String" value="C&#xf3;digo categor&#xed;a:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField24">
+                        <Component class="javax.swing.JTextField" name="cat_art_codigo_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
@@ -3422,7 +3421,7 @@
                             <Property name="text" type="java.lang.String" value="AB"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField24ActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_art_codigo_fieldActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>
@@ -3444,60 +3443,6 @@
                         <Property name="text" type="java.lang.String" value="Categor&#xed;as art&#xed;culos"/>
                       </Properties>
                     </Component>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPane8">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="18" style="0"/>
-                        </Property>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                      </AuxValues>
-
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                      <SubComponents>
-                        <Component class="javax.swing.JTable" name="jTable8">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="18" style="0"/>
-                            </Property>
-                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="8">
-                                <Column editable="true" title="C&#xf3;digo Categor&#xed;a" type="java.lang.String"/>
-                                <Column editable="true" title="Nombre Categor&#xed;a" type="java.lang.String"/>
-                                <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
-                              </Table>
-                            </Property>
-                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="1">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
-                            </Property>
-                            <Property name="columnSelectionAllowed" type="boolean" value="true"/>
-                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
-                            </Property>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="jTable8ComponentAdded"/>
-                          </Events>
-                        </Component>
-                      </SubComponents>
-                    </Container>
                     <Component class="javax.swing.JButton" name="jButton39">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -3525,6 +3470,59 @@
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
                     </Component>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane20">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="18" style="0"/>
+                        </Property>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                      </AuxValues>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Component class="javax.swing.JTable" name="cat_art_tabla">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="18" style="0"/>
+                            </Property>
+                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                              <Table columnCount="3" rowCount="0">
+                                <Column editable="true" title="Nombre Categoria" type="java.lang.String"/>
+                                <Column editable="true" title="Codigo Categoria" type="java.lang.String"/>
+                                <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
+                              </Table>
+                            </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="1">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                              </TableColumnModel>
+                            </Property>
+                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                            </Property>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="cat_art_tablaComponentAdded"/>
+                          </Events>
+                        </Component>
+                      </SubComponents>
+                    </Container>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="tab_comunas">
@@ -3559,7 +3557,7 @@
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                           </Group>
                                           <Component id="jPanel10" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jScrollPane5" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane19" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -3581,8 +3579,8 @@
                                   <Component id="jButton26" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jScrollPane5" min="-2" pref="115" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Component id="jScrollPane19" min="-2" pref="123" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jButton24" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton25" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -3616,17 +3614,17 @@
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="jLabel22" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jTextField13" pref="429" max="32767" attributes="0"/>
+                                          <Component id="comu_nombre_field" pref="409" max="32767" attributes="0"/>
                                           <EmptySpace min="-2" pref="107" max="-2" attributes="0"/>
                                           <Component id="jLabel25" min="-2" pref="161" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                          <Component id="jTextField17" min="-2" pref="270" max="-2" attributes="0"/>
+                                          <Component id="comu_codigo_field" min="-2" pref="270" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           <Component id="jButton23" min="-2" pref="156" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jButton22" min="-2" pref="153" max="-2" attributes="0"/>
+                                          <Component id="comu_bt_guardar" min="-2" pref="153" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
@@ -3638,13 +3636,13 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel22" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField13" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="comu_nombre_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel25" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField17" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="comu_codigo_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jButton22" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="comu_bt_guardar" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jButton23" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="28" max="32767" attributes="0"/>
@@ -3661,18 +3659,15 @@
                             <Property name="text" type="java.lang.String" value="Nombre comuna: "/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField13">
+                        <Component class="javax.swing.JTextField" name="comu_nombre_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="Santiago"/>
                           </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField13ActionPerformed"/>
-                          </Events>
                         </Component>
-                        <Component class="javax.swing.JButton" name="jButton22">
+                        <Component class="javax.swing.JButton" name="comu_bt_guardar">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
@@ -3680,7 +3675,7 @@
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton22ActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comu_bt_guardarActionPerformed"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="jButton23">
@@ -3690,6 +3685,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton23ActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel25">
                           <Properties>
@@ -3699,13 +3697,16 @@
                             <Property name="text" type="java.lang.String" value="C&#xf3;digo comuna:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField17">
+                        <Component class="javax.swing.JTextField" name="comu_codigo_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="01"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comu_codigo_fieldActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -3726,59 +3727,6 @@
                         <Property name="text" type="java.lang.String" value="Comunas"/>
                       </Properties>
                     </Component>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPane5">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="18" style="0"/>
-                        </Property>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                      </AuxValues>
-
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                      <SubComponents>
-                        <Component class="javax.swing.JTable" name="jTable5">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="18" style="0"/>
-                            </Property>
-                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="8">
-                                <Column editable="true" title="C&#xf3;digo comuna" type="java.lang.Integer"/>
-                                <Column editable="true" title="Nombre comuna" type="java.lang.String"/>
-                                <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
-                              </Table>
-                            </Property>
-                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="1">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
-                            </Property>
-                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
-                            </Property>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="jTable5ComponentAdded"/>
-                          </Events>
-                        </Component>
-                      </SubComponents>
-                    </Container>
                     <Component class="javax.swing.JButton" name="jButton24">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -3806,6 +3754,59 @@
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
                     </Component>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane19">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="18" style="0"/>
+                        </Property>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                      </AuxValues>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Component class="javax.swing.JTable" name="comu_tabla">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="18" style="0"/>
+                            </Property>
+                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                              <Table columnCount="3" rowCount="0">
+                                <Column editable="true" title="Nombre Comuna" type="java.lang.String"/>
+                                <Column editable="true" title="Codigo Comuna" type="java.lang.String"/>
+                                <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
+                              </Table>
+                            </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="1">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                              </TableColumnModel>
+                            </Property>
+                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                            </Property>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="comu_tablaComponentAdded"/>
+                          </Events>
+                        </Component>
+                      </SubComponents>
+                    </Container>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="tab_bancos">
@@ -3898,7 +3899,7 @@
                                           <Component id="jLabel3" min="-2" pref="127" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                                           <Component id="ban_nombre_field" min="-2" pref="433" max="-2" attributes="0"/>
-                                          <EmptySpace pref="154" max="32767" attributes="0"/>
+                                          <EmptySpace pref="134" max="32767" attributes="0"/>
                                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="ban_codigo_field" min="-2" pref="256" max="-2" attributes="0"/>
@@ -4126,16 +4127,20 @@
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jPanel14" alignment="0" max="32767" attributes="0"/>
                                           <Group type="102" alignment="1" attributes="0">
-                                              <Component id="jLabel43" max="32767" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jFormattedTextField9" min="-2" pref="170" max="-2" attributes="0"/>
-                                              <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton46" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="1" attributes="0">
+                                                  <Component id="jScrollPane21" alignment="0" max="32767" attributes="0"/>
+                                                  <Group type="102" alignment="1" attributes="0">
+                                                      <Component id="jLabel43" max="32767" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jFormattedTextField9" min="-2" pref="170" max="-2" attributes="0"/>
+                                                      <EmptySpace max="-2" attributes="0"/>
+                                                      <Component id="jButton46" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="jPanel14" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jScrollPane9" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -4157,8 +4162,8 @@
                                   <Component id="jButton46" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jScrollPane9" min="-2" pref="115" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Component id="jScrollPane21" min="-2" pref="123" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jButton44" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton45" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -4192,17 +4197,17 @@
                                       <Group type="102" alignment="1" attributes="0">
                                           <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                                          <Component id="jTextField25" pref="407" max="32767" attributes="0"/>
+                                          <Component id="cat_ven_nombre_field" pref="387" max="32767" attributes="0"/>
                                           <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
                                           <Component id="jLabel42" min="-2" pref="161" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                                          <Component id="jTextField26" min="-2" pref="270" max="-2" attributes="0"/>
+                                          <Component id="cat_ven_codigo_field" min="-2" pref="270" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="1" attributes="0">
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                           <Component id="jButton43" min="-2" pref="156" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="jButton42" min="-2" pref="153" max="-2" attributes="0"/>
+                                          <Component id="cat_ven_bt_guardar" min="-2" pref="153" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
@@ -4214,13 +4219,13 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel41" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField25" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cat_ven_nombre_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jLabel42" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField26" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cat_ven_codigo_field" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jButton42" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cat_ven_bt_guardar" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jButton43" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace pref="28" max="32767" attributes="0"/>
@@ -4237,7 +4242,7 @@
                             <Property name="text" type="java.lang.String" value="Categor&#xed;as ventas:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField25">
+                        <Component class="javax.swing.JTextField" name="cat_ven_nombre_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
@@ -4245,16 +4250,19 @@
                             <Property name="text" type="java.lang.String" value="Pago Recibido"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField25ActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_ven_nombre_fieldActionPerformed"/>
                           </Events>
                         </Component>
-                        <Component class="javax.swing.JButton" name="jButton42">
+                        <Component class="javax.swing.JButton" name="cat_ven_bt_guardar">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_ven_bt_guardarActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="jButton43">
                           <Properties>
@@ -4272,7 +4280,7 @@
                             <Property name="text" type="java.lang.String" value="C&#xf3;digo categor&#xed;a:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField26">
+                        <Component class="javax.swing.JTextField" name="cat_ven_codigo_field">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
@@ -4280,7 +4288,7 @@
                             <Property name="text" type="java.lang.String" value="V"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField26ActionPerformed"/>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_ven_codigo_fieldActionPerformed"/>
                           </Events>
                         </Component>
                       </SubComponents>
@@ -4302,59 +4310,6 @@
                         <Property name="text" type="java.lang.String" value="Categor&#xed;as de ventas registradas"/>
                       </Properties>
                     </Component>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPane9">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="18" style="0"/>
-                        </Property>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                      </AuxValues>
-
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                      <SubComponents>
-                        <Component class="javax.swing.JTable" name="jTable9">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="18" style="0"/>
-                            </Property>
-                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="8">
-                                <Column editable="true" title="C&#xf3;digo Categor&#xed;a" type="java.lang.String"/>
-                                <Column editable="true" title="Categor&#xed;a" type="java.lang.String"/>
-                                <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
-                              </Table>
-                            </Property>
-                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="1">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
-                            </Property>
-                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
-                            </Property>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="jTable9ComponentAdded"/>
-                          </Events>
-                        </Component>
-                      </SubComponents>
-                    </Container>
                     <Component class="javax.swing.JButton" name="jButton44">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -4382,6 +4337,59 @@
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
                     </Component>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane21">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="18" style="0"/>
+                        </Property>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                      </AuxValues>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Component class="javax.swing.JTable" name="cat_ven_tabla">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="18" style="0"/>
+                            </Property>
+                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                              <Table columnCount="3" rowCount="0">
+                                <Column editable="true" title="Nombre Categoria" type="java.lang.String"/>
+                                <Column editable="true" title="Codigo Categoria" type="java.lang.String"/>
+                                <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
+                              </Table>
+                            </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="1">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                              </TableColumnModel>
+                            </Property>
+                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                            </Property>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="cat_ven_tablaComponentAdded"/>
+                          </Events>
+                        </Component>
+                      </SubComponents>
+                    </Container>
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="tab_usuarios">
@@ -4416,7 +4424,7 @@
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                           </Group>
                                           <Component id="jPanel11" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jScrollPane6" alignment="0" max="32767" attributes="0"/>
+                                          <Component id="jScrollPane22" alignment="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -4436,8 +4444,8 @@
                                   <Component id="jButton31" min="-2" pref="22" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jScrollPane6" min="-2" pref="115" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Component id="jScrollPane22" min="-2" pref="123" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jButton29" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton30" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -4476,9 +4484,9 @@
                                           </Group>
                                           <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="1" attributes="0">
-                                              <Component id="username_field" alignment="1" pref="388" max="32767" attributes="0"/>
-                                              <Component id="jPasswordField1" max="32767" attributes="0"/>
-                                              <Component id="jPasswordField2" alignment="1" max="32767" attributes="0"/>
+                                              <Component id="username_field" alignment="1" pref="368" max="32767" attributes="0"/>
+                                              <Component id="pass_field" max="32767" attributes="0"/>
+                                              <Component id="repet_pass_field" alignment="1" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace min="-2" pref="543" max="-2" attributes="0"/>
                                       </Group>
@@ -4496,18 +4504,18 @@
                         <DimensionLayout dim="1">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="username" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="username_field" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="username" min="-2" max="-2" attributes="0"/>
+                                      <Component id="username_field" min="-2" pref="28" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
                                       <Component id="jLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jPasswordField1" alignment="3" max="32767" attributes="0"/>
+                                      <Component id="pass_field" alignment="3" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jPasswordField2" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                                      <Component id="repet_pass_field" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
                                       <Component id="jLabel30" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
@@ -4547,6 +4555,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveuser_buttonActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="canceluser_button">
                           <Properties>
@@ -4572,12 +4583,12 @@
                             <Property name="text" type="java.lang.String" value="Confirme clave:"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JPasswordField" name="jPasswordField1">
+                        <Component class="javax.swing.JPasswordField" name="pass_field">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="jPasswordField1"/>
                           </Properties>
                         </Component>
-                        <Component class="javax.swing.JPasswordField" name="jPasswordField2">
+                        <Component class="javax.swing.JPasswordField" name="repet_pass_field">
                           <Properties>
                             <Property name="text" type="java.lang.String" value="jPasswordField1"/>
                           </Properties>
@@ -4601,54 +4612,6 @@
                         <Property name="text" type="java.lang.String" value="Usuarios"/>
                       </Properties>
                     </Component>
-                    <Container class="javax.swing.JScrollPane" name="jScrollPane6">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="18" style="0"/>
-                        </Property>
-                      </Properties>
-                      <AuxValues>
-                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
-                      </AuxValues>
-
-                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                      <SubComponents>
-                        <Component class="javax.swing.JTable" name="jTable6">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="18" style="0"/>
-                            </Property>
-                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="2" rowCount="8">
-                                <Column editable="true" title="Nombre de usuario" type="java.lang.String"/>
-                                <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
-                              </Table>
-                            </Property>
-                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                              <TableColumnModel selectionModel="1">
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                                  <Title/>
-                                  <Editor/>
-                                  <Renderer/>
-                                </Column>
-                              </TableColumnModel>
-                            </Property>
-                            <Property name="columnSelectionAllowed" type="boolean" value="true"/>
-                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
-                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
-                            </Property>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="jTable6ComponentAdded"/>
-                          </Events>
-                        </Component>
-                      </SubComponents>
-                    </Container>
                     <Component class="javax.swing.JButton" name="jButton29">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -4676,6 +4639,59 @@
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
                     </Component>
+                    <Container class="javax.swing.JScrollPane" name="jScrollPane22">
+                      <Properties>
+                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                          <Font name="Tahoma" size="18" style="0"/>
+                        </Property>
+                      </Properties>
+                      <AuxValues>
+                        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                      </AuxValues>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                      <SubComponents>
+                        <Component class="javax.swing.JTable" name="usuario_tabla">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="18" style="0"/>
+                            </Property>
+                            <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                              <Table columnCount="3" rowCount="0">
+                                <Column editable="true" title="Nombre Usuario" type="java.lang.String"/>
+                                <Column editable="true" title="Contrase&#xf1;a" type="java.lang.String"/>
+                                <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
+                              </Table>
+                            </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="1">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                              </TableColumnModel>
+                            </Property>
+                            <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                              <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                            </Property>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="componentAdded" listener="java.awt.event.ContainerListener" parameters="java.awt.event.ContainerEvent" handler="usuario_tablaComponentAdded"/>
+                          </Events>
+                        </Component>
+                      </SubComponents>
+                    </Container>
                   </SubComponents>
                 </Container>
               </SubComponents>
