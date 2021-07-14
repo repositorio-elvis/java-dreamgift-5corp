@@ -1291,7 +1291,12 @@ public class crud_banco extends javax.swing.JFrame {
         cli_rut_field.setText("13675655-9");
 
         cli_fec_nacimiento_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        cli_fec_nacimiento_field.setText("1986-12-04");
+        cli_fec_nacimiento_field.setText("1985-10-04");
+        cli_fec_nacimiento_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cli_fec_nacimiento_fieldActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1333,7 +1338,6 @@ public class crud_banco extends javax.swing.JFrame {
                     .addComponent(cli_nombre_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18)
                     .addComponent(cli_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(2, 2, 2)
@@ -3553,6 +3557,10 @@ public class crud_banco extends javax.swing.JFrame {
     private void cli_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_nombre_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cli_nombre_fieldActionPerformed
+
+    private void cli_fec_nacimiento_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_fec_nacimiento_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cli_fec_nacimiento_fieldActionPerformed
 
     /**
      * @param args the command line arguments
