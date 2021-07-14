@@ -109,16 +109,15 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_BANCO(){
         Statement st;
-        String []datos = new String [3];   
+        String []datos = new String [2];   
         DefaultTableModel modelo = (DefaultTableModel) ban_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT BAN_ID_BANCO, BAN_DESCRIPCION ,BAN_CODIGO FROM bancos;");
+            ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION ,BAN_CODIGO FROM bancos;");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
-                datos[2]=rs.getString(3);
                 modelo.addRow(datos); 
                 
             }
@@ -2679,11 +2678,11 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Nombre Banco", "Codigo Banco", "Acción"
+                "Nombre Banco", "Codigo Banco", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -3349,10 +3348,9 @@ public class crud_banco extends javax.swing.JFrame {
 
     private void ban_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_bt_guardarActionPerformed
         try {
-            PreparedStatement pps = con.prepareStatement("INSERT INTO bancos (BAN_ID_BANCO, BAN_DESCRIPCION, BAN_CODIGO) VALUES (?,?,?)");
-            pps.setString(1, ban_codigo_field.getText());
-            pps.setString(2, ban_nombre_field.getText());
-            pps.setString(3, ban_codigo_field.getText());
+            PreparedStatement pps = con.prepareStatement("INSERT INTO bancos (BAN_DESCRIPCION, BAN_CODIGO) VALUES (?,?)");
+            pps.setString(1, ban_nombre_field.getText());
+            pps.setString(2, ban_codigo_field.getText());
             pps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
             Mostrar_BANCO();
