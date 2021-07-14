@@ -63,9 +63,8 @@ public class crud_banco extends javax.swing.JFrame {
     public crud_banco() {
         initComponents();
         Mostrar_RRSS();
-        
-        
-        
+        Mostrar_BANCO();
+                
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
 	int panelY = ((getHeight() - Panel_tab_menu.getHeight() - getInsets().top - getInsets().bottom) / 2);
         //Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
@@ -106,6 +105,31 @@ public class crud_banco extends javax.swing.JFrame {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+    private void Mostrar_BANCO(){
+        Statement st;
+        String []datos = new String [3];   
+        DefaultTableModel modelo = (DefaultTableModel) ban_tabla.getModel();
+        modelo.setNumRows(0);
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT BAN_ID_BANCO, BAN_DESCRIPCION ,BAN_CODIGO FROM bancos;");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3);
+                modelo.addRow(datos); 
+                
+            }
+            ban_tabla.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     
     private void cargarLista1(){
         lista1.add("Tazón personalizado");
@@ -348,18 +372,18 @@ public class crud_banco extends javax.swing.JFrame {
         tab_bancos = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        ban_nombre_field = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        ban_codigo_field = new javax.swing.JTextField();
+        ban_bt_guardar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jScrollPane17 = new javax.swing.JScrollPane();
+        ban_tabla = new javax.swing.JTable();
         tab_categorias1 = new javax.swing.JPanel();
         jPanel14 = new javax.swing.JPanel();
         jLabel41 = new javax.swing.JLabel();
@@ -465,13 +489,12 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(jLabel53)
                         .addGap(18, 18, 18)
-                        .addComponent(inf_ven_fecha_d, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 316, Short.MAX_VALUE))
+                        .addComponent(inf_ven_fecha_d, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(jLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(inf_ven_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(inf_ven_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(jLabel55)
@@ -2388,6 +2411,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton22.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton22.setText("Guardar");
+        jButton22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton22ActionPerformed(evt);
+            }
+        });
 
         jButton23.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton23.setText("Cancelar");
@@ -2547,17 +2575,32 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setText("Nombre banco: ");
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField1.setText("Banco Estado");
+        ban_nombre_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ban_nombre_field.setText("Banco Estado");
+        ban_nombre_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ban_nombre_fieldActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Código banco: ");
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField2.setText("12");
+        ban_codigo_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ban_codigo_field.setText("12");
+        ban_codigo_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ban_codigo_fieldActionPerformed(evt);
+            }
+        });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Guardar");
+        ban_bt_guardar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ban_bt_guardar.setText("Guardar");
+        ban_bt_guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ban_bt_guardarActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton2.setText("Cancelar");
@@ -2572,16 +2615,16 @@ public class crud_banco extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(16, 16, 16)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ban_nombre_field, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(ban_codigo_field, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(796, 796, 796)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(ban_bt_guardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(43, 43, 43))
         );
         jPanel2Layout.setVerticalGroup(
@@ -2590,12 +2633,12 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ban_nombre_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ban_codigo_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(42, 42, 42)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(ban_bt_guardar)
                     .addComponent(jButton2))
                 .addGap(28, 28, 28))
         );
@@ -2614,41 +2657,6 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Bancos");
 
-        jTable1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Código Banco", "Nombre Banco", "Acción"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jTable1.setColumnSelectionAllowed(true);
-        jTable1.getTableHeader().setReorderingAllowed(false);
-        jTable1.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                jTable1ComponentAdded(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-
         jButton3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton3.setText("Desactivar");
 
@@ -2662,6 +2670,35 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton6.setText("Buscar");
+
+        jScrollPane17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+
+        ban_tabla.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ban_tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nombre Banco", "Codigo Banco", "Acción"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        ban_tabla.setColumnSelectionAllowed(true);
+        ban_tabla.getTableHeader().setReorderingAllowed(false);
+        ban_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                ban_tablaComponentAdded(evt);
+            }
+        });
+        jScrollPane17.setViewportView(ban_tabla);
+        ban_tabla.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         javax.swing.GroupLayout tab_bancosLayout = new javax.swing.GroupLayout(tab_bancos);
         tab_bancos.setLayout(tab_bancosLayout);
@@ -2685,7 +2722,7 @@ public class crud_banco extends javax.swing.JFrame {
                                 .addComponent(jButton6)
                                 .addGap(8, 8, 8))
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))))
+                            .addComponent(jScrollPane17, javax.swing.GroupLayout.Alignment.LEADING))))
                 .addGap(50, 50, 50))
         );
         tab_bancosLayout.setVerticalGroup(
@@ -2700,8 +2737,8 @@ public class crud_banco extends javax.swing.JFrame {
                         .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
                 .addGroup(tab_bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton4))
@@ -3096,10 +3133,6 @@ public class crud_banco extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTable1ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jTable1ComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTable1ComponentAdded
-
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -3314,6 +3347,37 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton17ActionPerformed
 
+    private void ban_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_bt_guardarActionPerformed
+        try {
+            PreparedStatement pps = con.prepareStatement("INSERT INTO bancos (BAN_ID_BANCO, BAN_DESCRIPCION, BAN_CODIGO) VALUES (?,?,?)");
+            pps.setString(1, ban_codigo_field.getText());
+            pps.setString(2, ban_nombre_field.getText());
+            pps.setString(3, ban_codigo_field.getText());
+            pps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+            Mostrar_BANCO();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_ban_bt_guardarActionPerformed
+
+    private void ban_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_ban_tablaComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ban_tablaComponentAdded
+
+    private void ban_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_nombre_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ban_nombre_fieldActionPerformed
+
+    private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton22ActionPerformed
+
+    private void ban_codigo_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_codigo_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ban_codigo_fieldActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3357,6 +3421,10 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel Packs;
     private javax.swing.JTabbedPane Panel_tab_menu;
     private javax.swing.JSpinner addunits_spinner;
+    private javax.swing.JButton ban_bt_guardar;
+    private javax.swing.JTextField ban_codigo_field;
+    private javax.swing.JTextField ban_nombre_field;
+    private javax.swing.JTable ban_tabla;
     private javax.swing.JButton cancelpack_button;
     private javax.swing.JButton canceluser_button;
     private javax.swing.JLabel clientname;
@@ -3398,7 +3466,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField inf_ven_field_buscar_bar;
     private javax.swing.JTextField inf_ven_rut;
     private javax.swing.JTable inf_ven_tabla;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
@@ -3531,7 +3598,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
@@ -3539,6 +3605,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane16;
+    private javax.swing.JScrollPane jScrollPane17;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -3551,7 +3618,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
@@ -3560,7 +3626,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable jTable7;
     private javax.swing.JTable jTable8;
     private javax.swing.JTable jTable9;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
@@ -3570,7 +3635,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField19;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField22;
