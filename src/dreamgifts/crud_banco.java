@@ -20,6 +20,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -62,8 +63,6 @@ public class crud_banco extends javax.swing.JFrame {
     Vector<String> lista2;
     public crud_banco() {
         initComponents();
-        Mostrar_RRSS();
-        Mostrar_BANCO();
                 
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
 	int panelY = ((getHeight() - Panel_tab_menu.getHeight() - getInsets().top - getInsets().bottom) / 2);
@@ -362,7 +361,7 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         cli_rut_field = new javax.swing.JTextField();
-        cli_fec_nacimiento_field = new javax.swing.JTextField();
+        cli_fec_nacimiento_field = new com.toedter.calendar.JDateChooser();
         jFormattedTextField3 = new javax.swing.JFormattedTextField();
         jLabel21 = new javax.swing.JLabel();
         jButton14 = new javax.swing.JButton();
@@ -1290,14 +1289,6 @@ public class crud_banco extends javax.swing.JFrame {
         cli_rut_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         cli_rut_field.setText("13675655-9");
 
-        cli_fec_nacimiento_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        cli_fec_nacimiento_field.setText("1985-10-04");
-        cli_fec_nacimiento_field.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cli_fec_nacimiento_fieldActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -1321,14 +1312,15 @@ public class crud_banco extends javax.swing.JFrame {
                             .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cli_rut_field, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                            .addComponent(cli_fec_nacimiento_field)))
+                            .addComponent(cli_rut_field, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                            .addComponent(cli_fec_nacimiento_field, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cli_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(43, 43, 43))
+                        .addComponent(cli_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(17, 17, 17)))
+                .addGap(26, 26, 26))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1340,18 +1332,18 @@ public class crud_banco extends javax.swing.JFrame {
                     .addComponent(cli_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel19)
-                            .addComponent(cli_fec_nacimiento_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cli_telefono_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cli_email_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16))))
+                            .addComponent(jLabel16)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cli_fec_nacimiento_field, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19))))
                 .addGap(46, 46, 46)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cli_bt_guardar)
@@ -3544,7 +3536,7 @@ public class crud_banco extends javax.swing.JFrame {
             pps.setString(2, cli_nombre_field.getText());
             pps.setString(3, cli_telefono_field.getText());
             pps.setString(4, cli_email_field.getText());
-            pps.setString(5, cli_fec_nacimiento_field.getText());
+            pps.setString(5, ((JTextField)cli_fec_nacimiento_field.getDateEditor().getUiComponent()).getText());
             pps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
             Mostrar_CLIENTE();
@@ -3557,10 +3549,6 @@ public class crud_banco extends javax.swing.JFrame {
     private void cli_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_nombre_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cli_nombre_fieldActionPerformed
-
-    private void cli_fec_nacimiento_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_fec_nacimiento_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cli_fec_nacimiento_fieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -3621,7 +3609,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable cat_ven_tabla;
     private javax.swing.JButton cli_bt_guardar;
     private javax.swing.JTextField cli_email_field;
-    private javax.swing.JTextField cli_fec_nacimiento_field;
+    private com.toedter.calendar.JDateChooser cli_fec_nacimiento_field;
     private javax.swing.JTextField cli_nombre_field;
     private javax.swing.JTextField cli_rut_field;
     private javax.swing.JTable cli_tabla;
