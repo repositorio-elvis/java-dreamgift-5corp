@@ -32,9 +32,9 @@ public class crud_banco extends javax.swing.JFrame {
     
     // Declaramos los datos de conexion a la bd
     private static final String driver="com.mysql.jdbc.Driver";
-    private static final String user="root";
-    private static final String pass="";
-    private static final String url="jdbc:mysql://127.0.0.1:3306/mydb";
+    private static final String user="u0y837eoifywem5q";
+    private static final String pass="IF9svVbNHhO5FqmNKLQU";
+    private static final String url="jdbc:mysql://bttuukyxa2qoegjcitfx-mysql.services.clever-cloud.com:3306/bttuukyxa2qoegjcitfx";
     
       // Funcion que va conectarse a mi bd de mysql
     public static void conector(){
@@ -114,7 +114,7 @@ public class crud_banco extends javax.swing.JFrame {
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT COM_NOMBRE, COM_CODIGO, estado FROM comunas;");
+            ResultSet rs = st.executeQuery("SELECT COM_DESCRIPCION, COM_CODIGO, estado FROM comunas;");
             while (rs.next()){
                 datos[0]=rs.getString(2); 
                 datos[1]=rs.getString(1);
@@ -139,7 +139,7 @@ public class crud_banco extends javax.swing.JFrame {
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT BAN_NOMBRE, BAN_CODIGO, estado FROM bancos;");
+            ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION, BAN_CODIGO, ESTADO FROM bancos;");
             while (rs.next()){
                 datos[0]=rs.getString(2); 
                 datos[1]=rs.getString(1);
@@ -3235,7 +3235,7 @@ public class crud_banco extends javax.swing.JFrame {
                     String nombre = null;
                     //String codigo = null;
                     st = con.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT BAN_NOMBRE, BAN_CODIGO FROM bancos;");
+                    ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION, BAN_CODIGO FROM bancos;");
                     PreparedStatement pps2;
                     while (rs.next()){
                         if (rs.getString(2).equals(jTable1.getValueAt(i,0))){
@@ -3245,7 +3245,7 @@ public class crud_banco extends javax.swing.JFrame {
                         }               
                     }
                                                                                       
-                    pps2 = con.prepareStatement("update mydb.bancos set  BAN_NOMBRE = ? where BAN_CODIGO = ?;");
+                    pps2 = con.prepareStatement("update bancos set  BAN_DESCRIPCION = ? where BAN_CODIGO = ?;");
                     if (null != nombre){
                         pps2.setString(1,nombre);
                     }
@@ -3346,7 +3346,7 @@ public class crud_banco extends javax.swing.JFrame {
                         }               
                     }
                                                                                       
-                    pps2 = con.prepareStatement("update mydb.rrss set  RRS_NOMBRE = ? where RRS_CODIGO = ?;");
+                    pps2 = con.prepareStatement("update rrss set RRS_NOMBRE = ? where RRS_CODIGO = ?;");
                     if (null != nombre){
                         pps2.setString(1,nombre);
                     }
@@ -3391,7 +3391,7 @@ public class crud_banco extends javax.swing.JFrame {
                     String nombre = null;
                     //String codigo = null;
                     st = con.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT COM_NOMBRE, COM_CODIGO FROM comunas;");
+                    ResultSet rs = st.executeQuery("SELECT COM_DESCRIPCION, COM_CODIGO FROM comunas;");
                     PreparedStatement pps2;
                     while (rs.next()){
                         if (rs.getString(2).equals(jTable5.getValueAt(i,0))){
@@ -3400,7 +3400,7 @@ public class crud_banco extends javax.swing.JFrame {
                         }               
                     }
                                                                                       
-                    pps2 = con.prepareStatement("update mydb.comunas set  COM_NOMBRE = ? where COM_CODIGO = ?;");
+                    pps2 = con.prepareStatement("update comunas set  COM_DESCRIPCION = ? where COM_CODIGO = ?;");
                     if (null != nombre){
                         pps2.setString(1,nombre);
                     }
@@ -3463,7 +3463,7 @@ public class crud_banco extends javax.swing.JFrame {
                         }       
                     }
                                                                                       
-                    pps2 = con.prepareStatement("update mydb.usuarios set USU_NOMBRE = ? where  USU_ID_USUARIOS = ?;");
+                    pps2 = con.prepareStatement("update usuarios set USU_NOMBRE = ? where  USU_ID_USUARIOS = ?;");
                     if (null != nombre){
                         pps2.setString(1,nombre);
                     }
@@ -3617,7 +3617,7 @@ public class crud_banco extends javax.swing.JFrame {
             if (jTable4.isCellSelected(i, 3) == true){
                 try {
                     PreparedStatement pps;
-                    pps = con.prepareStatement("update mydb.rrss set estado = ? where RRS_CODIGO = ?;");
+                    pps = con.prepareStatement("update rrss set ESTADO = ? where RRS_CODIGO = ?;");
                     if ("activada".equals(jTable4.getValueAt(i, 2))){
                         pps.setString(1,"0");
                     }
@@ -3650,7 +3650,7 @@ public class crud_banco extends javax.swing.JFrame {
             }
             
             else {
-                PreparedStatement pps = con.prepareStatement("INSERT INTO comunas (COM_NOMBRE, COM_CODIGO, estado) VALUES (?,?,?)");
+                PreparedStatement pps = con.prepareStatement("INSERT INTO comunas (COM_DESCRIPCION, COM_CODIGO, estado) VALUES (?,?,?)");
                 pps.setString(1, campo1);
                 pps.setString(2, campo2);
                 pps.setString(3, "1");
@@ -3676,7 +3676,7 @@ public class crud_banco extends javax.swing.JFrame {
             }
             
             else {
-                PreparedStatement pps = con.prepareStatement("INSERT INTO bancos (BAN_NOMBRE, BAN_CODIGO, estado) VALUES (?,?,?)");
+                PreparedStatement pps = con.prepareStatement("INSERT INTO bancos (BAN_DESCRIPCION, BAN_CODIGO, estado) VALUES (?,?,?)");
                 pps.setString(1, campo1);
                 pps.setString(2, campo2);
                 pps.setString(3, "1");
@@ -3704,7 +3704,7 @@ public class crud_banco extends javax.swing.JFrame {
             if (jTable5.isCellSelected(i, 3) == true){
                 try {
                     PreparedStatement pps;
-                    pps = con.prepareStatement("update mydb.comunas set estado = ? where COM_CODIGO = ?;");
+                    pps = con.prepareStatement("update comunas set estado = ? where COM_CODIGO = ?;");
                     if ("activada".equals(jTable5.getValueAt(i, 2))){
                         pps.setString(1,"0");
                     }
@@ -3734,7 +3734,7 @@ public class crud_banco extends javax.swing.JFrame {
             if (jTable1.isCellSelected(i, 3) == true){
                 try {
                     PreparedStatement pps;
-                    pps = con.prepareStatement("update mydb.bancos set estado = ? where BAN_CODIGO = ?;");
+                    pps = con.prepareStatement("update bancos set estado = ? where BAN_CODIGO = ?;");
                     if ("activada".equals(jTable1.getValueAt(i, 2))){
                         pps.setString(1,"0");
                     }
@@ -3768,8 +3768,7 @@ public class crud_banco extends javax.swing.JFrame {
                 pps.executeUpdate();
                 pps.close();
                 JOptionPane.showMessageDialog(null, "Usuario guardado exitosamente");
-                
-                select 
+           
                 Mostrar_Usuarios();
             }
             
