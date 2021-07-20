@@ -265,15 +265,14 @@
                                           <Component id="jLabel53" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="inf_ven_fecha_d" min="-2" pref="158" max="-2" attributes="0"/>
-                                          <EmptySpace pref="316" max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jLabel45" min="-2" pref="166" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="inf_ven_rut" min="-2" pref="128" max="-2" attributes="0"/>
-                                          <EmptySpace max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
                                           <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
@@ -3124,6 +3123,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton18ActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel24">
                           <Properties>
@@ -3181,14 +3183,20 @@
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="0">
+                              <Table columnCount="4" rowCount="2">
                                 <Column editable="true" title="C&#xf3;digo RRSS" type="java.lang.Integer"/>
                                 <Column editable="true" title="Nombre RRSS" type="java.lang.String"/>
+                                <Column editable="true" title="Estado" type="java.lang.String"/>
                                 <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                               <TableColumnModel selectionModel="1">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title/>
                                   <Editor/>
@@ -3224,6 +3232,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="Desactivar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton19ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton20">
                       <Properties>
@@ -3680,6 +3691,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton22ActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="jButton23">
                           <Properties>
@@ -3688,6 +3702,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton23ActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel25">
                           <Properties>
@@ -3742,9 +3759,10 @@
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="8">
+                              <Table columnCount="4" rowCount="8">
                                 <Column editable="true" title="C&#xf3;digo comuna" type="java.lang.Integer"/>
                                 <Column editable="true" title="Nombre comuna" type="java.lang.String"/>
+                                <Column editable="true" title="Estado" type="java.lang.String"/>
                                 <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
                               </Table>
                             </Property>
@@ -3765,8 +3783,14 @@
                                   <Editor/>
                                   <Renderer/>
                                 </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
                               </TableColumnModel>
                             </Property>
+                            <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                             </Property>
@@ -3784,6 +3808,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="Desactivar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton24ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton25">
                       <Properties>
@@ -3972,6 +3999,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="jButton2">
                           <Properties>
@@ -3980,6 +4010,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -4022,14 +4055,20 @@
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="3" rowCount="9">
+                              <Table columnCount="4" rowCount="9">
                                 <Column editable="true" title="C&#xf3;digo Banco" type="java.lang.Integer"/>
                                 <Column editable="true" title="Nombre Banco" type="java.lang.String"/>
+                                <Column editable="true" title="Estado" type="java.lang.String"/>
                                 <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
                               </Table>
                             </Property>
                             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                               <TableColumnModel selectionModel="1">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
                                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                                   <Title/>
                                   <Editor/>
@@ -4065,6 +4104,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="Desactivar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton4">
                       <Properties>
@@ -4420,13 +4462,13 @@
                                   <Component id="jButton31" min="-2" pref="22" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jScrollPane6" min="-2" pref="115" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                              <Component id="jScrollPane6" min="-2" pref="90" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jButton29" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jButton30" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jButton29" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="239" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -4531,6 +4573,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Guardar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveuser_buttonActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="canceluser_button">
                           <Properties>
@@ -4539,6 +4584,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Cancelar"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="canceluser_buttonActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel29">
                           <Properties>
@@ -4603,7 +4651,7 @@
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="2" rowCount="8">
+                              <Table columnCount="2" rowCount="1">
                                 <Column editable="true" title="Nombre de usuario" type="java.lang.String"/>
                                 <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
                               </Table>
@@ -4638,8 +4686,11 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="18" style="0"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Desactivar"/>
+                        <Property name="text" type="java.lang.String" value="Eliminar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton29ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jButton30">
                       <Properties>
