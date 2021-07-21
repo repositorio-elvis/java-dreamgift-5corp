@@ -63,7 +63,9 @@ public class crud_banco extends javax.swing.JFrame {
     public crud_banco() {
         initComponents();
         Mostrar_RRSS();
+        Mostrar_COMUNA();
         Mostrar_BANCO();
+        Mostrar_USUARIO();
                 
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
 	int panelY = ((getHeight() - Panel_tab_menu.getHeight() - getInsets().top - getInsets().bottom) / 2);
@@ -91,14 +93,14 @@ public class crud_banco extends javax.swing.JFrame {
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE, RRS_CODIGO, ESTADO FROM RRSS;");
+            ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE, RRS_CODIGO, ESTADO FROM rrss;");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
                 if ("1".equals(rs.getString(3))){
-                    datos[2] = "true" ;
+                    datos[2] = "activada";
                 }
-                else datos[2]= "false";
+                else datos[2]= "desactivada";
                 modelo.addRow(datos); 
                 
             }
@@ -110,20 +112,22 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    
     private void Mostrar_BANCO(){
         Statement st;
-        String []datos = new String [2];   
+        String []datos = new String [3];   
         DefaultTableModel modelo = (DefaultTableModel) ban_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION ,BAN_CODIGO FROM bancos;");
+            ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION ,BAN_CODIGO, estado FROM bancos;");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
+                if ("1".equals(rs.getString(3))){
+                    datos[2]= "activado";
+                }
+                else datos[2]= "desactivado";
                 modelo.addRow(datos); 
-                
             }
             ban_tabla.setModel(modelo);
             st.close();
@@ -135,15 +139,19 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_COMUNA(){
         Statement st;
-        String []datos = new String [2];   
+        String []datos = new String [3];   
         DefaultTableModel modelo = (DefaultTableModel) comu_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT COM_DESCRIPCION ,COM_CODIGO  FROM comunas;");
+            ResultSet rs = st.executeQuery("SELECT COM_DESCRIPCION ,COM_CODIGO, estado  FROM comunas;");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
+                if ("1".equals(rs.getString(3))){
+                    datos[2]= "activada";
+                }
+                else datos[2]= "desactivada";
                 modelo.addRow(datos); 
                 
             }
@@ -176,8 +184,7 @@ public class crud_banco extends javax.swing.JFrame {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+      
     private void Mostrar_CAT_VENTA(){
         Statement st;
         String []datos = new String [2];   
@@ -200,7 +207,6 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    
     private void Mostrar_USUARIO(){
         Statement st;
         String []datos = new String [2];   
@@ -208,12 +214,10 @@ public class crud_banco extends javax.swing.JFrame {
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT USU_NOMBRE, USU_CONTRASEÑA  FROM usuarios;");
+            ResultSet rs = st.executeQuery("SELECT USU_NOMBRE FROM usuarios;");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
-                datos[1]=rs.getString(2);
                 modelo.addRow(datos); 
-                
             }
             usuario_tabla.setModel(modelo);
             st.close();
@@ -222,8 +226,7 @@ public class crud_banco extends javax.swing.JFrame {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+      
     private void Mostrar_CLIENTE(){
         Statement st;
         String []datos = new String [5];   
@@ -475,12 +478,12 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         comu_nombre_field = new javax.swing.JTextField();
         comu_bt_guardar = new javax.swing.JButton();
-        jButton23 = new javax.swing.JButton();
+        comu_can = new javax.swing.JButton();
         jLabel25 = new javax.swing.JLabel();
         comu_codigo_field = new javax.swing.JTextField();
         jFormattedTextField5 = new javax.swing.JFormattedTextField();
         jLabel28 = new javax.swing.JLabel();
-        jButton24 = new javax.swing.JButton();
+        comu_desactivar = new javax.swing.JButton();
         jButton25 = new javax.swing.JButton();
         jButton26 = new javax.swing.JButton();
         jScrollPane19 = new javax.swing.JScrollPane();
@@ -495,7 +498,7 @@ public class crud_banco extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        ban_desactivar = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jScrollPane17 = new javax.swing.JScrollPane();
@@ -2181,6 +2184,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton18.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton18.setText("Cancelar");
+        jButton18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton18ActionPerformed(evt);
+            }
+        });
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel24.setText("Código red social:");
@@ -2249,11 +2257,11 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Código RRSS", "Nombre RRSS", "Activado", "Acción"
+                "Nombre RRSS", "Código RRSS", "Estado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -2272,6 +2280,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton19.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton19.setText("Desactivar");
+        jButton19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton19ActionPerformed(evt);
+            }
+        });
 
         jButton20.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton20.setText("Editar");
@@ -2521,11 +2534,11 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton23.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton23.setText("Cancelar");
-        jButton23.addActionListener(new java.awt.event.ActionListener() {
+        comu_can.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        comu_can.setText("Cancelar");
+        comu_can.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton23ActionPerformed(evt);
+                comu_canActionPerformed(evt);
             }
         });
 
@@ -2557,7 +2570,7 @@ public class crud_banco extends javax.swing.JFrame {
                         .addComponent(comu_codigo_field, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(comu_can, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(comu_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(43, 43, 43))
@@ -2573,7 +2586,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(42, 42, 42)
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comu_bt_guardar)
-                    .addComponent(jButton23))
+                    .addComponent(comu_can))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -2588,8 +2601,13 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel28.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel28.setText("Comunas");
 
-        jButton24.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton24.setText("Desactivar");
+        comu_desactivar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        comu_desactivar.setText("Desactivar");
+        comu_desactivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comu_desactivarActionPerformed(evt);
+            }
+        });
 
         jButton25.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton25.setText("Editar");
@@ -2610,17 +2628,18 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre Comuna", "Codigo Comuna", "Acción"
+                "Nombre Comuna", "Codigo Comuna", "", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        comu_tabla.setColumnSelectionAllowed(true);
         comu_tabla.getTableHeader().setReorderingAllowed(false);
         comu_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -2640,7 +2659,7 @@ public class crud_banco extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton25, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton24))
+                        .addComponent(comu_desactivar))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tab_comunasLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(tab_comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2670,7 +2689,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(tab_comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton24)
+                    .addComponent(comu_desactivar)
                     .addComponent(jButton25))
                 .addGap(76, 76, 76))
         );
@@ -2711,6 +2730,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton2.setText("Cancelar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -2764,8 +2788,13 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText("Bancos");
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton3.setText("Desactivar");
+        ban_desactivar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ban_desactivar.setText("Desactivar");
+        ban_desactivar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ban_desactivarActionPerformed(evt);
+            }
+        });
 
         jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton4.setText("Editar");
@@ -2786,11 +2815,11 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre Banco", "Codigo Banco", "Acción"
+                "Nombre Banco", "Codigo Banco", "Estado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -2817,7 +2846,7 @@ public class crud_banco extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton3))
+                        .addComponent(ban_desactivar))
                     .addGroup(tab_bancosLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(tab_bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -2847,7 +2876,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addGroup(tab_bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
+                    .addComponent(ban_desactivar)
                     .addComponent(jButton4))
                 .addGap(76, 76, 76))
         );
@@ -3051,6 +3080,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         canceluser_button.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         canceluser_button.setText("Cancelar");
+        canceluser_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                canceluser_buttonActionPerformed(evt);
+            }
+        });
 
         jLabel29.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel29.setText("Ingrese clave:");
@@ -3120,7 +3154,12 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel34.setText("Usuarios");
 
         jButton29.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton29.setText("Desactivar");
+        jButton29.setText("Eliminar");
+        jButton29.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton29ActionPerformed(evt);
+            }
+        });
 
         jButton30.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton30.setText("Editar");
@@ -3141,17 +3180,18 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre Usuario", "Contraseña", "Acción"
+                "Nombre Usuario", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        usuario_tabla.setColumnSelectionAllowed(true);
         usuario_tabla.getTableHeader().setReorderingAllowed(false);
         usuario_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -3239,9 +3279,49 @@ public class crud_banco extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//editar banco
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = ban_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (ban_tabla.isCellSelected(i, 3) == true){
+                try {
+                    Statement st;
+                    String nombre = null;
+                    //String codigo = null;
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION, BAN_CODIGO FROM bancos;");
+                    PreparedStatement pps2;
+                    while (rs.next()){
+                        
+                        if (rs.getString(2).equals(ban_tabla.getValueAt(i,1))){
+                            nombre = JOptionPane.showInputDialog(null,"Ingrese nuevo nombre de banco", "Editar Banco", JOptionPane.QUESTION_MESSAGE);
+                            
+                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
+                        }               
+                    }
+                                                                                      
+                    pps2 = con.prepareStatement("update bancos set  BAN_DESCRIPCION = ? where BAN_CODIGO = ?;");
+                    if ("".equals(nombre)){
+                        pps2.setString(1,(String) ban_tabla.getValueAt(i,0));
+                    }
+                    else pps2.setString(1,nombre);
+                    /*
+                    if (null != codigo){
+                        pps2.setString(2,codigo);
+                    }
+                    else pps2.setString(2,(String) jTable4.getValueAt(i,1));
+                    */                  
+                    pps2.setString(2, (String) ban_tabla.getValueAt(i,1));
+                    pps2.executeUpdate();
+                    pps2.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_BANCO();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
@@ -3294,17 +3374,93 @@ public class crud_banco extends javax.swing.JFrame {
 
     private void jTable4ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jTable4ComponentAdded
     }//GEN-LAST:event_jTable4ComponentAdded
-
+//editar redes sociales
     private void jButton20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton20ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = jTable4.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (jTable4.isCellSelected(i, 3) == true){
+                try {
+                    Statement st;
+                    String nombre = null;
+                    //String codigo = null;
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE, RRS_CODIGO FROM rrss;");
+                    PreparedStatement pps2;
+                    while (rs.next()){
+                        if (rs.getString(2).equals(jTable4.getValueAt(i,1))){
+                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
+                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
+                        }               
+                    }
+                                                                                      
+                    pps2 = con.prepareStatement("update rrss set RRS_NOMBRE = ? where RRS_CODIGO = ?;");
+                    if ("".equals(nombre)){
+                        pps2.setString(1,(String) jTable4.getValueAt(i,0));
+                    }
+                    else pps2.setString(1,nombre);
+                    /*
+                    if (null != codigo){
+                        pps2.setString(2,codigo);
+                    }
+                    else pps2.setString(2,(String) jTable4.getValueAt(i,1));
+                    */                  
+                    pps2.setString(2, (String) jTable4.getValueAt(i,1));
+                    pps2.executeUpdate();
+                    pps2.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_RRSS();
     }//GEN-LAST:event_jButton20ActionPerformed
 
     private void jFormattedTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextField5ActionPerformed
-
+//editar comunas
     private void jButton25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton25ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = comu_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (comu_tabla.isCellSelected(i, 3) == true){
+                try {
+                    Statement st;
+                    String nombre = null;
+                    //String codigo = null;
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT COM_DESCRIPCION, COM_CODIGO FROM comunas;");
+                    PreparedStatement pps2;
+                    while (rs.next()){
+                        if (rs.getString(2).equals(comu_tabla.getValueAt(i,1))){
+                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
+                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
+                        }               
+                    }
+                                                                                      
+                    pps2 = con.prepareStatement("update comunas set  COM_DESCRIPCION = ? where COM_CODIGO = ?;");
+                    if ("".equals(nombre)){
+                        pps2.setString(1,(String) comu_tabla.getValueAt(i,0));     
+                    }
+                    else pps2.setString(1,nombre);
+                    /*
+                    if (null != codigo){
+                        pps2.setString(2,codigo);
+                    }
+                    else pps2.setString(2,(String) jTable5.getValueAt(i,1));
+                    */                  
+                    pps2.setString(2, (String) comu_tabla.getValueAt(i,1));
+                    pps2.executeUpdate();
+                    pps2.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_COMUNA();
     }//GEN-LAST:event_jButton25ActionPerformed
 
     private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField16ActionPerformed
@@ -3318,9 +3474,52 @@ public class crud_banco extends javax.swing.JFrame {
     private void jFormattedTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextField6ActionPerformed
-
+//editar usuario
     private void jButton30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton30ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = usuario_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (usuario_tabla.isCellSelected(i, 1) == true){
+                try {
+                    Statement st;
+                    String nombre = null;
+                    String actual = null;
+                    String id = null;
+                    //String codigo = null;
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT USU_ID_USUARIOS,USU_NOMBRE FROM usuarios;");
+                    PreparedStatement pps2;
+                    while (rs.next()){
+                        
+                        if (rs.getString(2).equals(usuario_tabla.getValueAt(i,0))){
+                            id = rs.getString(1);
+                            actual = rs.getString(2);
+                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
+                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
+                        }       
+                    }
+                                                                                      
+                    pps2 = con.prepareStatement("update usuarios set USU_NOMBRE = ? where  USU_ID_USUARIOS = ?;");
+                    if ("".equals(nombre)){
+                        pps2.setString(1,actual );
+                    }
+                    else pps2.setString(1,nombre);
+                    /*
+                    if (null != codigo){
+                        pps2.setString(2,codigo);
+                    }
+                    else pps2.setString(2,(String) jTable5.getValueAt(i,1));
+                    */                  
+                    pps2.setString(2, id);
+                    pps2.executeUpdate();
+                    pps2.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_USUARIO();    
     }//GEN-LAST:event_jButton30ActionPerformed
 
     private void jTextField15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField15ActionPerformed
@@ -3410,34 +3609,56 @@ public class crud_banco extends javax.swing.JFrame {
         lista2.remove(i);
         packeditor_list.setListData(lista1);
     }//GEN-LAST:event_frompack_buttonActionPerformed
-
+//guardar redes sociales
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
-
+        String campo1 = jTextField12.getText();
+        String campo2 = jTextField16.getText();
+        
         try {
-            PreparedStatement pps = con.prepareStatement("INSERT INTO RRSS (RRS_NOMBRE, RRS_CODIGO, ESTADO) VALUES (?,?,?)");
-            pps.setString(1, jTextField12.getText());
-            pps.setString(2, jTextField16.getText());
-            pps.setString(3, "1");
-            pps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_RRSS();
+            if ("".equals(campo1)  || "".equals(campo2)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            
+            else {
+                PreparedStatement pps = con.prepareStatement("INSERT INTO rrss (RRS_NOMBRE, RRS_CODIGO, estado) VALUES (?,?,?)");
+                pps.setString(1, campo1);
+                pps.setString(2, campo2);
+                pps.setString(3, "1");
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                Mostrar_RRSS();
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
         }
     }//GEN-LAST:event_jButton17ActionPerformed
-
+//guardar banco
     private void ban_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_bt_guardarActionPerformed
+        String campo1 = ban_nombre_field.getText();
+        String campo2 = ban_codigo_field.getText();
+        
         try {
-            PreparedStatement pps = con.prepareStatement("INSERT INTO bancos (BAN_DESCRIPCION, BAN_CODIGO) VALUES (?,?)");
-            pps.setString(1, ban_nombre_field.getText());
-            pps.setString(2, ban_codigo_field.getText());
-            pps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_BANCO();
+            if ("".equals(campo1)  || "".equals(campo2)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            
+            else {
+                PreparedStatement pps = con.prepareStatement("INSERT INTO bancos (BAN_DESCRIPCION, BAN_CODIGO, estado) VALUES (?,?,?)");
+                pps.setString(1, campo1);
+                pps.setString(2, campo2);
+                pps.setString(3, "1");
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                Mostrar_BANCO();
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
         }
     }//GEN-LAST:event_ban_bt_guardarActionPerformed
 
@@ -3452,18 +3673,30 @@ public class crud_banco extends javax.swing.JFrame {
     private void ban_codigo_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_codigo_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ban_codigo_fieldActionPerformed
-
+//guardar comuna
     private void comu_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comu_bt_guardarActionPerformed
+      String campo1 = comu_nombre_field.getText();
+        String campo2 = comu_codigo_field.getText();
+        
         try {
-            PreparedStatement pps = con.prepareStatement("INSERT INTO comunas (COM_DESCRIPCION, COM_CODIGO) VALUES (?,?)");
-            pps.setString(1, comu_nombre_field.getText());
-            pps.setString(2, comu_codigo_field.getText());
-            pps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_COMUNA();
+            if ("".equals(campo1)  || "".equals(campo2)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            
+            else {
+                PreparedStatement pps = con.prepareStatement("INSERT INTO comunas (COM_DESCRIPCION, COM_CODIGO, estado) VALUES (?,?,?)");
+                pps.setString(1, campo1);
+                pps.setString(2, campo2);
+                pps.setString(3, "1");
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                Mostrar_COMUNA();
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
         }
     }//GEN-LAST:event_comu_bt_guardarActionPerformed
 
@@ -3492,10 +3725,11 @@ public class crud_banco extends javax.swing.JFrame {
     private void cat_art_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_cat_art_tablaComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_cat_art_tablaComponentAdded
-
-    private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton23ActionPerformed
+//cancelar comuna
+    private void comu_canActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comu_canActionPerformed
+        comu_nombre_field.setText(null);
+        comu_codigo_field.setText(null);
+    }//GEN-LAST:event_comu_canActionPerformed
 
     private void cat_ven_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_cat_ven_tablaComponentAdded
         // TODO add your handling code here:
@@ -3514,19 +3748,35 @@ public class crud_banco extends javax.swing.JFrame {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_cat_ven_bt_guardarActionPerformed
-
+//guardar usuario
     private void saveuser_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveuser_buttonActionPerformed
+       String nombre = username_field.getText();
+        char[] c1 = pass_field.getPassword();
+        char[] c2 = repet_pass_field.getPassword();
+        String contraseña = String.valueOf(c1);
+        String contraseña2 = String.valueOf(c2);
+               
         try {
-            PreparedStatement pps = con.prepareStatement("INSERT INTO usuarios (USU_NOMBRE, USU_CONTRASEÑA) VALUES (?,?)");
-            pps.setString(1, username_field.getText());
-            pps.setString(2, pass_field.getText());
-            pps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_USUARIO();
+            if (contraseña.equals(contraseña2)){
+                                
+                PreparedStatement pps = con.prepareStatement("INSERT INTO usuarios (USU_NOMBRE, USU_CONTRASEÑA) VALUES (?,?)");
+                pps.setString(1, nombre);
+                pps.setString(2, contraseña);
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Usuario guardado exitosamente");
+           
+                Mostrar_USUARIO();
+            }
+            
+            else {
+                JOptionPane.showMessageDialog(null, "Repetir contraseña");
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            JOptionPane.showMessageDialog(null, "No se pudo agregar el usuario");
+        }  
     }//GEN-LAST:event_saveuser_buttonActionPerformed
 
     private void usuario_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_usuario_tablaComponentAdded
@@ -3561,6 +3811,120 @@ public class crud_banco extends javax.swing.JFrame {
     private void cli_fec_nacimiento_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_fec_nacimiento_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cli_fec_nacimiento_fieldActionPerformed
+//desactivar redes sociales
+    private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
+        int cantidad_filas = jTable4.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            
+       
+            if (jTable4.isCellSelected(i, 3) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("update rrss set ESTADO = ? where RRS_CODIGO = ?");
+                    System.out.print("pase");
+                    if ("activada".equals(jTable4.getValueAt(i, 2))){
+                        pps.setString(1,"0");
+                    }
+                    else pps.setString(1,"1"); 
+                    
+                    pps.setString(2, (String) jTable4.getValueAt(i,1));
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_RRSS();
+    }//GEN-LAST:event_jButton19ActionPerformed
+//cancelar redes sociales
+    private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
+        jTextField12.setText(null);
+        jTextField16.setText(null);
+    }//GEN-LAST:event_jButton18ActionPerformed
+//desactivar comuna
+    private void comu_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comu_desactivarActionPerformed
+        int cantidad_filas = comu_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (comu_tabla.isCellSelected(i, 3) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("update comunas set estado = ? where COM_CODIGO = ?;");
+                    if ("activada".equals(comu_tabla.getValueAt(i, 2))){
+                        pps.setString(1,"0");
+                    }
+                    else pps.setString(1,"1"); 
+                    
+                    pps.setString(2, (String) comu_tabla.getValueAt(i,1));
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_COMUNA(); 
+    }//GEN-LAST:event_comu_desactivarActionPerformed
+//cancelar banco
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        ban_nombre_field.setText(null);
+        ban_codigo_field.setText(null);
+    }//GEN-LAST:event_jButton2ActionPerformed
+//desactivar banco
+    private void ban_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_desactivarActionPerformed
+         int cantidad_filas = ban_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (ban_tabla.isCellSelected(i, 3) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("update bancos set estado = ? where BAN_CODIGO = ?;");
+                    if ("activado".equals(ban_tabla.getValueAt(i, 2))){
+                        pps.setString(1,"0");
+                    }
+                    else pps.setString(1,"1"); 
+                    
+                    pps.setString(2, (String) ban_tabla.getValueAt(i,1));
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_BANCO();
+    }//GEN-LAST:event_ban_desactivarActionPerformed
+//cancelar usuario
+    private void canceluser_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_canceluser_buttonActionPerformed
+        username_field.setText(null);
+        pass_field.setText(null);
+        repet_pass_field.setText(null);
+    }//GEN-LAST:event_canceluser_buttonActionPerformed
+//eliminar usuario
+    private void jButton29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton29ActionPerformed
+        int cantidad_filas = usuario_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (usuario_tabla.isCellSelected(i, 1) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("DELETE FROM usuarios WHERE USU_NOMBRE = ?;");
+                    pps.setString(1,(String) usuario_tabla.getValueAt(i, 0)); 
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_USUARIO();
+    }//GEN-LAST:event_jButton29ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -3607,6 +3971,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JSpinner addunits_spinner;
     private javax.swing.JButton ban_bt_guardar;
     private javax.swing.JTextField ban_codigo_field;
+    private javax.swing.JButton ban_desactivar;
     private javax.swing.JTextField ban_nombre_field;
     private javax.swing.JTable ban_tabla;
     private javax.swing.JButton cancelpack_button;
@@ -3628,7 +3993,9 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField cli_telefono_field;
     private javax.swing.JLabel clientname;
     private javax.swing.JButton comu_bt_guardar;
+    private javax.swing.JButton comu_can;
     private javax.swing.JTextField comu_codigo_field;
+    private javax.swing.JButton comu_desactivar;
     private javax.swing.JTextField comu_nombre_field;
     private javax.swing.JTable comu_tabla;
     private javax.swing.JButton deactivatepack_button;
@@ -3680,12 +4047,9 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
     private javax.swing.JButton jButton21;
-    private javax.swing.JButton jButton23;
-    private javax.swing.JButton jButton24;
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton26;
     private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton32;
