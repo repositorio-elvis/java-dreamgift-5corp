@@ -66,6 +66,8 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_COMUNA();
         Mostrar_BANCO();
         Mostrar_USUARIO();
+        Mostrar_CLIENTE();
+        
                 
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
 	int panelY = ((getHeight() - Panel_tab_menu.getHeight() - getInsets().top - getInsets().bottom) / 2);
@@ -236,12 +238,12 @@ public class crud_banco extends javax.swing.JFrame {
             st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO  FROM cliente;");
             while (rs.next()){
-                datos[0]=rs.getString(1); 
-                datos[1]=rs.getString(2);
-                datos[2]=rs.getString(3); 
-                datos[3]=rs.getString(4);
+                datos[0]=rs.getString(2); 
+                datos[1]=rs.getString(3);
+                datos[2]=rs.getString(4); 
+                datos[3]=rs.getString(1);
                 datos[4]=rs.getString(5); 
-                modelo.addRow(datos); 
+                modelo.addRow(datos);           
                 
             }
             cli_tabla.setModel(modelo);
@@ -357,7 +359,7 @@ public class crud_banco extends javax.swing.JFrame {
         clientname = new javax.swing.JLabel();
         cli_nombre_field = new javax.swing.JTextField();
         cli_bt_guardar = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
+        cli_bt_cancelar = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
         cli_telefono_field = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
@@ -365,7 +367,7 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         cli_rut_field = new javax.swing.JTextField();
-        cli_fec_nacimiento_field = new javax.swing.JTextField();
+        cli_fec_nacimiento_field = new com.toedter.calendar.JDateChooser();
         jFormattedTextField3 = new javax.swing.JFormattedTextField();
         jLabel21 = new javax.swing.JLabel();
         jButton14 = new javax.swing.JButton();
@@ -1269,8 +1271,13 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton13.setText("Cancelar");
+        cli_bt_cancelar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cli_bt_cancelar.setText("Cancelar");
+        cli_bt_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cli_bt_cancelarActionPerformed(evt);
+            }
+        });
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel15.setText("Teléfono:");
@@ -1292,14 +1299,6 @@ public class crud_banco extends javax.swing.JFrame {
 
         cli_rut_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         cli_rut_field.setText("13675655-9");
-
-        cli_fec_nacimiento_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        cli_fec_nacimiento_field.setText("1985-10-04");
-        cli_fec_nacimiento_field.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cli_fec_nacimiento_fieldActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -1325,10 +1324,10 @@ public class crud_banco extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cli_rut_field, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                            .addComponent(cli_fec_nacimiento_field)))
+                            .addComponent(cli_fec_nacimiento_field, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cli_bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cli_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(43, 43, 43))
@@ -1343,22 +1342,22 @@ public class crud_banco extends javax.swing.JFrame {
                     .addComponent(cli_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel19)
-                            .addComponent(cli_fec_nacimiento_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cli_telefono_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cli_email_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16))))
+                            .addComponent(jLabel16)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel19)
+                            .addComponent(cli_fec_nacimiento_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(46, 46, 46)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cli_bt_guardar)
-                    .addComponent(jButton13))
+                    .addComponent(cli_bt_cancelar))
                 .addGap(28, 28, 28))
         );
 
@@ -1395,17 +1394,18 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Rut", "Nombre", "Celular", "Correo", "Fecha Nacimiento", "Acción"
+                "Rut", "Nombre", "Telefono", "Correo", "Fecha Nacimiento", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        cli_tabla.setColumnSelectionAllowed(true);
         cli_tabla.getTableHeader().setReorderingAllowed(false);
         cli_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -3789,12 +3789,24 @@ public class crud_banco extends javax.swing.JFrame {
 
     private void cli_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_guardarActionPerformed
         try {
+            //V1 -formato date - JCalendar -- con formato unico "2021-10-25" -- BD en DATE
+            java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
+            java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
+            
+            //V2 - Fecha a String con FORMATO -- cambiar formato de BD a STRING "25-10-2021"
+            //SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+            //String date1= sdf.format(cli_fec_nacimiento_field.getDate());
+            //pps.setString(5, date1);
+            
             PreparedStatement pps = con.prepareStatement("INSERT INTO cliente (CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO) VALUES (?,?,?,?,?)");
             pps.setString(1, cli_rut_field.getText());
             pps.setString(2, cli_nombre_field.getText());
             pps.setString(3, cli_telefono_field.getText());
             pps.setString(4, cli_email_field.getText());
-            pps.setString(5, cli_fec_nacimiento_field.getText());
+            //V2//pps.setString(5, date1);
+            pps.setDate(5, cli_fec_nacimiento_field1);
+            //V3//Fecha Date a String -- Sencillo -- cambiar formato de BD a STRING
+            //pps.setString(5, ((JTextField)cli_fec_nacimiento_field.getDateEditor().getUiComponent()).getText());
             pps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
             Mostrar_CLIENTE();
@@ -3807,10 +3819,6 @@ public class crud_banco extends javax.swing.JFrame {
     private void cli_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_nombre_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cli_nombre_fieldActionPerformed
-
-    private void cli_fec_nacimiento_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_fec_nacimiento_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cli_fec_nacimiento_fieldActionPerformed
 //desactivar redes sociales
     private void jButton19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton19ActionPerformed
         int cantidad_filas = jTable4.getRowCount();
@@ -3926,6 +3934,14 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_USUARIO();
     }//GEN-LAST:event_jButton29ActionPerformed
 
+    private void cli_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_cancelarActionPerformed
+        cli_nombre_field.setText(null);
+        cli_telefono_field.setText(null);
+        cli_email_field.setText(null);
+        cli_rut_field.setText(null);
+        cli_fec_nacimiento_field.setDate(null);
+    }//GEN-LAST:event_cli_bt_cancelarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -3984,9 +4000,10 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField cat_ven_codigo_field;
     private javax.swing.JTextField cat_ven_nombre_field;
     private javax.swing.JTable cat_ven_tabla;
+    private javax.swing.JButton cli_bt_cancelar;
     private javax.swing.JButton cli_bt_guardar;
     private javax.swing.JTextField cli_email_field;
-    private javax.swing.JTextField cli_fec_nacimiento_field;
+    private com.toedter.calendar.JDateChooser cli_fec_nacimiento_field;
     private javax.swing.JTextField cli_nombre_field;
     private javax.swing.JTextField cli_rut_field;
     private javax.swing.JTable cli_tabla;
@@ -4037,7 +4054,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable inf_ven_tabla;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
