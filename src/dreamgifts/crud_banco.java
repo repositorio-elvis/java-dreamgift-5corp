@@ -67,6 +67,7 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_BANCO();
         Mostrar_USUARIO();
         Mostrar_CLIENTE();
+        Mostrar_PROVEEDOR();
         
                 
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
@@ -231,22 +232,57 @@ public class crud_banco extends javax.swing.JFrame {
       
     private void Mostrar_CLIENTE(){
         Statement st;
-        String []datos = new String [5];   
+        String []datos = new String [6];   
         DefaultTableModel modelo = (DefaultTableModel) cli_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO  FROM cliente;");
+            ResultSet rs = st.executeQuery("SELECT CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO, ESTADO  FROM cliente;");
             while (rs.next()){
-                datos[0]=rs.getString(2); 
-                datos[1]=rs.getString(3);
-                datos[2]=rs.getString(4); 
-                datos[3]=rs.getString(1);
-                datos[4]=rs.getString(5); 
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3); 
+                datos[3]=rs.getString(4);
+                datos[4]=rs.getString(5);
+                if ("1".equals(rs.getString(6))){
+                    datos[5] = "activada";
+                }
+                else datos[5]= "desactivada";
                 modelo.addRow(datos);           
                 
             }
             cli_tabla.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    private void Mostrar_PROVEEDOR(){
+        Statement st;
+        String []datos = new String [7];   
+        DefaultTableModel modelo = (DefaultTableModel) prov_tabla.getModel();
+        modelo.setNumRows(0);
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT PRO_ID_PROVEEDOR, PRO_NOMBRE, PRO_TELEFONO, PRO_CORREO, PRO_DIRECCION, PRO_RAZON, ESTADO FROM proveedor;");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3); 
+                datos[3]=rs.getString(4);
+                datos[4]=rs.getString(5);
+                datos[5]=rs.getString(6);
+                if ("1".equals(rs.getString(7))){
+                    datos[6] = "activada";
+                }
+                else datos[6]= "desactivada";
+                modelo.addRow(datos);           
+                
+            }
+            prov_tabla.setModel(modelo);
             st.close();
                         
         } catch (SQLException ex) {
@@ -370,34 +406,34 @@ public class crud_banco extends javax.swing.JFrame {
         cli_fec_nacimiento_field = new com.toedter.calendar.JDateChooser();
         jFormattedTextField3 = new javax.swing.JFormattedTextField();
         jLabel21 = new javax.swing.JLabel();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
+        cli_bt_desactivar = new javax.swing.JButton();
+        cli_bt_editar = new javax.swing.JButton();
         jButton16 = new javax.swing.JButton();
         jScrollPane23 = new javax.swing.JScrollPane();
         cli_tabla = new javax.swing.JTable();
         tab_provee = new javax.swing.JPanel();
         jPanel12 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
-        jTextField15 = new javax.swing.JTextField();
-        jButton32 = new javax.swing.JButton();
-        jButton33 = new javax.swing.JButton();
+        prov_rut_field = new javax.swing.JTextField();
+        prov_bt_guardar = new javax.swing.JButton();
+        prov_bt_cancelar = new javax.swing.JButton();
         jLabel31 = new javax.swing.JLabel();
-        jTextField18 = new javax.swing.JTextField();
+        prov_nombre_field = new javax.swing.JTextField();
         jLabel32 = new javax.swing.JLabel();
-        jTextField19 = new javax.swing.JTextField();
+        prov_direccion_field = new javax.swing.JTextField();
         jLabel33 = new javax.swing.JLabel();
         jLabel35 = new javax.swing.JLabel();
         jLabel36 = new javax.swing.JLabel();
-        jTextField20 = new javax.swing.JTextField();
-        jTextField21 = new javax.swing.JTextField();
-        jTextField22 = new javax.swing.JTextField();
-        jFormattedTextField7 = new javax.swing.JFormattedTextField();
+        prov_email_field = new javax.swing.JTextField();
+        prov_razon_field = new javax.swing.JTextField();
+        prov_telefono_field = new javax.swing.JTextField();
+        prov_bar_buscar = new javax.swing.JFormattedTextField();
         jLabel37 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTable7 = new javax.swing.JTable();
-        jButton34 = new javax.swing.JButton();
-        jButton35 = new javax.swing.JButton();
-        jButton36 = new javax.swing.JButton();
+        prov_tabla = new javax.swing.JTable();
+        prov_bt_desactivar = new javax.swing.JButton();
+        prov_bt_editar = new javax.swing.JButton();
+        prov_bt_buscar = new javax.swing.JButton();
         tab_articulos = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -1372,14 +1408,19 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel21.setText("Lista Clientes");
 
-        jButton14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton14.setText("Desactivar");
-
-        jButton15.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton15.setText("Editar");
-        jButton15.addActionListener(new java.awt.event.ActionListener() {
+        cli_bt_desactivar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cli_bt_desactivar.setText("Desactivar");
+        cli_bt_desactivar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton15ActionPerformed(evt);
+                cli_bt_desactivarActionPerformed(evt);
+            }
+        });
+
+        cli_bt_editar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cli_bt_editar.setText("Editar");
+        cli_bt_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cli_bt_editarActionPerformed(evt);
             }
         });
 
@@ -1394,11 +1435,11 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Rut", "Nombre", "Telefono", "Correo", "Fecha Nacimiento", "Acción"
+                "Rut", "Nombre", "Telefono", "Correo", "Fecha Nacimiento", "Estado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1423,10 +1464,10 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGroup(tab_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(tab_clientesLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton14)
-                        .addGap(100, 100, 100))
+                        .addComponent(cli_bt_desactivar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cli_bt_editar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(231, 231, 231))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tab_clientesLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(tab_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1457,8 +1498,8 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(tab_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton14)
-                    .addComponent(jButton15))
+                    .addComponent(cli_bt_desactivar)
+                    .addComponent(cli_bt_editar))
                 .addGap(76, 76, 76))
         );
 
@@ -1469,29 +1510,46 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel26.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel26.setText("RUT Proveedor:");
 
-        jTextField15.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField15.setText("70.123.456-K");
-        jTextField15.addActionListener(new java.awt.event.ActionListener() {
+        prov_rut_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_rut_field.setText("70123456-5");
+        prov_rut_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField15ActionPerformed(evt);
+                prov_rut_fieldActionPerformed(evt);
             }
         });
 
-        jButton32.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton32.setText("Guardar");
+        prov_bt_guardar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_bt_guardar.setText("Guardar");
+        prov_bt_guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prov_bt_guardarActionPerformed(evt);
+            }
+        });
 
-        jButton33.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton33.setText("Cancelar");
+        prov_bt_cancelar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_bt_cancelar.setText("Cancelar");
+        prov_bt_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prov_bt_cancelarActionPerformed(evt);
+            }
+        });
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel31.setText("Nombre Contacto:");
 
-        jTextField18.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_nombre_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_nombre_field.setText("Pedro Perez");
 
         jLabel32.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel32.setText("Dirección:");
 
-        jTextField19.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_direccion_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_direccion_field.setText("Pasaje 1234");
+        prov_direccion_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prov_direccion_fieldActionPerformed(evt);
+            }
+        });
 
         jLabel33.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel33.setText("Razón social:");
@@ -1502,11 +1560,19 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel36.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel36.setText("E-mail:");
 
-        jTextField20.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_email_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_email_field.setText("pedro.p@mcdonals.cl");
 
-        jTextField21.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_razon_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_razon_field.setText("Mcdonals SPA");
+        prov_razon_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prov_razon_fieldActionPerformed(evt);
+            }
+        });
 
-        jTextField22.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_telefono_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_telefono_field.setText("912345678");
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -1522,9 +1588,9 @@ public class crud_banco extends javax.swing.JFrame {
                             .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField19, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField18, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField15, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
+                            .addComponent(prov_direccion_field, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(prov_nombre_field, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(prov_rut_field, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
                         .addGap(82, 82, 82)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel35)
@@ -1532,14 +1598,14 @@ public class crud_banco extends javax.swing.JFrame {
                             .addComponent(jLabel36))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField21)
-                            .addComponent(jTextField20, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
-                            .addComponent(jTextField22, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)))
+                            .addComponent(prov_razon_field)
+                            .addComponent(prov_email_field, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                            .addComponent(prov_telefono_field, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)))
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton33, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(prov_bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton32, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(prov_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(43, 43, 43))
         );
         jPanel12Layout.setVerticalGroup(
@@ -1550,36 +1616,36 @@ public class crud_banco extends javax.swing.JFrame {
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel26)
                             .addComponent(jLabel33)
-                            .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(prov_razon_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(8, 8, 8)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel35)
-                            .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(prov_telefono_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel36)
-                            .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(prov_email_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(prov_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(prov_nombre_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel31))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(prov_direccion_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel32))))
                 .addGap(42, 42, 42)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton32)
-                    .addComponent(jButton33))
+                    .addComponent(prov_bt_guardar)
+                    .addComponent(prov_bt_cancelar))
                 .addGap(28, 28, 28))
         );
 
-        jFormattedTextField7.setToolTipText("buscar...");
-        jFormattedTextField7.addActionListener(new java.awt.event.ActionListener() {
+        prov_bar_buscar.setToolTipText("buscar...");
+        prov_bar_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField7ActionPerformed(evt);
+                prov_bar_buscarActionPerformed(evt);
             }
         });
 
@@ -1589,52 +1655,58 @@ public class crud_banco extends javax.swing.JFrame {
 
         jScrollPane7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jTable7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTable7.setModel(new javax.swing.table.DefaultTableModel(
+        prov_tabla.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "RUT Proveedor", "Razón social", "Nombre contacto", "Dirección", "Correo electrónico", "Teléfono", "Acción"
+                "RUT Proveedor", "Nombre contacto", "Teléfono", "Correo electrónico", "Dirección", "Razón social", "Estado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jTable7.getTableHeader().setReorderingAllowed(false);
-        jTable7.addContainerListener(new java.awt.event.ContainerAdapter() {
+        prov_tabla.setColumnSelectionAllowed(true);
+        prov_tabla.getTableHeader().setReorderingAllowed(false);
+        prov_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
-                jTable7ComponentAdded(evt);
+                prov_tablaComponentAdded(evt);
             }
         });
-        jScrollPane7.setViewportView(jTable7);
-        jTable7.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane7.setViewportView(prov_tabla);
+        prov_tabla.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        jButton34.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton34.setText("Desactivar");
-
-        jButton35.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton35.setText("Editar");
-        jButton35.addActionListener(new java.awt.event.ActionListener() {
+        prov_bt_desactivar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_bt_desactivar.setText("Desactivar");
+        prov_bt_desactivar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton35ActionPerformed(evt);
+                prov_bt_desactivarActionPerformed(evt);
             }
         });
 
-        jButton36.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton36.setText("Buscar");
+        prov_bt_editar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_bt_editar.setText("Editar");
+        prov_bt_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prov_bt_editarActionPerformed(evt);
+            }
+        });
+
+        prov_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        prov_bt_buscar.setText("Buscar");
 
         javax.swing.GroupLayout tab_proveeLayout = new javax.swing.GroupLayout(tab_provee);
         tab_provee.setLayout(tab_proveeLayout);
@@ -1644,18 +1716,18 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGroup(tab_proveeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(tab_proveeLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton35, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(prov_bt_editar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton34))
+                        .addComponent(prov_bt_desactivar))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tab_proveeLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(tab_proveeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_proveeLayout.createSequentialGroup()
                                 .addComponent(jLabel37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(prov_bar_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton36)
+                                .addComponent(prov_bt_buscar)
                                 .addGap(8, 8, 8))
                             .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane7))))
@@ -1668,15 +1740,15 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(tab_proveeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jFormattedTextField7, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(prov_bar_buscar, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel37, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(prov_bt_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addGroup(tab_proveeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton34)
-                    .addComponent(jButton35))
+                    .addComponent(prov_bt_desactivar)
+                    .addComponent(prov_bt_editar))
                 .addGap(76, 76, 76))
         );
 
@@ -3360,9 +3432,47 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jFormattedTextField3ActionPerformed
 
-    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton15ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton15ActionPerformed
+    private void cli_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_editarActionPerformed
+        int cantidad_filas = cli_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (cli_tabla.isCellSelected(i, 6) == true){
+                try {
+                    Statement st;
+                    String nombre = null;
+                    //String codigo = null;
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO, ESTADO FROM cliente;");
+                    PreparedStatement pps2;
+                    while (rs.next()){
+                        if (rs.getString(2).equals(cli_tabla.getValueAt(i,1))){
+                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
+                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
+                        }               
+                    }
+                                                                                      
+                    pps2 = con.prepareStatement("update cliente set CLI_NOMBRE = ? where CLI_ID_CLIENTE = ?;");
+                    if ("".equals(nombre)){
+                        pps2.setString(1,(String) cli_tabla.getValueAt(i,0));
+                    }
+                    else pps2.setString(1,nombre);
+                    /*
+                    if (null != codigo){
+                        pps2.setString(2,codigo);
+                    }
+                    else pps2.setString(2,(String) jTable4.getValueAt(i,1));
+                    */                  
+                    pps2.setString(2, (String) cli_tabla.getValueAt(i,1));
+                    pps2.executeUpdate();
+                    pps2.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_CLIENTE();
+    }//GEN-LAST:event_cli_bt_editarActionPerformed
 
     private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
         // TODO add your handling code here:
@@ -3522,21 +3632,59 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_USUARIO();    
     }//GEN-LAST:event_jButton30ActionPerformed
 
-    private void jTextField15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField15ActionPerformed
+    private void prov_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_rut_fieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField15ActionPerformed
+    }//GEN-LAST:event_prov_rut_fieldActionPerformed
 
-    private void jFormattedTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField7ActionPerformed
+    private void prov_bar_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bar_buscarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField7ActionPerformed
+    }//GEN-LAST:event_prov_bar_buscarActionPerformed
 
-    private void jTable7ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jTable7ComponentAdded
+    private void prov_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_prov_tablaComponentAdded
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTable7ComponentAdded
+    }//GEN-LAST:event_prov_tablaComponentAdded
 
-    private void jButton35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton35ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton35ActionPerformed
+    private void prov_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_editarActionPerformed
+        int cantidad_filas = prov_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (prov_tabla.isCellSelected(i, 6) == true){
+                try {
+                    Statement st;
+                    String nombre = null;
+                    //String codigo = null;
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT PRO_ID_PROVEEDOR, PRO_NOMBRE, PRO_TELEFONO, PRO_CORREO, PRO_DIRECCION, PRO_RAZON, ESTADO FROM cliente;");
+                    PreparedStatement pps2;
+                    while (rs.next()){
+                        if (rs.getString(2).equals(prov_tabla.getValueAt(i,1))){
+                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
+                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
+                        }               
+                    }
+                                                                                      
+                    pps2 = con.prepareStatement("update cliente set CLI_NOMBRE = ? where CLI_ID_CLIENTE = ?;");
+                    if ("".equals(nombre)){
+                        pps2.setString(1,(String) prov_tabla.getValueAt(i,0));
+                    }
+                    else pps2.setString(1,nombre);
+                    /*
+                    if (null != codigo){
+                        pps2.setString(2,codigo);
+                    }
+                    else pps2.setString(2,(String) jTable4.getValueAt(i,1));
+                    */                  
+                    pps2.setString(2, (String) prov_tabla.getValueAt(i,1));
+                    pps2.executeUpdate();
+                    pps2.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_PROVEEDOR();
+    }//GEN-LAST:event_prov_bt_editarActionPerformed
 
     private void cat_art_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_art_nombre_fieldActionPerformed
         // TODO add your handling code here:
@@ -3788,32 +3936,37 @@ public class crud_banco extends javax.swing.JFrame {
     }//GEN-LAST:event_cli_tablaComponentAdded
 
     private void cli_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_guardarActionPerformed
+
+        String campo1 = cli_nombre_field.getText();
+        String campo2 = cli_telefono_field.getText();
+        String campo3 = cli_email_field.getText();
+        String campo4 = cli_rut_field.getText();  
         try {
-            //V1 -formato date - JCalendar -- con formato unico "2021-10-25" -- BD en DATE
-            java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
-            java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
+            if ("".equals(campo1) || "".equals(campo2) || "".equals(campo3) || "".equals(campo4)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
             
-            //V2 - Fecha a String con FORMATO -- cambiar formato de BD a STRING "25-10-2021"
-            //SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-            //String date1= sdf.format(cli_fec_nacimiento_field.getDate());
-            //pps.setString(5, date1);
-            
-            PreparedStatement pps = con.prepareStatement("INSERT INTO cliente (CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO) VALUES (?,?,?,?,?)");
-            pps.setString(1, cli_rut_field.getText());
-            pps.setString(2, cli_nombre_field.getText());
-            pps.setString(3, cli_telefono_field.getText());
-            pps.setString(4, cli_email_field.getText());
-            //V2//pps.setString(5, date1);
-            pps.setDate(5, cli_fec_nacimiento_field1);
-            //V3//Fecha Date a String -- Sencillo -- cambiar formato de BD a STRING
-            //pps.setString(5, ((JTextField)cli_fec_nacimiento_field.getDateEditor().getUiComponent()).getText());
-            pps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_CLIENTE();
+            else {
+                java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
+                java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
+                PreparedStatement pps = con.prepareStatement("INSERT INTO cliente (CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO, ESTADO) VALUES (?,?,?,?,?,?)");
+                pps.setString(2, campo1);
+                pps.setString(3, campo2);
+                pps.setString(4, campo3);
+                pps.setString(1, campo4);
+                pps.setDate(5, cli_fec_nacimiento_field1);
+                pps.setString(6, "1");
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                Mostrar_CLIENTE();
+            }
             
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
         }
+        
     }//GEN-LAST:event_cli_bt_guardarActionPerformed
 
     private void cli_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_nombre_fieldActionPerformed
@@ -3884,7 +4037,7 @@ public class crud_banco extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 //desactivar banco
     private void ban_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_desactivarActionPerformed
-         int cantidad_filas = ban_tabla.getRowCount();
+        int cantidad_filas = ban_tabla.getRowCount();
         
         for (int i = 0; i <= cantidad_filas; i++){
             if (ban_tabla.isCellSelected(i, 3) == true){
@@ -3941,6 +4094,106 @@ public class crud_banco extends javax.swing.JFrame {
         cli_rut_field.setText(null);
         cli_fec_nacimiento_field.setDate(null);
     }//GEN-LAST:event_cli_bt_cancelarActionPerformed
+
+    private void cli_bt_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_desactivarActionPerformed
+        int cantidad_filas = cli_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (cli_tabla.isCellSelected(i, 6) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("update cliente set ESTADO = ? where CLI_ID_CLIENTE = ?");
+                    System.out.print("pase");
+                    if ("activada".equals(cli_tabla.getValueAt(i, 5))){
+                        pps.setString(1,"0");
+                    }
+                    else pps.setString(1,"1"); 
+                    pps.setString(2, (String) cli_tabla.getValueAt(i,0));
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_CLIENTE();
+    }//GEN-LAST:event_cli_bt_desactivarActionPerformed
+
+    private void prov_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_cancelarActionPerformed
+        prov_rut_field.setText(null);
+        prov_nombre_field.setText(null);
+        prov_direccion_field.setText(null);
+        prov_razon_field.setText(null);
+        prov_telefono_field.setText(null);
+        prov_email_field.setText(null);
+    }//GEN-LAST:event_prov_bt_cancelarActionPerformed
+
+    private void prov_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_guardarActionPerformed
+        String campo1 = prov_rut_field.getText();
+        String campo2 = prov_nombre_field.getText();
+        String campo3 = prov_direccion_field.getText();
+        String campo4 = prov_razon_field.getText();  
+        String campo5 = prov_telefono_field.getText();  
+        String campo6 = prov_email_field.getText();  
+        try {
+            if ("".equals(campo1) || "".equals(campo2) || "".equals(campo3) || "".equals(campo4) || "".equals(campo5) || "".equals(campo6)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            
+            else {
+                PreparedStatement pps = con.prepareStatement("INSERT INTO proveedor (PRO_ID_PROVEEDOR, PRO_NOMBRE, PRO_TELEFONO, PRO_CORREO, PRO_DIRECCION, PRO_RAZON, ESTADO) VALUES (?,?,?,?,?,?,?)");
+                pps.setString(1, campo1);
+                pps.setString(2, campo2);
+                pps.setString(5, campo3);
+                pps.setString(6, campo4);
+                pps.setString(3, campo5);
+                pps.setString(4, campo6);
+                pps.setString(7, "1");
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                Mostrar_PROVEEDOR();
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }
+    }//GEN-LAST:event_prov_bt_guardarActionPerformed
+
+    private void prov_bt_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_desactivarActionPerformed
+        int cantidad_filas = prov_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (prov_tabla.isCellSelected(i, 7) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("update proveedor set ESTADO = ? where PRO_ID_PROVEEDOR = ?");
+                    System.out.print("pase");
+                    if ("activada".equals(prov_tabla.getValueAt(i, 6))){
+                        pps.setString(1,"0");
+                    }
+                    else pps.setString(1,"1"); 
+                    pps.setString(2, (String) prov_tabla.getValueAt(i,0));
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_PROVEEDOR();
+    }//GEN-LAST:event_prov_bt_desactivarActionPerformed
+
+    private void prov_direccion_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_direccion_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_prov_direccion_fieldActionPerformed
+
+    private void prov_razon_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_razon_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_prov_razon_fieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -4001,6 +4254,8 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField cat_ven_nombre_field;
     private javax.swing.JTable cat_ven_tabla;
     private javax.swing.JButton cli_bt_cancelar;
+    private javax.swing.JButton cli_bt_desactivar;
+    private javax.swing.JButton cli_bt_editar;
     private javax.swing.JButton cli_bt_guardar;
     private javax.swing.JTextField cli_email_field;
     private com.toedter.calendar.JDateChooser cli_fec_nacimiento_field;
@@ -4054,8 +4309,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable inf_ven_tabla;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
     private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
@@ -4068,11 +4321,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton jButton29;
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton31;
-    private javax.swing.JButton jButton32;
-    private javax.swing.JButton jButton33;
-    private javax.swing.JButton jButton34;
-    private javax.swing.JButton jButton35;
-    private javax.swing.JButton jButton36;
     private javax.swing.JButton jButton38;
     private javax.swing.JButton jButton39;
     private javax.swing.JButton jButton4;
@@ -4097,7 +4345,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField jFormattedTextField4;
     private javax.swing.JFormattedTextField jFormattedTextField5;
     private javax.swing.JFormattedTextField jFormattedTextField6;
-    private javax.swing.JFormattedTextField jFormattedTextField7;
     private javax.swing.JFormattedTextField jFormattedTextField8;
     private javax.swing.JFormattedTextField jFormattedTextField9;
     private javax.swing.JLabel jLabel1;
@@ -4194,15 +4441,8 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable7;
     private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField15;
     private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
-    private javax.swing.JTextField jTextField20;
-    private javax.swing.JTextField jTextField21;
-    private javax.swing.JTextField jTextField22;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
@@ -4218,6 +4458,19 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTabbedPane pesta_admin1;
     private javax.swing.JLabel pricepack;
     private javax.swing.JTextField pricepack_field;
+    private javax.swing.JFormattedTextField prov_bar_buscar;
+    private javax.swing.JButton prov_bt_buscar;
+    private javax.swing.JButton prov_bt_cancelar;
+    private javax.swing.JButton prov_bt_desactivar;
+    private javax.swing.JButton prov_bt_editar;
+    private javax.swing.JButton prov_bt_guardar;
+    private javax.swing.JTextField prov_direccion_field;
+    private javax.swing.JTextField prov_email_field;
+    private javax.swing.JTextField prov_nombre_field;
+    private javax.swing.JTextField prov_razon_field;
+    private javax.swing.JTextField prov_rut_field;
+    private javax.swing.JTable prov_tabla;
+    private javax.swing.JTextField prov_telefono_field;
     private javax.swing.JPasswordField repet_pass_field;
     private javax.swing.JButton savepack_button;
     private javax.swing.JButton saveuser_button;
