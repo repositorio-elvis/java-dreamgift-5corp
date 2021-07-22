@@ -62,12 +62,13 @@ public class crud_banco extends javax.swing.JFrame {
     Vector<String> lista2;
     public crud_banco() {
         initComponents();
-        Mostrar_RRSS();
+        Mostrar_RRSS("");
         Mostrar_COMUNA();
         Mostrar_BANCO();
         Mostrar_USUARIO();
         Mostrar_CLIENTE();
         Mostrar_PROVEEDOR();
+        
         
                 
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
@@ -89,14 +90,14 @@ public class crud_banco extends javax.swing.JFrame {
         
     }
     
-    private void Mostrar_RRSS(){
+    private void Mostrar_RRSS(String valor){
         Statement st;
         String []datos = new String [3];   
         DefaultTableModel modelo = (DefaultTableModel) jTable4.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE, RRS_CODIGO, ESTADO FROM rrss;");
+            ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE, RRS_CODIGO, ESTADO FROM rrss where CONCAT(RRS_NOMBRE, ' ',RRS_CODIGO) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -489,13 +490,13 @@ public class crud_banco extends javax.swing.JFrame {
         jButton18 = new javax.swing.JButton();
         jLabel24 = new javax.swing.JLabel();
         jTextField16 = new javax.swing.JTextField();
-        jFormattedTextField4 = new javax.swing.JFormattedTextField();
+        rrss_buscar_bar = new javax.swing.JFormattedTextField();
         jLabel27 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
         jButton19 = new javax.swing.JButton();
         jButton20 = new javax.swing.JButton();
-        jButton21 = new javax.swing.JButton();
+        rrss_bt_buscar = new javax.swing.JButton();
         tab_categorias = new javax.swing.JPanel();
         jPanel13 = new javax.swing.JPanel();
         jLabel38 = new javax.swing.JLabel();
@@ -1426,6 +1427,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton16.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton16.setText("Buscar");
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
+            }
+        });
 
         jScrollPane23.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -2310,12 +2316,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jFormattedTextField4.setToolTipText("buscar...");
-        jFormattedTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField4ActionPerformed(evt);
-            }
-        });
+        rrss_buscar_bar.setToolTipText("buscar...");
 
         jLabel27.setFont(new java.awt.Font("Sitka Small", 1, 24)); // NOI18N
         jLabel27.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -2366,8 +2367,13 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton21.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton21.setText("Buscar");
+        rrss_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        rrss_bt_buscar.setText("Buscar");
+        rrss_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rrss_bt_buscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout tab_rrssLayout = new javax.swing.GroupLayout(tab_rrss);
         tab_rrss.setLayout(tab_rrssLayout);
@@ -2386,9 +2392,9 @@ public class crud_banco extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_rrssLayout.createSequentialGroup()
                                 .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rrss_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton21)
+                                .addComponent(rrss_bt_buscar)
                                 .addGap(8, 8, 8))
                             .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane4))))
@@ -2402,9 +2408,9 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(tab_rrssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tab_rrssLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jFormattedTextField4)
+                        .addComponent(rrss_buscar_bar)
                         .addComponent(jLabel27))
-                    .addComponent(jButton21))
+                    .addComponent(rrss_bt_buscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
@@ -3478,10 +3484,6 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField12ActionPerformed
 
-    private void jFormattedTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField4ActionPerformed
-
     private void jTable4ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jTable4ComponentAdded
     }//GEN-LAST:event_jTable4ComponentAdded
 //editar redes sociales
@@ -3524,7 +3526,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_RRSS();
+        Mostrar_RRSS("");
     }//GEN-LAST:event_jButton20ActionPerformed
 
     private void jFormattedTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField5ActionPerformed
@@ -3775,7 +3777,7 @@ public class crud_banco extends javax.swing.JFrame {
                 pps.executeUpdate();
                 pps.close();
                 JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-                Mostrar_RRSS();
+                Mostrar_RRSS("");
             }
             
         } catch (SQLException ex) {
@@ -3998,7 +4000,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_RRSS();
+        Mostrar_RRSS("");
     }//GEN-LAST:event_jButton19ActionPerformed
 //cancelar redes sociales
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -4195,6 +4197,14 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_prov_razon_fieldActionPerformed
 
+    private void rrss_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rrss_bt_buscarActionPerformed
+        Mostrar_RRSS(rrss_buscar_bar.getText());
+    }//GEN-LAST:event_rrss_bt_buscarActionPerformed
+
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton16ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -4315,7 +4325,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton26;
     private javax.swing.JButton jButton29;
@@ -4342,7 +4351,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField jFormattedTextField10;
     private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JFormattedTextField jFormattedTextField3;
-    private javax.swing.JFormattedTextField jFormattedTextField4;
     private javax.swing.JFormattedTextField jFormattedTextField5;
     private javax.swing.JFormattedTextField jFormattedTextField6;
     private javax.swing.JFormattedTextField jFormattedTextField8;
@@ -4472,6 +4480,8 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable prov_tabla;
     private javax.swing.JTextField prov_telefono_field;
     private javax.swing.JPasswordField repet_pass_field;
+    private javax.swing.JButton rrss_bt_buscar;
+    private javax.swing.JFormattedTextField rrss_buscar_bar;
     private javax.swing.JButton savepack_button;
     private javax.swing.JButton saveuser_button;
     private javax.swing.JPanel tab_administrador;
