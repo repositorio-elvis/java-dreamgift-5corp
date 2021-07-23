@@ -1356,9 +1356,9 @@
                                                   <Group type="102" attributes="0">
                                                       <Component id="jLabel21" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jFormattedTextField3" min="-2" pref="170" max="-2" attributes="0"/>
+                                                      <Component id="cli_buscar_bar" min="-2" pref="170" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton16" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="cli_bt_buscar" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
@@ -1377,9 +1377,9 @@
                               <Component id="jPanel8" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jFormattedTextField3" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="cli_buscar_bar" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jLabel21" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton16" max="32767" attributes="0"/>
+                                  <Component id="cli_bt_buscar" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Component id="jScrollPane23" min="-2" pref="123" max="-2" attributes="0"/>
@@ -1589,12 +1589,12 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField3">
+                    <Component class="javax.swing.JFormattedTextField" name="cli_buscar_bar">
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="buscar..."/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFormattedTextField3ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cli_buscar_barActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel21">
@@ -1628,7 +1628,7 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cli_bt_editarActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton16">
+                    <Component class="javax.swing.JButton" name="cli_bt_buscar">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="18" style="0"/>
@@ -1636,7 +1636,7 @@
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton16ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cli_bt_buscarActionPerformed"/>
                       </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane23">
@@ -1745,7 +1745,7 @@
                                           <Group type="102" alignment="1" attributes="0">
                                               <Component id="jLabel37" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="prov_bar_buscar" min="-2" pref="170" max="-2" attributes="0"/>
+                                              <Component id="prov_buscar_bar" min="-2" pref="170" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
                                               <Component id="prov_bt_buscar" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
@@ -1766,7 +1766,7 @@
                               <Component id="jPanel12" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="prov_bar_buscar" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="prov_buscar_bar" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jLabel37" alignment="0" max="32767" attributes="0"/>
                                   <Component id="prov_bt_buscar" alignment="1" max="32767" attributes="0"/>
                               </Group>
@@ -2014,12 +2014,12 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JFormattedTextField" name="prov_bar_buscar">
+                    <Component class="javax.swing.JFormattedTextField" name="prov_buscar_bar">
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="buscar..."/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prov_bar_buscarActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prov_buscar_barActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel37">
@@ -2144,6 +2144,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="prov_bt_buscarActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -3315,9 +3318,9 @@
                                                   <Group type="102" alignment="1" attributes="0">
                                                       <Component id="jLabel40" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jFormattedTextField8" min="-2" pref="170" max="-2" attributes="0"/>
+                                                      <Component id="cat_art_buscar_bar" min="-2" pref="170" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton41" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="cat_art_bt_buscar" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
@@ -3337,10 +3340,10 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                      <Component id="jFormattedTextField8" alignment="3" max="32767" attributes="0"/>
+                                      <Component id="cat_art_buscar_bar" alignment="3" max="32767" attributes="0"/>
                                       <Component id="jLabel40" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jButton41" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cat_art_bt_buscar" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane20" min="-2" pref="123" max="-2" attributes="0"/>
@@ -3474,12 +3477,12 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField8">
+                    <Component class="javax.swing.JFormattedTextField" name="cat_art_buscar_bar">
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="buscar..."/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFormattedTextField8ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_art_buscar_barActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel40">
@@ -3510,13 +3513,16 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton40ActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton41">
+                    <Component class="javax.swing.JButton" name="cat_art_bt_buscar">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="18" style="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_art_bt_buscarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane20">
                       <Properties>
@@ -3599,9 +3605,9 @@
                                           <Group type="102" alignment="1" attributes="0">
                                               <Component id="jLabel28" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jFormattedTextField5" min="-2" pref="170" max="-2" attributes="0"/>
+                                              <Component id="comu_buscar_bar" min="-2" pref="170" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton26" min="-2" max="-2" attributes="0"/>
+                                              <Component id="comu_bt_buscar" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                           </Group>
                                           <Component id="jPanel10" alignment="0" max="32767" attributes="0"/>
@@ -3621,10 +3627,10 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                      <Component id="jFormattedTextField5" alignment="3" max="32767" attributes="0"/>
+                                      <Component id="comu_buscar_bar" alignment="3" max="32767" attributes="0"/>
                                       <Component id="jLabel28" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jButton26" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="comu_bt_buscar" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane19" min="-2" pref="123" max="-2" attributes="0"/>
@@ -3758,12 +3764,12 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField5">
+                    <Component class="javax.swing.JFormattedTextField" name="comu_buscar_bar">
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="buscar..."/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFormattedTextField5ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comu_buscar_barActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel28">
@@ -3797,13 +3803,16 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton25ActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton26">
+                    <Component class="javax.swing.JButton" name="comu_bt_buscar">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="18" style="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comu_bt_buscarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane19">
                       <Properties>
@@ -3826,7 +3835,7 @@
                               <Table columnCount="4" rowCount="0">
                                 <Column editable="true" title="Nombre Comuna" type="java.lang.String"/>
                                 <Column editable="true" title="Codigo Comuna" type="java.lang.String"/>
-                                <Column editable="true" title="" type="java.lang.String"/>
+                                <Column editable="true" title="Estado" type="java.lang.String"/>
                                 <Column editable="true" title="Acci&#xf3;n" type="java.lang.Boolean"/>
                               </Table>
                             </Property>
@@ -3893,9 +3902,9 @@
                                           <Group type="102" alignment="1" attributes="0">
                                               <Component id="jLabel5" max="32767" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="jFormattedTextField1" min="-2" pref="175" max="-2" attributes="0"/>
+                                              <Component id="ban_buscar_bar" min="-2" pref="175" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton6" min="-2" max="-2" attributes="0"/>
+                                              <Component id="ban_bt_buscar" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                           </Group>
                                           <Component id="jPanel2" alignment="0" max="32767" attributes="0"/>
@@ -3915,8 +3924,8 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                      <Component id="jButton6" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jFormattedTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ban_bt_buscar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="ban_buscar_bar" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -4056,7 +4065,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField1">
+                    <Component class="javax.swing.JFormattedTextField" name="ban_buscar_bar">
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="buscar..."/>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -4070,7 +4079,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFormattedTextField1ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ban_buscar_barActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel5">
@@ -4104,13 +4113,16 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton6">
+                    <Component class="javax.swing.JButton" name="ban_bt_buscar">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="18" style="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ban_bt_buscarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane17">
                       <Properties>
@@ -4204,9 +4216,9 @@
                                                   <Group type="102" alignment="1" attributes="0">
                                                       <Component id="jLabel43" max="32767" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jFormattedTextField9" min="-2" pref="170" max="-2" attributes="0"/>
+                                                      <Component id="cat_ven_buscar_bar" min="-2" pref="170" max="-2" attributes="0"/>
                                                       <EmptySpace max="-2" attributes="0"/>
-                                                      <Component id="jButton46" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="cat_ven_bt_buscar" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
@@ -4226,10 +4238,10 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                   <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                      <Component id="jFormattedTextField9" alignment="3" max="32767" attributes="0"/>
+                                      <Component id="cat_ven_buscar_bar" alignment="3" max="32767" attributes="0"/>
                                       <Component id="jLabel43" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jButton46" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cat_ven_bt_buscar" alignment="1" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane21" min="-2" pref="123" max="-2" attributes="0"/>
@@ -4363,12 +4375,12 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField9">
+                    <Component class="javax.swing.JFormattedTextField" name="cat_ven_buscar_bar">
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="buscar..."/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFormattedTextField9ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_ven_buscar_barActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel43">
@@ -4399,13 +4411,16 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton45ActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton46">
+                    <Component class="javax.swing.JButton" name="cat_ven_bt_buscar">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="18" style="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cat_ven_bt_buscarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane21">
                       <Properties>
@@ -4488,9 +4503,9 @@
                                           <Group type="102" alignment="1" attributes="0">
                                               <Component id="jLabel34" max="32767" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jFormattedTextField6" min="-2" pref="170" max="-2" attributes="0"/>
+                                              <Component id="usu_buscar_bar" min="-2" pref="170" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="jButton31" min="-2" max="-2" attributes="0"/>
+                                              <Component id="usu_bt_buscar" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                                           </Group>
                                           <Component id="jPanel11" alignment="0" max="32767" attributes="0"/>
@@ -4510,8 +4525,8 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel34" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jFormattedTextField6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton31" min="-2" pref="22" max="-2" attributes="0"/>
+                                  <Component id="usu_buscar_bar" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="usu_bt_buscar" min="-2" pref="22" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jScrollPane22" min="-2" pref="123" max="-2" attributes="0"/>
@@ -4668,12 +4683,12 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JFormattedTextField" name="jFormattedTextField6">
+                    <Component class="javax.swing.JFormattedTextField" name="usu_buscar_bar">
                       <Properties>
                         <Property name="toolTipText" type="java.lang.String" value="buscar..."/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFormattedTextField6ActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usu_buscar_barActionPerformed"/>
                       </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel34">
@@ -4707,13 +4722,16 @@
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton30ActionPerformed"/>
                       </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton31">
+                    <Component class="javax.swing.JButton" name="usu_bt_buscar">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="18" style="0"/>
                         </Property>
                         <Property name="text" type="java.lang.String" value="Buscar"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usu_bt_buscarActionPerformed"/>
+                      </Events>
                     </Component>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane22">
                       <Properties>

@@ -63,11 +63,13 @@ public class crud_banco extends javax.swing.JFrame {
     public crud_banco() {
         initComponents();
         Mostrar_RRSS("");
-        Mostrar_COMUNA();
-        Mostrar_BANCO();
-        Mostrar_USUARIO();
-        Mostrar_CLIENTE();
-        Mostrar_PROVEEDOR();
+        Mostrar_COMUNA("");
+        Mostrar_BANCO("");
+        Mostrar_USUARIO("");
+        Mostrar_CLIENTE("");
+        Mostrar_PROVEEDOR("");
+        Mostrar_CAT_ARTICULO("");
+        Mostrar_CAT_VENTA("");
         
         
                 
@@ -116,14 +118,14 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    private void Mostrar_BANCO(){
+    private void Mostrar_BANCO(String valor){
         Statement st;
         String []datos = new String [3];   
         DefaultTableModel modelo = (DefaultTableModel) ban_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION ,BAN_CODIGO, estado FROM bancos;");
+            ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION ,BAN_CODIGO, estado FROM bancos where CONCAT(BAN_DESCRIPCION, ' ',BAN_CODIGO) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -141,14 +143,14 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    private void Mostrar_COMUNA(){
+    private void Mostrar_COMUNA(String valor){
         Statement st;
         String []datos = new String [3];   
         DefaultTableModel modelo = (DefaultTableModel) comu_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT COM_DESCRIPCION ,COM_CODIGO, estado  FROM comunas;");
+            ResultSet rs = st.executeQuery("SELECT COM_DESCRIPCION ,COM_CODIGO, estado FROM comunas where CONCAT(COM_DESCRIPCION, ' ',COM_CODIGO) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -167,14 +169,14 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    private void Mostrar_CAT_ARTICULO(){
+    private void Mostrar_CAT_ARTICULO(String valor){
         Statement st;
         String []datos = new String [2];   
         DefaultTableModel modelo = (DefaultTableModel) cat_art_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT CAT_DESCRIPCION, CAT_CODIGO  FROM categoria_articulo;");
+            ResultSet rs = st.executeQuery("SELECT CAT_DESCRIPCION, CAT_CODIGO  FROM categoria_articulo where CONCAT(CAT_DESCRIPCION, ' ',CAT_CODIGO) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -189,14 +191,14 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
       
-    private void Mostrar_CAT_VENTA(){
+    private void Mostrar_CAT_VENTA(String valor){
         Statement st;
         String []datos = new String [2];   
         DefaultTableModel modelo = (DefaultTableModel) cat_ven_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT EST_DESCRIPCION, EST_CODIGO  FROM estados_venta;");
+            ResultSet rs = st.executeQuery("SELECT EST_DESCRIPCION, EST_CODIGO  FROM estados_venta where CONCAT(EST_DESCRIPCION, ' ',EST_CODIGO) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -211,14 +213,14 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    private void Mostrar_USUARIO(){
+    private void Mostrar_USUARIO(String valor){
         Statement st;
         String []datos = new String [2];   
         DefaultTableModel modelo = (DefaultTableModel) usuario_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT USU_NOMBRE FROM usuarios;");
+            ResultSet rs = st.executeQuery("SELECT USU_NOMBRE FROM usuarios where CONCAT(USU_NOMBRE, ' ',USU_CONTRASEÑA) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 modelo.addRow(datos); 
@@ -231,14 +233,14 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
       
-    private void Mostrar_CLIENTE(){
+    private void Mostrar_CLIENTE(String valor){
         Statement st;
         String []datos = new String [6];   
         DefaultTableModel modelo = (DefaultTableModel) cli_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO, ESTADO  FROM cliente;");
+            ResultSet rs = st.executeQuery("SELECT CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO, ESTADO FROM cliente where CONCAT(CLI_ID_CLIENTE, ' ',CLI_NOMBRE) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -261,14 +263,14 @@ public class crud_banco extends javax.swing.JFrame {
     }
     
     
-    private void Mostrar_PROVEEDOR(){
+    private void Mostrar_PROVEEDOR(String valor){
         Statement st;
         String []datos = new String [7];   
         DefaultTableModel modelo = (DefaultTableModel) prov_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT PRO_ID_PROVEEDOR, PRO_NOMBRE, PRO_TELEFONO, PRO_CORREO, PRO_DIRECCION, PRO_RAZON, ESTADO FROM proveedor;");
+            ResultSet rs = st.executeQuery("SELECT PRO_ID_PROVEEDOR, PRO_NOMBRE, PRO_TELEFONO, PRO_CORREO, PRO_DIRECCION, PRO_RAZON, ESTADO FROM proveedor where CONCAT(PRO_ID_PROVEEDOR, ' ',PRO_NOMBRE) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -405,11 +407,11 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel19 = new javax.swing.JLabel();
         cli_rut_field = new javax.swing.JTextField();
         cli_fec_nacimiento_field = new com.toedter.calendar.JDateChooser();
-        jFormattedTextField3 = new javax.swing.JFormattedTextField();
+        cli_buscar_bar = new javax.swing.JFormattedTextField();
         jLabel21 = new javax.swing.JLabel();
         cli_bt_desactivar = new javax.swing.JButton();
         cli_bt_editar = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
+        cli_bt_buscar = new javax.swing.JButton();
         jScrollPane23 = new javax.swing.JScrollPane();
         cli_tabla = new javax.swing.JTable();
         tab_provee = new javax.swing.JPanel();
@@ -428,7 +430,7 @@ public class crud_banco extends javax.swing.JFrame {
         prov_email_field = new javax.swing.JTextField();
         prov_razon_field = new javax.swing.JTextField();
         prov_telefono_field = new javax.swing.JTextField();
-        prov_bar_buscar = new javax.swing.JFormattedTextField();
+        prov_buscar_bar = new javax.swing.JFormattedTextField();
         jLabel37 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         prov_tabla = new javax.swing.JTable();
@@ -505,11 +507,11 @@ public class crud_banco extends javax.swing.JFrame {
         jButton38 = new javax.swing.JButton();
         jLabel39 = new javax.swing.JLabel();
         cat_art_codigo_field = new javax.swing.JTextField();
-        jFormattedTextField8 = new javax.swing.JFormattedTextField();
+        cat_art_buscar_bar = new javax.swing.JFormattedTextField();
         jLabel40 = new javax.swing.JLabel();
         jButton39 = new javax.swing.JButton();
         jButton40 = new javax.swing.JButton();
-        jButton41 = new javax.swing.JButton();
+        cat_art_bt_buscar = new javax.swing.JButton();
         jScrollPane20 = new javax.swing.JScrollPane();
         cat_art_tabla = new javax.swing.JTable();
         tab_comunas = new javax.swing.JPanel();
@@ -520,11 +522,11 @@ public class crud_banco extends javax.swing.JFrame {
         comu_can = new javax.swing.JButton();
         jLabel25 = new javax.swing.JLabel();
         comu_codigo_field = new javax.swing.JTextField();
-        jFormattedTextField5 = new javax.swing.JFormattedTextField();
+        comu_buscar_bar = new javax.swing.JFormattedTextField();
         jLabel28 = new javax.swing.JLabel();
         comu_desactivar = new javax.swing.JButton();
         jButton25 = new javax.swing.JButton();
-        jButton26 = new javax.swing.JButton();
+        comu_bt_buscar = new javax.swing.JButton();
         jScrollPane19 = new javax.swing.JScrollPane();
         comu_tabla = new javax.swing.JTable();
         tab_bancos = new javax.swing.JPanel();
@@ -535,11 +537,11 @@ public class crud_banco extends javax.swing.JFrame {
         ban_codigo_field = new javax.swing.JTextField();
         ban_bt_guardar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        ban_buscar_bar = new javax.swing.JFormattedTextField();
         jLabel5 = new javax.swing.JLabel();
         ban_desactivar = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        ban_bt_buscar = new javax.swing.JButton();
         jScrollPane17 = new javax.swing.JScrollPane();
         ban_tabla = new javax.swing.JTable();
         tab_categorias1 = new javax.swing.JPanel();
@@ -550,11 +552,11 @@ public class crud_banco extends javax.swing.JFrame {
         jButton43 = new javax.swing.JButton();
         jLabel42 = new javax.swing.JLabel();
         cat_ven_codigo_field = new javax.swing.JTextField();
-        jFormattedTextField9 = new javax.swing.JFormattedTextField();
+        cat_ven_buscar_bar = new javax.swing.JFormattedTextField();
         jLabel43 = new javax.swing.JLabel();
         jButton44 = new javax.swing.JButton();
         jButton45 = new javax.swing.JButton();
-        jButton46 = new javax.swing.JButton();
+        cat_ven_bt_buscar = new javax.swing.JButton();
         jScrollPane21 = new javax.swing.JScrollPane();
         cat_ven_tabla = new javax.swing.JTable();
         tab_usuarios = new javax.swing.JPanel();
@@ -567,11 +569,11 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel30 = new javax.swing.JLabel();
         pass_field = new javax.swing.JPasswordField();
         repet_pass_field = new javax.swing.JPasswordField();
-        jFormattedTextField6 = new javax.swing.JFormattedTextField();
+        usu_buscar_bar = new javax.swing.JFormattedTextField();
         jLabel34 = new javax.swing.JLabel();
         jButton29 = new javax.swing.JButton();
         jButton30 = new javax.swing.JButton();
-        jButton31 = new javax.swing.JButton();
+        usu_bt_buscar = new javax.swing.JButton();
         jScrollPane22 = new javax.swing.JScrollPane();
         usuario_tabla = new javax.swing.JTable();
 
@@ -1398,10 +1400,10 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(28, 28, 28))
         );
 
-        jFormattedTextField3.setToolTipText("buscar...");
-        jFormattedTextField3.addActionListener(new java.awt.event.ActionListener() {
+        cli_buscar_bar.setToolTipText("buscar...");
+        cli_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField3ActionPerformed(evt);
+                cli_buscar_barActionPerformed(evt);
             }
         });
 
@@ -1425,11 +1427,11 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton16.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton16.setText("Buscar");
-        jButton16.addActionListener(new java.awt.event.ActionListener() {
+        cli_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cli_bt_buscar.setText("Buscar");
+        cli_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton16ActionPerformed(evt);
+                cli_bt_buscarActionPerformed(evt);
             }
         });
 
@@ -1484,9 +1486,9 @@ public class crud_banco extends javax.swing.JFrame {
                                     .addGroup(tab_clientesLayout.createSequentialGroup()
                                         .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jFormattedTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cli_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton16)))
+                                        .addComponent(cli_bt_buscar)))
                                 .addGap(8, 8, 8)))))
                 .addContainerGap())
         );
@@ -1497,9 +1499,9 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(tab_clientesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jFormattedTextField3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cli_buscar_bar, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cli_bt_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane23, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -1648,10 +1650,10 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(28, 28, 28))
         );
 
-        prov_bar_buscar.setToolTipText("buscar...");
-        prov_bar_buscar.addActionListener(new java.awt.event.ActionListener() {
+        prov_buscar_bar.setToolTipText("buscar...");
+        prov_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                prov_bar_buscarActionPerformed(evt);
+                prov_buscar_barActionPerformed(evt);
             }
         });
 
@@ -1713,6 +1715,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         prov_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         prov_bt_buscar.setText("Buscar");
+        prov_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prov_bt_buscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout tab_proveeLayout = new javax.swing.GroupLayout(tab_provee);
         tab_provee.setLayout(tab_proveeLayout);
@@ -1731,7 +1738,7 @@ public class crud_banco extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_proveeLayout.createSequentialGroup()
                                 .addComponent(jLabel37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(prov_bar_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(prov_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(prov_bt_buscar)
                                 .addGap(8, 8, 8))
@@ -1746,7 +1753,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(tab_proveeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(prov_bar_buscar, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(prov_buscar_bar, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel37, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(prov_bt_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
@@ -2494,10 +2501,10 @@ public class crud_banco extends javax.swing.JFrame {
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jFormattedTextField8.setToolTipText("buscar...");
-        jFormattedTextField8.addActionListener(new java.awt.event.ActionListener() {
+        cat_art_buscar_bar.setToolTipText("buscar...");
+        cat_art_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField8ActionPerformed(evt);
+                cat_art_buscar_barActionPerformed(evt);
             }
         });
 
@@ -2516,8 +2523,13 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton41.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton41.setText("Buscar");
+        cat_art_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cat_art_bt_buscar.setText("Buscar");
+        cat_art_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cat_art_bt_buscarActionPerformed(evt);
+            }
+        });
 
         jScrollPane20.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -2568,9 +2580,9 @@ public class crud_banco extends javax.swing.JFrame {
                                     .addGroup(tab_categoriasLayout.createSequentialGroup()
                                         .addComponent(jLabel40, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jFormattedTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cat_art_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton41)))
+                                        .addComponent(cat_art_bt_buscar)))
                                 .addGap(8, 8, 8)))))
                 .addGap(50, 50, 50))
         );
@@ -2582,9 +2594,9 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(tab_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tab_categoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jFormattedTextField8)
+                        .addComponent(cat_art_buscar_bar)
                         .addComponent(jLabel40))
-                    .addComponent(jButton41))
+                    .addComponent(cat_art_bt_buscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane20, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -2668,10 +2680,10 @@ public class crud_banco extends javax.swing.JFrame {
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jFormattedTextField5.setToolTipText("buscar...");
-        jFormattedTextField5.addActionListener(new java.awt.event.ActionListener() {
+        comu_buscar_bar.setToolTipText("buscar...");
+        comu_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField5ActionPerformed(evt);
+                comu_buscar_barActionPerformed(evt);
             }
         });
 
@@ -2695,8 +2707,13 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton26.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton26.setText("Buscar");
+        comu_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        comu_bt_buscar.setText("Buscar");
+        comu_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comu_bt_buscarActionPerformed(evt);
+            }
+        });
 
         jScrollPane19.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -2706,7 +2723,7 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre Comuna", "Codigo Comuna", "", "Acción"
+                "Nombre Comuna", "Codigo Comuna", "Estado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
@@ -2744,9 +2761,9 @@ public class crud_banco extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_comunasLayout.createSequentialGroup()
                                 .addComponent(jLabel28, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(comu_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton26)
+                                .addComponent(comu_bt_buscar)
                                 .addGap(8, 8, 8))
                             .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane19))))
@@ -2760,9 +2777,9 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(tab_comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tab_comunasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jFormattedTextField5)
+                        .addComponent(comu_buscar_bar)
                         .addComponent(jLabel28))
-                    .addComponent(jButton26))
+                    .addComponent(comu_bt_buscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane19, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -2852,13 +2869,13 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(28, 28, 28))
         );
 
-        jFormattedTextField1.setToolTipText("buscar...");
-        jFormattedTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jFormattedTextField1.setMinimumSize(new java.awt.Dimension(6, 22));
-        jFormattedTextField1.setPreferredSize(new java.awt.Dimension(6, 22));
-        jFormattedTextField1.addActionListener(new java.awt.event.ActionListener() {
+        ban_buscar_bar.setToolTipText("buscar...");
+        ban_buscar_bar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ban_buscar_bar.setMinimumSize(new java.awt.Dimension(6, 22));
+        ban_buscar_bar.setPreferredSize(new java.awt.Dimension(6, 22));
+        ban_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField1ActionPerformed(evt);
+                ban_buscar_barActionPerformed(evt);
             }
         });
 
@@ -2882,8 +2899,13 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton6.setText("Buscar");
+        ban_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ban_bt_buscar.setText("Buscar");
+        ban_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ban_bt_buscarActionPerformed(evt);
+            }
+        });
 
         jScrollPane17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -2931,9 +2953,9 @@ public class crud_banco extends javax.swing.JFrame {
                             .addGroup(tab_bancosLayout.createSequentialGroup()
                                 .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(ban_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton6)
+                                .addComponent(ban_bt_buscar)
                                 .addGap(8, 8, 8))
                             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane17, javax.swing.GroupLayout.Alignment.LEADING))))
@@ -2947,8 +2969,8 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(tab_bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tab_bancosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton6)
-                        .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(ban_bt_buscar)
+                        .addComponent(ban_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3033,10 +3055,10 @@ public class crud_banco extends javax.swing.JFrame {
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
-        jFormattedTextField9.setToolTipText("buscar...");
-        jFormattedTextField9.addActionListener(new java.awt.event.ActionListener() {
+        cat_ven_buscar_bar.setToolTipText("buscar...");
+        cat_ven_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField9ActionPerformed(evt);
+                cat_ven_buscar_barActionPerformed(evt);
             }
         });
 
@@ -3055,8 +3077,13 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton46.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton46.setText("Buscar");
+        cat_ven_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cat_ven_bt_buscar.setText("Buscar");
+        cat_ven_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cat_ven_bt_buscarActionPerformed(evt);
+            }
+        });
 
         jScrollPane21.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -3107,9 +3134,9 @@ public class crud_banco extends javax.swing.JFrame {
                                     .addGroup(tab_categorias1Layout.createSequentialGroup()
                                         .addComponent(jLabel43, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jFormattedTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(cat_ven_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton46)))
+                                        .addComponent(cat_ven_bt_buscar)))
                                 .addGap(8, 8, 8)))))
                 .addGap(50, 50, 50))
         );
@@ -3121,9 +3148,9 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(tab_categorias1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tab_categorias1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jFormattedTextField9)
+                        .addComponent(cat_ven_buscar_bar)
                         .addComponent(jLabel43))
-                    .addComponent(jButton46))
+                    .addComponent(cat_ven_bt_buscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane21, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -3220,10 +3247,10 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(28, 28, 28))
         );
 
-        jFormattedTextField6.setToolTipText("buscar...");
-        jFormattedTextField6.addActionListener(new java.awt.event.ActionListener() {
+        usu_buscar_bar.setToolTipText("buscar...");
+        usu_buscar_bar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField6ActionPerformed(evt);
+                usu_buscar_barActionPerformed(evt);
             }
         });
 
@@ -3247,8 +3274,13 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton31.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton31.setText("Buscar");
+        usu_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        usu_bt_buscar.setText("Buscar");
+        usu_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                usu_bt_buscarActionPerformed(evt);
+            }
+        });
 
         jScrollPane22.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -3296,9 +3328,9 @@ public class crud_banco extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_usuariosLayout.createSequentialGroup()
                                 .addComponent(jLabel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFormattedTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(usu_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton31)
+                                .addComponent(usu_bt_buscar)
                                 .addGap(8, 8, 8))
                             .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane22))))
@@ -3312,8 +3344,8 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(tab_usuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel34)
-                    .addComponent(jFormattedTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton31, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(usu_buscar_bar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(usu_bt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane22, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
@@ -3399,12 +3431,12 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_BANCO();
+        Mostrar_BANCO("");
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
+    private void ban_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_buscar_barActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField1ActionPerformed
+    }//GEN-LAST:event_ban_buscar_barActionPerformed
 
     private void jFormattedTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField2ActionPerformed
         // TODO add your handling code here:
@@ -3434,9 +3466,9 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
-    private void jFormattedTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField3ActionPerformed
+    private void cli_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_buscar_barActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField3ActionPerformed
+    }//GEN-LAST:event_cli_buscar_barActionPerformed
 
     private void cli_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_editarActionPerformed
         int cantidad_filas = cli_tabla.getRowCount();
@@ -3477,7 +3509,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_CLIENTE();
+        Mostrar_CLIENTE("");
     }//GEN-LAST:event_cli_bt_editarActionPerformed
 
     private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
@@ -3529,9 +3561,9 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_RRSS("");
     }//GEN-LAST:event_jButton20ActionPerformed
 
-    private void jFormattedTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField5ActionPerformed
+    private void comu_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comu_buscar_barActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField5ActionPerformed
+    }//GEN-LAST:event_comu_buscar_barActionPerformed
 //editar comunas
     private void jButton25ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton25ActionPerformed
         int cantidad_filas = comu_tabla.getRowCount();
@@ -3572,7 +3604,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_COMUNA();
+        Mostrar_COMUNA("");
     }//GEN-LAST:event_jButton25ActionPerformed
 
     private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField16ActionPerformed
@@ -3583,9 +3615,9 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_username_fieldActionPerformed
 
-    private void jFormattedTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField6ActionPerformed
+    private void usu_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usu_buscar_barActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField6ActionPerformed
+    }//GEN-LAST:event_usu_buscar_barActionPerformed
 //editar usuario
     private void jButton30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton30ActionPerformed
         int cantidad_filas = usuario_tabla.getRowCount();
@@ -3631,16 +3663,16 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_USUARIO();    
+        Mostrar_USUARIO("");    
     }//GEN-LAST:event_jButton30ActionPerformed
 
     private void prov_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_rut_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_prov_rut_fieldActionPerformed
 
-    private void prov_bar_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bar_buscarActionPerformed
+    private void prov_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_buscar_barActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_prov_bar_buscarActionPerformed
+    }//GEN-LAST:event_prov_buscar_barActionPerformed
 
     private void prov_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_prov_tablaComponentAdded
         // TODO add your handling code here:
@@ -3685,7 +3717,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_PROVEEDOR();
+        Mostrar_PROVEEDOR("");
     }//GEN-LAST:event_prov_bt_editarActionPerformed
 
     private void cat_art_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_art_nombre_fieldActionPerformed
@@ -3696,9 +3728,9 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cat_art_codigo_fieldActionPerformed
 
-    private void jFormattedTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField8ActionPerformed
+    private void cat_art_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_art_buscar_barActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField8ActionPerformed
+    }//GEN-LAST:event_cat_art_buscar_barActionPerformed
 
     private void jButton40ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton40ActionPerformed
         // TODO add your handling code here:
@@ -3712,9 +3744,9 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cat_ven_codigo_fieldActionPerformed
 
-    private void jFormattedTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField9ActionPerformed
+    private void cat_ven_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_ven_buscar_barActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField9ActionPerformed
+    }//GEN-LAST:event_cat_ven_buscar_barActionPerformed
 
     private void jButton45ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton45ActionPerformed
         // TODO add your handling code here:
@@ -3803,7 +3835,7 @@ public class crud_banco extends javax.swing.JFrame {
                 pps.executeUpdate();
                 pps.close();
                 JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-                Mostrar_BANCO();
+                Mostrar_BANCO("");
             }
             
         } catch (SQLException ex) {
@@ -3841,7 +3873,7 @@ public class crud_banco extends javax.swing.JFrame {
                 pps.executeUpdate();
                 pps.close();
                 JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-                Mostrar_COMUNA();
+                Mostrar_COMUNA("");
             }
             
         } catch (SQLException ex) {
@@ -3865,7 +3897,7 @@ public class crud_banco extends javax.swing.JFrame {
             pps.setString(2, cat_art_codigo_field.getText());
             pps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_CAT_ARTICULO();
+            Mostrar_CAT_ARTICULO("");
             
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
@@ -3892,7 +3924,7 @@ public class crud_banco extends javax.swing.JFrame {
             pps.setString(2, cat_ven_codigo_field.getText());
             pps.executeUpdate();
             JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_CAT_VENTA();
+            Mostrar_CAT_VENTA("");
             
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
@@ -3916,7 +3948,7 @@ public class crud_banco extends javax.swing.JFrame {
                 pps.close();
                 JOptionPane.showMessageDialog(null, "Usuario guardado exitosamente");
            
-                Mostrar_USUARIO();
+                Mostrar_USUARIO("");
             }
             
             else {
@@ -3961,7 +3993,7 @@ public class crud_banco extends javax.swing.JFrame {
                 pps.executeUpdate();
                 pps.close();
                 JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-                Mostrar_CLIENTE();
+                Mostrar_CLIENTE("");
             }
             
         } catch (SQLException ex) {
@@ -4030,7 +4062,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_COMUNA(); 
+        Mostrar_COMUNA(""); 
     }//GEN-LAST:event_comu_desactivarActionPerformed
 //cancelar banco
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -4060,7 +4092,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_BANCO();
+        Mostrar_BANCO("");
     }//GEN-LAST:event_ban_desactivarActionPerformed
 //cancelar usuario
     private void canceluser_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_canceluser_buttonActionPerformed
@@ -4086,7 +4118,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_USUARIO();
+        Mostrar_USUARIO("");
     }//GEN-LAST:event_jButton29ActionPerformed
 
     private void cli_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_cancelarActionPerformed
@@ -4119,7 +4151,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_CLIENTE();
+        Mostrar_CLIENTE("");
     }//GEN-LAST:event_cli_bt_desactivarActionPerformed
 
     private void prov_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_cancelarActionPerformed
@@ -4155,7 +4187,7 @@ public class crud_banco extends javax.swing.JFrame {
                 pps.executeUpdate();
                 pps.close();
                 JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-                Mostrar_PROVEEDOR();
+                Mostrar_PROVEEDOR("");
             }
             
         } catch (SQLException ex) {
@@ -4186,7 +4218,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }       
             }
         }
-        Mostrar_PROVEEDOR();
+        Mostrar_PROVEEDOR("");
     }//GEN-LAST:event_prov_bt_desactivarActionPerformed
 
     private void prov_direccion_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_direccion_fieldActionPerformed
@@ -4201,9 +4233,33 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_RRSS(rrss_buscar_bar.getText());
     }//GEN-LAST:event_rrss_bt_buscarActionPerformed
 
-    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton16ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton16ActionPerformed
+    private void cli_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_buscarActionPerformed
+        Mostrar_CLIENTE(cli_buscar_bar.getText());
+    }//GEN-LAST:event_cli_bt_buscarActionPerformed
+
+    private void usu_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usu_bt_buscarActionPerformed
+        Mostrar_USUARIO(usu_buscar_bar.getText());
+    }//GEN-LAST:event_usu_bt_buscarActionPerformed
+
+    private void cat_ven_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_ven_bt_buscarActionPerformed
+        Mostrar_CAT_VENTA(cat_ven_buscar_bar.getText());
+    }//GEN-LAST:event_cat_ven_bt_buscarActionPerformed
+
+    private void prov_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_buscarActionPerformed
+        Mostrar_PROVEEDOR(prov_buscar_bar.getText());
+    }//GEN-LAST:event_prov_bt_buscarActionPerformed
+
+    private void cat_art_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_art_bt_buscarActionPerformed
+        Mostrar_CAT_ARTICULO(cat_art_buscar_bar.getText());
+    }//GEN-LAST:event_cat_art_bt_buscarActionPerformed
+
+    private void comu_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comu_bt_buscarActionPerformed
+        Mostrar_COMUNA(comu_buscar_bar.getText());
+    }//GEN-LAST:event_comu_bt_buscarActionPerformed
+
+    private void ban_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_bt_buscarActionPerformed
+        Mostrar_BANCO(ban_buscar_bar.getText());
+    }//GEN-LAST:event_ban_bt_buscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -4248,25 +4304,33 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel Packs;
     private javax.swing.JTabbedPane Panel_tab_menu;
     private javax.swing.JSpinner addunits_spinner;
+    private javax.swing.JButton ban_bt_buscar;
     private javax.swing.JButton ban_bt_guardar;
+    private javax.swing.JFormattedTextField ban_buscar_bar;
     private javax.swing.JTextField ban_codigo_field;
     private javax.swing.JButton ban_desactivar;
     private javax.swing.JTextField ban_nombre_field;
     private javax.swing.JTable ban_tabla;
     private javax.swing.JButton cancelpack_button;
     private javax.swing.JButton canceluser_button;
+    private javax.swing.JButton cat_art_bt_buscar;
     private javax.swing.JButton cat_art_bt_guardar;
+    private javax.swing.JFormattedTextField cat_art_buscar_bar;
     private javax.swing.JTextField cat_art_codigo_field;
     private javax.swing.JTextField cat_art_nombre_field;
     private javax.swing.JTable cat_art_tabla;
+    private javax.swing.JButton cat_ven_bt_buscar;
     private javax.swing.JButton cat_ven_bt_guardar;
+    private javax.swing.JFormattedTextField cat_ven_buscar_bar;
     private javax.swing.JTextField cat_ven_codigo_field;
     private javax.swing.JTextField cat_ven_nombre_field;
     private javax.swing.JTable cat_ven_tabla;
+    private javax.swing.JButton cli_bt_buscar;
     private javax.swing.JButton cli_bt_cancelar;
     private javax.swing.JButton cli_bt_desactivar;
     private javax.swing.JButton cli_bt_editar;
     private javax.swing.JButton cli_bt_guardar;
+    private javax.swing.JFormattedTextField cli_buscar_bar;
     private javax.swing.JTextField cli_email_field;
     private com.toedter.calendar.JDateChooser cli_fec_nacimiento_field;
     private javax.swing.JTextField cli_nombre_field;
@@ -4274,7 +4338,9 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable cli_tabla;
     private javax.swing.JTextField cli_telefono_field;
     private javax.swing.JLabel clientname;
+    private javax.swing.JButton comu_bt_buscar;
     private javax.swing.JButton comu_bt_guardar;
+    private javax.swing.JFormattedTextField comu_buscar_bar;
     private javax.swing.JButton comu_can;
     private javax.swing.JTextField comu_codigo_field;
     private javax.swing.JButton comu_desactivar;
@@ -4319,42 +4385,30 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable inf_ven_tabla;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton16;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
     private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton26;
     private javax.swing.JButton jButton29;
     private javax.swing.JButton jButton30;
-    private javax.swing.JButton jButton31;
     private javax.swing.JButton jButton38;
     private javax.swing.JButton jButton39;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton40;
-    private javax.swing.JButton jButton41;
     private javax.swing.JButton jButton43;
     private javax.swing.JButton jButton44;
     private javax.swing.JButton jButton45;
-    private javax.swing.JButton jButton46;
     private javax.swing.JButton jButton51;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private com.toedter.calendar.JDateChooser jDateChooser1;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JFormattedTextField jFormattedTextField10;
     private javax.swing.JFormattedTextField jFormattedTextField2;
-    private javax.swing.JFormattedTextField jFormattedTextField3;
-    private javax.swing.JFormattedTextField jFormattedTextField5;
-    private javax.swing.JFormattedTextField jFormattedTextField6;
-    private javax.swing.JFormattedTextField jFormattedTextField8;
-    private javax.swing.JFormattedTextField jFormattedTextField9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -4466,12 +4520,12 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTabbedPane pesta_admin1;
     private javax.swing.JLabel pricepack;
     private javax.swing.JTextField pricepack_field;
-    private javax.swing.JFormattedTextField prov_bar_buscar;
     private javax.swing.JButton prov_bt_buscar;
     private javax.swing.JButton prov_bt_cancelar;
     private javax.swing.JButton prov_bt_desactivar;
     private javax.swing.JButton prov_bt_editar;
     private javax.swing.JButton prov_bt_guardar;
+    private javax.swing.JFormattedTextField prov_buscar_bar;
     private javax.swing.JTextField prov_direccion_field;
     private javax.swing.JTextField prov_email_field;
     private javax.swing.JTextField prov_nombre_field;
@@ -4505,6 +4559,8 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton topack_button;
     private javax.swing.JLabel username;
     private javax.swing.JTextField username_field;
+    private javax.swing.JButton usu_bt_buscar;
+    private javax.swing.JFormattedTextField usu_buscar_bar;
     private javax.swing.JTable usuario_tabla;
     // End of variables declaration//GEN-END:variables
 }
