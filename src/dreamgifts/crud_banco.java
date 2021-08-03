@@ -17,6 +17,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -60,6 +62,8 @@ public class crud_banco extends javax.swing.JFrame {
      */
     Vector<String> lista1;
     Vector<String> lista2;
+    Vector<String> lista3;
+    public static String id_pack_actualizar;
     public crud_banco() {
         initComponents();
         Mostrar_RRSS("");
@@ -70,6 +74,11 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_PROVEEDOR("");
         Mostrar_CAT_ARTICULO("");
         Mostrar_CAT_VENTA("");
+        Mostrar_ARTICULO("");
+        Mostrar_ART_CAT_COMBO();
+        Mostrar_ART_PRO_COMBO();
+        Mostrar_PACKS("");
+        
         
         
                 
@@ -78,9 +87,10 @@ public class crud_banco extends javax.swing.JFrame {
         //Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
         //setLocation((pantalla.width/2)-(this.getWidth()/2), (pantalla.height/2)-(this.getHeight()/2));
         setLocationRelativeTo(null);
-        lista1=new Vector<String>();
-        lista2=new Vector<String>();
-        cargarLista1();
+        lista1=new Vector<>();
+        lista2=new Vector<>();
+        lista3=new Vector<>();
+        cargarLista1(1);
         SpinnerNumberModel nm = new SpinnerNumberModel();
         nm.setMaximum(1000);
         nm.setMinimum(0);
@@ -92,6 +102,98 @@ public class crud_banco extends javax.swing.JFrame {
         
     }
     
+    private void Mostrar_ARTICULO(String valor){
+        Statement st;
+        String []datos = new String [8];   
+        DefaultTableModel modelo = (DefaultTableModel) jTable2.getModel();
+        modelo.setNumRows(0);
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT ART_NOMBRE, ART_CODIGO, ART_MARCA, ART_DESCRIPCION, ART_FECHA_VENCIMIENTO, articulo.estado, proveedor.PRO_RAZON, categoria_articulo.CAT_DESCRIPCION "
+                    + "FROM articulo INNER JOIN proveedor ON articulo.PRO_ID_PROVEEDOR = proveedor.PRO_ID_PROVEEDOR "
+                    + "INNER JOIN categoria_articulo ON categoria_articulo.ID_CAT = articulo.CATEGORIA_ARTICULO_ID_CAT "
+                    + "where CONCAT(ART_NOMBRE, ' ',ART_CODIGO) LIKE '%"+valor+"%'");
+            while (rs.next()){
+                datos[0]=rs.getString(2); 
+                datos[1]=rs.getString(1);
+                datos[2]=rs.getString(8); //categoria articulo
+                datos[3]=rs.getString(4);
+                datos[4]=rs.getString(5);
+                datos[5]=rs.getString(3);
+                datos[6]=rs.getString(7);//proveedor
+                if ("1".equals(rs.getString(6))){
+                    datos[7] = "activado";
+                }
+                else datos[7]= "desactivado";
+                modelo.addRow(datos);           
+                
+            }
+            jTable2.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }    
+    }
+    
+    private void Mostrar_PACKS(String valor){
+        Statement st;
+        String []datos = new String [4];   
+        DefaultTableModel modelo = (DefaultTableModel) packs_table.getModel();
+        modelo.setNumRows(0);
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT PCK_ID_PACK, PCK_NOMBRE, PCK_COSTO, estado FROM pack where CONCAT(PCK_ID_PACK, ' ',PCK_NOMBRE) LIKE '%"+valor+"%'");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3);                
+                if ("1".equals(rs.getString(4))){
+                    datos[3] = "activado";
+                }
+                else datos[3]= "desactivado";
+                modelo.addRow(datos);           
+                
+            }
+            packs_table.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void Mostrar_ART_CAT_COMBO(){
+        
+        jComboBox1.removeAllItems();
+        Statement st;
+        try{
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT CAT_DESCRIPCION FROM categoria_articulo WHERE estado = 1");
+            while (rs.next()){
+                jComboBox1.addItem(rs.getString(1));
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+    }
+    
+    private void Mostrar_ART_PRO_COMBO(){
+        jComboBox2.removeAllItems();
+        Statement st;
+        try{
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT PRO_RAZON FROM proveedor WHERE ESTADO = 1");
+            while (rs.next()){
+                jComboBox2.addItem(rs.getString(1));
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+        
     private void Mostrar_RRSS(String valor){
         Statement st;
         String []datos = new String [3];   
@@ -171,15 +273,19 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_CAT_ARTICULO(String valor){
         Statement st;
-        String []datos = new String [2];   
+        String []datos = new String [3];   
         DefaultTableModel modelo = (DefaultTableModel) cat_art_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT CAT_DESCRIPCION, CAT_CODIGO  FROM categoria_articulo where CONCAT(CAT_DESCRIPCION, ' ',CAT_CODIGO) LIKE '%"+valor+"%'");
+            ResultSet rs = st.executeQuery("SELECT CAT_DESCRIPCION, CAT_CODIGO, estado  FROM categoria_articulo where CONCAT(CAT_DESCRIPCION, ' ',CAT_CODIGO) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
+                if ("1".equals(rs.getString(3))){
+                    datos[2]= "activada";
+                }
+                else datos[2]= "desactivada";
                 modelo.addRow(datos); 
                 
             }
@@ -262,7 +368,6 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    
     private void Mostrar_PROVEEDOR(String valor){
         Statement st;
         String []datos = new String [7];   
@@ -292,20 +397,53 @@ public class crud_banco extends javax.swing.JFrame {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void cargarLista1(){
-        lista1.add("Tazón personalizado");
-        lista1.add("Té");
-        lista1.add("Jugo natural");
-        lista1.add("Cereal");
-        lista1.add("Flores");
-        lista1.add("Cerveza");
-        lista1.add("Pastel");
-        lista1.add("Capuccino café sobre");
-        packeditor_list.setListData(lista1);
+        
+    private void cargarLista1(int flag){
+        lista1.removeAllElements();
+        lista2.removeAllElements();
+        lista3.removeAllElements();
+        Statement st;
+        try{
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT ART_NOMBRE FROM articulo WHERE estado = 1");
+            while (rs.next()){
+                lista1.add(rs.getString(1));
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }  
+        if(flag == 1){
+            packeditor_list.setListData(lista1);
+            packedited_list.setListData(lista2);
+        }
     }
     
+    private void Editar_listas(String id_pack){
+        try {
+            cargarLista1(0);
+            Statement st;
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, p.CANTIDAD FROM pack_has_articulo p INNER JOIN articulo a ON a.ART_ID_ARTICULO = p.ART_ID_ARTICULO WHERE p.PCK_ID_PACK = "+id_pack);
+            while (rs.next()){
+                lista2.add(rs.getString(1)+" ("+rs.getString(2)+")");
+                lista3.add(rs.getString(1));
+            }
+            lista1.removeAll(lista3);
+           
 
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private String obtener_cantidad(String cadena){
+        int x = cadena.indexOf("(");
+        int y = cadena.length();
+        String temp = cadena.substring(x+1,y-1);
+        return temp;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -3200,14 +3338,7 @@ public class crud_banco extends javax.swing.JFrame {
         prov_tabla.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         prov_tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "RUT Proveedor", "Nombre contacto", "Teléfono", "Correo electrónico", "Dirección", "Razón social", "Estado", "Acción"
@@ -3316,12 +3447,22 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton7.setText("Guardar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton8.setText("Cancelar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel9.setText("Unidades:");
+        jLabel9.setText("Descripción");
 
         jTextField5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextField5.setText("Un");
@@ -3353,7 +3494,6 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel14.setText("Proveedor:");
 
         jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -3361,7 +3501,6 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox2ActionPerformed(evt);
@@ -3457,27 +3596,21 @@ public class crud_banco extends javax.swing.JFrame {
         jTable2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
-                "Código", "Artículo", "Tipo Artículo", "Unidades", "Fecha Vencimiento", "Marca", "Proveedor", "Acción"
+                "Código", "Artículo", "Tipo Artículo", "Descripcion", "Fecha Vencimiento", "Marca", "Proveedor", "Estado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        jTable2.setColumnSelectionAllowed(true);
         jTable2.getTableHeader().setReorderingAllowed(false);
         jTable2.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -3486,15 +3619,14 @@ public class crud_banco extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable2);
         jTable2.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(3).setHeaderValue("Unidades");
-            jTable2.getColumnModel().getColumn(4).setHeaderValue("Fecha Vencimiento");
-            jTable2.getColumnModel().getColumn(5).setHeaderValue("Marca");
-            jTable2.getColumnModel().getColumn(6).setHeaderValue("Proveedor");
-        }
 
         jButton9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton9.setText("Desactivar");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jButton10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton10.setText("Editar");
@@ -3568,27 +3700,27 @@ public class crud_banco extends javax.swing.JFrame {
 
         savepack_button.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         savepack_button.setText("Guardar");
+        savepack_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                savepack_buttonActionPerformed(evt);
+            }
+        });
 
         cancelpack_button.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         cancelpack_button.setText("Cancelar");
+        cancelpack_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelpack_buttonActionPerformed(evt);
+            }
+        });
 
         pricepack.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         pricepack.setText("Precio Pack ($):");
 
         packedited_list.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        packedited_list.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane11.setViewportView(packedited_list);
 
         packeditor_list.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        packeditor_list.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane12.setViewportView(packeditor_list);
 
         topack_button.setText(">");
@@ -3682,24 +3814,17 @@ public class crud_banco extends javax.swing.JFrame {
         packs_table.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         packs_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Código Pack", "Nombre Pack", "Unidades Bodega", "Acción"
+                "Código Pack", "Nombre Pack", "Precio", "Estado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, false, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -3722,6 +3847,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         deactivatepack_button.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         deactivatepack_button.setText("Desactivar");
+        deactivatepack_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deactivatepack_buttonActionPerformed(evt);
+            }
+        });
 
         editpack_button.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         editpack_button.setText("Editar");
@@ -3986,6 +4116,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton38.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton38.setText("Cancelar");
+        jButton38.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton38ActionPerformed(evt);
+            }
+        });
 
         jLabel39.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel39.setText("Código categoría:");
@@ -4048,6 +4183,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton39.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton39.setText("Desactivar");
+        jButton39.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton39ActionPerformed(evt);
+            }
+        });
 
         jButton40.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton40.setText("Editar");
@@ -4073,17 +4213,18 @@ public class crud_banco extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nombre Categoria", "Codigo Categoria", "Acción"
+                "Nombre Categoria", "Codigo Categoria", "Estado", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
+        cat_art_tabla.setColumnSelectionAllowed(true);
         cat_art_tabla.getTableHeader().setReorderingAllowed(false);
         cat_art_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -4540,6 +4681,11 @@ public class crud_banco extends javax.swing.JFrame {
 
         jButton43.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton43.setText("Cancelar");
+        jButton43.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton43ActionPerformed(evt);
+            }
+        });
 
         jLabel42.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel42.setText("Código categoría:");
@@ -4601,7 +4747,12 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel43.setText("Categorías de ventas registradas");
 
         jButton44.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton44.setText("Desactivar");
+        jButton44.setText("Eliminar");
+        jButton44.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton44ActionPerformed(evt);
+            }
+        });
 
         jButton45.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton45.setText("Editar");
@@ -4979,9 +5130,29 @@ public class crud_banco extends javax.swing.JFrame {
     private void jTable2ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_jTable2ComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_jTable2ComponentAdded
-
+//editar articulo
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = jTable2.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (jTable2.isCellSelected(i, 8) == true){
+                jTextField7.setText((String) jTable2.getValueAt(i,0));
+                jTextField7.setEnabled(false);
+                jTextField3.setText((String) jTable2.getValueAt(i,1));
+                jComboBox1.setSelectedItem(jTable2.getValueAt(i,2));
+                jTextField5.setText((String) jTable2.getValueAt(i,3));
+                jTextField6.setText((String) jTable2.getValueAt(i,5));
+                jComboBox2.setSelectedItem(jTable2.getValueAt(i,6));
+                                
+                String fecha = jTable2.getValueAt(i,4).toString();
+                SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    jDateChooser1.setDate(formatofecha.parse(fecha));
+                } catch (ParseException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
@@ -5003,47 +5174,27 @@ public class crud_banco extends javax.swing.JFrame {
     private void cli_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_buscar_barActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cli_buscar_barActionPerformed
-
+//editar cliente
     private void cli_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_editarActionPerformed
-        int cantidad_filas = cli_tabla.getRowCount();
+       int cantidad_filas = cli_tabla.getRowCount();
         
         for (int i = 0; i <= cantidad_filas; i++){
             if (cli_tabla.isCellSelected(i, 6) == true){
+                cli_rut_field.setText((String) cli_tabla.getValueAt(i,0));
+                cli_rut_field.setEnabled(false);
+                cli_nombre_field.setText((String) cli_tabla.getValueAt(i,1));
+                cli_telefono_field.setText((String) cli_tabla.getValueAt(i,2));
+                cli_email_field.setText((String) cli_tabla.getValueAt(i,3));
+                
+                String fecha = cli_tabla.getValueAt(i,4).toString();
+                SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
                 try {
-                    Statement st;
-                    String nombre = null;
-                    //String codigo = null;
-                    st = con.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO, ESTADO FROM cliente;");
-                    PreparedStatement pps2;
-                    while (rs.next()){
-                        if (rs.getString(2).equals(cli_tabla.getValueAt(i,1))){
-                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
-                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
-                        }               
-                    }
-                                                                                      
-                    pps2 = con.prepareStatement("update cliente set CLI_NOMBRE = ? where CLI_ID_CLIENTE = ?;");
-                    if ("".equals(nombre)){
-                        pps2.setString(1,(String) cli_tabla.getValueAt(i,0));
-                    }
-                    else pps2.setString(1,nombre);
-                    /*
-                    if (null != codigo){
-                        pps2.setString(2,codigo);
-                    }
-                    else pps2.setString(2,(String) jTable4.getValueAt(i,1));
-                    */                  
-                    pps2.setString(2, (String) cli_tabla.getValueAt(i,1));
-                    pps2.executeUpdate();
-                    pps2.close();
-                   
-                } catch (SQLException ex) {
+                    cli_fec_nacimiento_field.setDate(formatofecha.parse(fecha));
+                } catch (ParseException ex) {
                     Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-                }       
+                }
             }
         }
-        Mostrar_CLIENTE("");
     }//GEN-LAST:event_cli_bt_editarActionPerformed
 
     private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
@@ -5211,47 +5362,22 @@ public class crud_banco extends javax.swing.JFrame {
     private void prov_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_prov_tablaComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_prov_tablaComponentAdded
-
+//editar proveedor
     private void prov_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_editarActionPerformed
         int cantidad_filas = prov_tabla.getRowCount();
         
         for (int i = 0; i <= cantidad_filas; i++){
-            if (prov_tabla.isCellSelected(i, 6) == true){
-                try {
-                    Statement st;
-                    String nombre = null;
-                    //String codigo = null;
-                    st = con.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT PRO_ID_PROVEEDOR, PRO_NOMBRE, PRO_TELEFONO, PRO_CORREO, PRO_DIRECCION, PRO_RAZON, ESTADO FROM cliente;");
-                    PreparedStatement pps2;
-                    while (rs.next()){
-                        if (rs.getString(2).equals(prov_tabla.getValueAt(i,1))){
-                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
-                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
-                        }               
-                    }
-                                                                                      
-                    pps2 = con.prepareStatement("update cliente set CLI_NOMBRE = ? where CLI_ID_CLIENTE = ?;");
-                    if ("".equals(nombre)){
-                        pps2.setString(1,(String) prov_tabla.getValueAt(i,0));
-                    }
-                    else pps2.setString(1,nombre);
-                    /*
-                    if (null != codigo){
-                        pps2.setString(2,codigo);
-                    }
-                    else pps2.setString(2,(String) jTable4.getValueAt(i,1));
-                    */                  
-                    pps2.setString(2, (String) prov_tabla.getValueAt(i,1));
-                    pps2.executeUpdate();
-                    pps2.close();
-                   
-                } catch (SQLException ex) {
-                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-                }       
+            if (prov_tabla.isCellSelected(i, 7) == true){
+                prov_rut_field.setText((String) prov_tabla.getValueAt(i,0));
+                prov_rut_field.setEnabled(false);
+                prov_nombre_field.setText((String) prov_tabla.getValueAt(i,1));
+                prov_telefono_field.setText((String) prov_tabla.getValueAt(i,2));
+                prov_email_field.setText((String) prov_tabla.getValueAt(i,3));
+                prov_direccion_field.setText((String) prov_tabla.getValueAt(i,4));
+                prov_razon_field.setText((String) prov_tabla.getValueAt(i,5));
+
             }
         }
-        Mostrar_PROVEEDOR("");
     }//GEN-LAST:event_prov_bt_editarActionPerformed
 
     private void cat_art_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_art_nombre_fieldActionPerformed
@@ -5265,9 +5391,48 @@ public class crud_banco extends javax.swing.JFrame {
     private void cat_art_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_art_buscar_barActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cat_art_buscar_barActionPerformed
-
+//editar cat_articulo
     private void jButton40ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton40ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = cat_art_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (cat_art_tabla.isCellSelected(i, 3) == true){
+                try {
+                    Statement st;
+                    String nombre = null;
+                    //String codigo = null;
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT CAT_DESCRIPCION, CAT_CODIGO FROM categoria_articulo;");
+                    PreparedStatement pps2;
+                    while (rs.next()){
+                        if (rs.getString(2).equals(cat_art_tabla.getValueAt(i,1))){
+                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
+                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
+                        }               
+                    }
+                                                                                      
+                    pps2 = con.prepareStatement("update categoria_articulo set  CAT_DESCRIPCION = ? where CAT_CODIGO = ?;");
+                    if ("".equals(nombre)){
+                        pps2.setString(1,(String) cat_art_tabla.getValueAt(i,0));     
+                    }
+                    else pps2.setString(1,nombre);
+                    /*
+                    if (null != codigo){
+                        pps2.setString(2,codigo);
+                    }
+                    else pps2.setString(2,(String) jTable5.getValueAt(i,1));
+                    */                  
+                    pps2.setString(2, (String) cat_art_tabla.getValueAt(i,1));
+                    pps2.executeUpdate();
+                    pps2.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_CAT_ARTICULO("");
+        Mostrar_ART_CAT_COMBO();
     }//GEN-LAST:event_jButton40ActionPerformed
 
     private void cat_ven_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_ven_nombre_fieldActionPerformed
@@ -5281,9 +5446,51 @@ public class crud_banco extends javax.swing.JFrame {
     private void cat_ven_buscar_barActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_ven_buscar_barActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cat_ven_buscar_barActionPerformed
-
+//editar cat_venta
     private void jButton45ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton45ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = cat_ven_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (cat_ven_tabla.isCellSelected(i, 2) == true){
+                try {
+                    Statement st;
+                    String nombre = null;
+                    String actual = null;
+                    String codigo = null;
+                    //String codigo = null;
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT EST_DESCRIPCION, EST_CODIGO FROM estados_venta;");
+                    PreparedStatement pps2;
+                    while (rs.next()){
+                        if (rs.getString(2).equals(cat_ven_tabla.getValueAt(i,1))){
+                            codigo = rs.getString(2);
+                            actual = rs.getString(1);
+                            nombre = JOptionPane.showInputDialog("Ingrese nuevo nombre");
+                            //codigo = JOptionPane.showInputDialog("Ingrese nuevo codigo");
+                        }       
+                    }
+                                                                                      
+                    pps2 = con.prepareStatement("update estados_venta set EST_DESCRIPCION = ? where EST_CODIGO = ?;");
+                    if ("".equals(nombre)){
+                        pps2.setString(1,actual );
+                    }
+                    else pps2.setString(1,nombre);
+                    /*
+                    if (null != codigo){
+                        pps2.setString(2,codigo);
+                    }
+                    else pps2.setString(2,(String) jTable5.getValueAt(i,1));
+                    */                  
+                    pps2.setString(2, codigo);
+                    pps2.executeUpdate();
+                    pps2.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_CAT_VENTA("");    
     }//GEN-LAST:event_jButton45ActionPerformed
 
     private void namepack_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_namepack_fieldActionPerformed
@@ -5297,33 +5504,51 @@ public class crud_banco extends javax.swing.JFrame {
     private void packs_tableComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_packs_tableComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_packs_tableComponentAdded
-
+//editar pack
     private void editpack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editpack_buttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editpack_buttonActionPerformed
-
-    private void topack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_topack_buttonActionPerformed
-        int i=packeditor_list.getSelectedIndex();
-        packedited_list.removeAll();
-        if(addunits_spinner.getValue().equals(0)){
-            lista2.add(lista1.get(i)+ "(1)");
-        }else{
-            lista2.add(lista1.get(i)+ "("+ addunits_spinner.getValue().toString()+")");
+        int cantidad_filas = packs_table.getRowCount();
+        String id_pack;
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (packs_table.isCellSelected(i, 4) == true){
+                namepack_field.setText((String) packs_table.getValueAt(i,1));
+                pricepack_field.setText((String) packs_table.getValueAt(i,2));
+                id_pack = (String) packs_table.getValueAt(i,0);
+                id_pack_actualizar = id_pack;
+                Editar_listas(id_pack);//pasar id pack
+                packeditor_list.setListData(lista1);
+                packedited_list.setListData(lista2);
+                
+                
+            }
         }
-        
-        lista1.remove(i);
+    }//GEN-LAST:event_editpack_buttonActionPerformed
+//agregar articulo a pack
+    private void topack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_topack_buttonActionPerformed
+        int seleccion = packeditor_list.getSelectedIndex();
+        int cantidad = (int) addunits_spinner.getValue();
+        packedited_list.removeAll();
+        if(cantidad  == 0){
+            lista2.add(lista1.get(seleccion)+ " (1)");
+        }else{
+            lista2.add(lista1.get(seleccion)+ " ("+cantidad+")");
+        }
+        lista3.add(lista1.get(seleccion));
+        lista1.remove(seleccion);
+        packeditor_list.setListData(lista1);
         packedited_list.setListData(lista2);
     }//GEN-LAST:event_topack_buttonActionPerformed
 
     private void frompack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frompack_buttonActionPerformed
-        int i=packedited_list.getSelectedIndex();
+        int seleccion = packedited_list.getSelectedIndex();
         packeditor_list.removeAll();
-        int x = lista2.get(i).indexOf("(");
-        int y = lista2.get(i).indexOf(")");
-        String temp = lista2.get(i).substring(0, x);
+        int borrar = lista2.get(seleccion).indexOf("(");
+        //int y = lista2.get(i).indexOf(")");
+        String temp = lista2.get(seleccion).substring(0, borrar);
         lista1.add(temp);
-        lista2.remove(i);
+        lista3.remove(seleccion);
+        lista2.remove(seleccion);
         packeditor_list.setListData(lista1);
+        packedited_list.setListData(lista2);
     }//GEN-LAST:event_frompack_buttonActionPerformed
 //guardar redes sociales
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
@@ -5423,18 +5648,28 @@ public class crud_banco extends javax.swing.JFrame {
     private void comu_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_comu_tablaComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_comu_tablaComponentAdded
-
+//guardar categoria articulo
     private void cat_art_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_art_bt_guardarActionPerformed
+        String campo1 = cat_art_nombre_field.getText();
+        String campo2 = cat_art_codigo_field.getText();
         try {
-            PreparedStatement pps = con.prepareStatement("INSERT INTO categoria_articulo (CAT_DESCRIPCION, CAT_CODIGO) VALUES (?,?)");
-            pps.setString(1, cat_art_nombre_field.getText());
-            pps.setString(2, cat_art_codigo_field.getText());
-            pps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_CAT_ARTICULO("");
+            if ("".equals(campo1)  || "".equals(campo2)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            else {
+                PreparedStatement pps = con.prepareStatement("INSERT INTO categoria_articulo (CAT_DESCRIPCION, CAT_CODIGO, estado) VALUES (?,?,?)");
+                pps.setString(1, campo1);
+                pps.setString(2, campo2);
+                pps.setString(3, "1");
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                Mostrar_CAT_ARTICULO("");
+                Mostrar_ART_CAT_COMBO();
             
+            }
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo existente");
         }
     }//GEN-LAST:event_cat_art_bt_guardarActionPerformed
 
@@ -5450,18 +5685,27 @@ public class crud_banco extends javax.swing.JFrame {
     private void cat_ven_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_cat_ven_tablaComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_cat_ven_tablaComponentAdded
-
+//guardar cat_venta
     private void cat_ven_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cat_ven_bt_guardarActionPerformed
+        String campo1 = cat_ven_nombre_field.getText();
+        String campo2 = cat_ven_codigo_field.getText();
+                
         try {
-            PreparedStatement pps = con.prepareStatement("INSERT INTO estados_venta (EST_DESCRIPCION, EST_CODIGO) VALUES (?,?)");
-            pps.setString(1, cat_ven_nombre_field.getText());
-            pps.setString(2, cat_ven_codigo_field.getText());
-            pps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            Mostrar_CAT_VENTA("");
-            
+            if ("".equals(campo1)  || "".equals(campo2)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            else{
+                PreparedStatement pps = con.prepareStatement("INSERT INTO estados_venta (EST_DESCRIPCION, EST_CODIGO) VALUES (?,?)");
+                pps.setString(1, campo1);
+                pps.setString(2, campo2);
+                pps.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                Mostrar_CAT_VENTA("");
+            }
+                        
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo existente");
         }
     }//GEN-LAST:event_cat_ven_bt_guardarActionPerformed
 //guardar usuario
@@ -5502,31 +5746,57 @@ public class crud_banco extends javax.swing.JFrame {
     private void cli_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_cli_tablaComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_cli_tablaComponentAdded
-
+//guardar cliente
     private void cli_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_guardarActionPerformed
 
         String campo1 = cli_nombre_field.getText();
         String campo2 = cli_telefono_field.getText();
         String campo3 = cli_email_field.getText();
         String campo4 = cli_rut_field.getText();  
+        java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
+        java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
+        int flag = 1;
         try {
             if ("".equals(campo1) || "".equals(campo2) || "".equals(campo3) || "".equals(campo4)){
                 JOptionPane.showMessageDialog(null, "rellene todos los campos");
             }
             
             else {
-                java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
-                java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
-                PreparedStatement pps = con.prepareStatement("INSERT INTO cliente (CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO, ESTADO) VALUES (?,?,?,?,?,?)");
-                pps.setString(2, campo1);
-                pps.setString(3, campo2);
-                pps.setString(4, campo3);
-                pps.setString(1, campo4);
-                pps.setDate(5, cli_fec_nacimiento_field1);
-                pps.setString(6, "1");
-                pps.executeUpdate();
-                pps.close();
-                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                PreparedStatement pps;
+                Statement st;
+                st = con.createStatement();
+                ResultSet rut = st.executeQuery("SELECT CLI_ID_CLIENTE FROM cliente");
+                while (rut.next()){
+                    if (rut.getString(1).equals(campo4)){
+                        flag = 0;
+                    }
+                }
+                
+                if (flag == 0){
+                    pps = con.prepareStatement("update cliente set CLI_NOMBRE = ?, CLI_CELULAR = ?, CLI_CORREO = ?, CLI_FECHA_NACIMIENTO = ? where CLI_ID_CLIENTE = ?");
+                    pps.setString(1, campo1);
+                    pps.setString(2, campo2);
+                    pps.setString(3, campo3);
+                    pps.setDate(4, cli_fec_nacimiento_field1);
+                    pps.setString(5, campo4);
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                    cli_rut_field.setEnabled(true); 
+                }
+                else{
+                    
+                    pps = con.prepareStatement("INSERT INTO cliente (CLI_ID_CLIENTE, CLI_NOMBRE, CLI_CELULAR, CLI_CORREO, CLI_FECHA_NACIMIENTO, ESTADO) VALUES (?,?,?,?,?,?)");
+                    pps.setString(2, campo1);
+                    pps.setString(3, campo2);
+                    pps.setString(4, campo3);
+                    pps.setString(1, campo4);
+                    pps.setDate(5, cli_fec_nacimiento_field1);
+                    pps.setString(6, "1");
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                }
                 Mostrar_CLIENTE("");
             }
             
@@ -5534,7 +5804,6 @@ public class crud_banco extends javax.swing.JFrame {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Codigo no permitido");
         }
-        
     }//GEN-LAST:event_cli_bt_guardarActionPerformed
 
     private void cli_nombre_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_nombre_fieldActionPerformed
@@ -5654,7 +5923,7 @@ public class crud_banco extends javax.swing.JFrame {
         }
         Mostrar_USUARIO("");
     }//GEN-LAST:event_jButton29ActionPerformed
-
+//cancelar cliente
     private void cli_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_cancelarActionPerformed
         cli_nombre_field.setText(null);
         cli_telefono_field.setText(null);
@@ -5662,7 +5931,7 @@ public class crud_banco extends javax.swing.JFrame {
         cli_rut_field.setText(null);
         cli_fec_nacimiento_field.setDate(null);
     }//GEN-LAST:event_cli_bt_cancelarActionPerformed
-
+//desactivar cliente
     private void cli_bt_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_desactivarActionPerformed
         int cantidad_filas = cli_tabla.getRowCount();
         
@@ -5671,7 +5940,6 @@ public class crud_banco extends javax.swing.JFrame {
                 try {
                     PreparedStatement pps;
                     pps = con.prepareStatement("update cliente set ESTADO = ? where CLI_ID_CLIENTE = ?");
-                    System.out.print("pase");
                     if ("activada".equals(cli_tabla.getValueAt(i, 5))){
                         pps.setString(1,"0");
                     }
@@ -5687,7 +5955,7 @@ public class crud_banco extends javax.swing.JFrame {
         }
         Mostrar_CLIENTE("");
     }//GEN-LAST:event_cli_bt_desactivarActionPerformed
-
+//cancelar proveedor
     private void prov_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_cancelarActionPerformed
         prov_rut_field.setText(null);
         prov_nombre_field.setText(null);
@@ -5696,7 +5964,7 @@ public class crud_banco extends javax.swing.JFrame {
         prov_telefono_field.setText(null);
         prov_email_field.setText(null);
     }//GEN-LAST:event_prov_bt_cancelarActionPerformed
-
+//guardar proveedor
     private void prov_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_guardarActionPerformed
         String campo1 = prov_rut_field.getText();
         String campo2 = prov_nombre_field.getText();
@@ -5704,24 +5972,52 @@ public class crud_banco extends javax.swing.JFrame {
         String campo4 = prov_razon_field.getText();  
         String campo5 = prov_telefono_field.getText();  
         String campo6 = prov_email_field.getText();  
+        int flag = 1;
         try {
             if ("".equals(campo1) || "".equals(campo2) || "".equals(campo3) || "".equals(campo4) || "".equals(campo5) || "".equals(campo6)){
                 JOptionPane.showMessageDialog(null, "rellene todos los campos");
             }
             
             else {
-                PreparedStatement pps = con.prepareStatement("INSERT INTO proveedor (PRO_ID_PROVEEDOR, PRO_NOMBRE, PRO_TELEFONO, PRO_CORREO, PRO_DIRECCION, PRO_RAZON, ESTADO) VALUES (?,?,?,?,?,?,?)");
-                pps.setString(1, campo1);
-                pps.setString(2, campo2);
-                pps.setString(5, campo3);
-                pps.setString(6, campo4);
-                pps.setString(3, campo5);
-                pps.setString(4, campo6);
-                pps.setString(7, "1");
-                pps.executeUpdate();
-                pps.close();
-                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                PreparedStatement pps;
+                Statement st;
+                st = con.createStatement();
+                ResultSet rut = st.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor");
+                while (rut.next()){
+                    if (rut.getString(1).equals(campo1)){
+                        flag = 0;
+                    }
+                }
+                
+                if (flag == 0){
+                    pps = con.prepareStatement("update proveedor set PRO_NOMBRE = ?, PRO_TELEFONO = ?, PRO_CORREO = ?, PRO_DIRECCION = ?, PRO_RAZON = ? where PRO_ID_PROVEEDOR = ?");
+                    pps.setString(1, campo2);
+                    pps.setString(2, campo5);
+                    pps.setString(3, campo6);
+                    pps.setString(4, campo3);
+                    pps.setString(5, campo4);
+                    pps.setString(6, campo1);
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                    prov_rut_field.setEnabled(true); 
+                }
+                else{
+                    pps = con.prepareStatement("INSERT INTO proveedor (PRO_ID_PROVEEDOR, PRO_NOMBRE, PRO_TELEFONO, PRO_CORREO, PRO_DIRECCION, PRO_RAZON, ESTADO) VALUES (?,?,?,?,?,?,?)");
+                    pps.setString(1, campo1);
+                    pps.setString(2, campo2);
+                    pps.setString(5, campo3);
+                    pps.setString(6, campo4);
+                    pps.setString(3, campo5);
+                    pps.setString(4, campo6);
+                    pps.setString(7, "1");
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                }
+
                 Mostrar_PROVEEDOR("");
+                Mostrar_ART_PRO_COMBO();
             }
             
         } catch (SQLException ex) {
@@ -5729,7 +6025,7 @@ public class crud_banco extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Codigo no permitido");
         }
     }//GEN-LAST:event_prov_bt_guardarActionPerformed
-
+//desactivar proveedor
     private void prov_bt_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_bt_desactivarActionPerformed
         int cantidad_filas = prov_tabla.getRowCount();
         
@@ -5738,7 +6034,6 @@ public class crud_banco extends javax.swing.JFrame {
                 try {
                     PreparedStatement pps;
                     pps = con.prepareStatement("update proveedor set ESTADO = ? where PRO_ID_PROVEEDOR = ?");
-                    System.out.print("pase");
                     if ("activada".equals(prov_tabla.getValueAt(i, 6))){
                         pps.setString(1,"0");
                     }
@@ -5753,6 +6048,7 @@ public class crud_banco extends javax.swing.JFrame {
             }
         }
         Mostrar_PROVEEDOR("");
+        Mostrar_ART_PRO_COMBO();
     }//GEN-LAST:event_prov_bt_desactivarActionPerformed
 
     private void prov_direccion_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prov_direccion_fieldActionPerformed
@@ -5974,6 +6270,283 @@ public class crud_banco extends javax.swing.JFrame {
     private void jTextField41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField41ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField41ActionPerformed
+//guardar articulo
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        String campo1 = jTextField3.getText();//nombre
+        String campo2 = jTextField5.getText();//DESCRIPCION
+        String campo3 = jTextField6.getText();//marca
+        String campo4 = jTextField7.getText();//codigo  
+        String campo5 = (String) jComboBox1.getSelectedItem(); //categoria articulo
+        String campo6 = (String) jComboBox2.getSelectedItem(); //proveedor
+        
+        int flag = 1;
+        
+        try {
+            if ("".equals(campo1) || "".equals(campo2) || "".equals(campo3) || "".equals(campo4)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            
+            else {
+                java.util.Date utilDate = (java.util.Date) jDateChooser1.getDate();
+                java.sql.Date fecha_vencimiento = new java.sql.Date(utilDate.getTime());
+                PreparedStatement pps;
+                Statement stp;
+                Statement stc;
+                Statement st;
+                stp = con.createStatement();
+                stc = con.createStatement();
+                st = con.createStatement();
+                ResultSet codigo = st.executeQuery("SELECT ART_CODIGO FROM articulo");
+                while (codigo.next()){
+                    if (codigo.getString(1).equals(campo4)){
+                        flag = 0;
+                    }
+                }
+                
+                ResultSet id_cate = stc.executeQuery("SELECT ID_CAT FROM categoria_articulo WHERE CAT_DESCRIPCION = '"+campo5+"'");
+                ResultSet id_pro = stp.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor WHERE PRO_RAZON = '"+campo6+"'");             
+                id_cate.next();
+                id_pro.next();
+                if (flag == 0){
+                    pps = con.prepareStatement("update articulo set ART_NOMBRE = ?, ART_MARCA = ?, ART_DESCRIPCION = ?, ART_FECHA_VENCIMIENTO = ?, PRO_ID_PROVEEDOR = ?, CATEGORIA_ARTICULO_ID_CAT = ?  where ART_CODIGO = ?");
+                    pps.setString(1, campo1);
+                    pps.setString(3, campo2);
+                    pps.setString(2, campo3);
+                    pps.setDate(4, fecha_vencimiento);
+                    pps.setString(7, campo4);
+                    pps.setString(5, id_pro.getString(1));
+                    pps.setString(6, id_cate.getString(1));
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                    jTextField7.setEnabled(true); 
+                }
+                else{
+                    
+                    pps = con.prepareStatement("INSERT INTO articulo (ART_NOMBRE, ART_CODIGO, ART_MARCA, ART_DESCRIPCION, ART_FECHA_VENCIMIENTO, estado, PRO_ID_PROVEEDOR, CATEGORIA_ARTICULO_ID_CAT, ART_STOCK) VALUES (?,?,?,?,?,?,?,?,?)");
+                    pps.setString(1, campo1);
+                    pps.setString(4, campo2);
+                    pps.setString(3, campo3);
+                    pps.setString(2, campo4);
+                    pps.setDate(5, fecha_vencimiento);
+                    pps.setString(6, "1");
+                    pps.setString(7, id_pro.getString(1));
+                    pps.setString(8, id_cate.getString(1));
+                    pps.setString(9, "1");
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                }
+                Mostrar_ARTICULO("");
+                cargarLista1(1);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }       
+    }//GEN-LAST:event_jButton7ActionPerformed
+//cancelar articulo
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        jTextField3.setText(null);
+        jTextField5.setText(null);
+        jTextField6.setText(null);
+        jTextField7.setText(null);
+        jDateChooser1.setDate(null);
+    }//GEN-LAST:event_jButton8ActionPerformed
+//desactivar articulo
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        int cantidad_filas = jTable2.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (jTable2.isCellSelected(i, 8) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("update articulo set estado = ? where ART_CODIGO = ?;");
+                    if ("activado".equals(jTable2.getValueAt(i, 7))){
+                        pps.setString(1,"0");
+                    }
+                    else pps.setString(1,"1"); 
+                    pps.setString(2, (String) jTable2.getValueAt(i,0));
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_ARTICULO("");
+        cargarLista1(1);
+    }//GEN-LAST:event_jButton9ActionPerformed
+//cacelar pack
+    private void cancelpack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelpack_buttonActionPerformed
+        namepack_field.setText(null);
+        pricepack_field.setText(null);
+        cargarLista1(1);
+        packedited_list.setListData(lista2);
+    }//GEN-LAST:event_cancelpack_buttonActionPerformed
+//guardar pack
+    private void savepack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savepack_buttonActionPerformed
+        String campo1 = namepack_field.getText();//nombre
+        String campo2 = pricepack_field.getText();//precio
+        
+        int flag = 1;
+        
+        try {
+            if ("".equals(campo1) || "".equals(campo2) || packedited_list.getModel().getSize() == 0){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            
+            else {
+                String c_articulo;
+                PreparedStatement pps;
+                Statement st2;
+                Statement st3;
+                Statement st;
+                st2 = con.createStatement();
+                st3 = con.createStatement();
+                st = con.createStatement();
+                ResultSet codigo = st.executeQuery("SELECT PCK_ID_PACK FROM pack");
+                while (codigo.next()){
+                    if (codigo.getString(1).equals(id_pack_actualizar)){
+                        flag = 0;
+                    }
+                }
+                                
+                if (flag == 0){
+                    pps = con.prepareStatement("update pack set PCK_NOMBRE = ?, PCK_COSTO = ? where PCK_ID_PACK = ?");
+                    pps.setString(1, campo1);
+                    pps.setString(2, campo2);
+                    pps.setString(3, id_pack_actualizar);
+                    pps.executeUpdate();
+                    pps.close();
+                    id_pack_actualizar = null;
+                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                 
+                }
+                else{
+                    pps = con.prepareStatement("INSERT INTO pack (PCK_NOMBRE, PCK_COSTO, estado) VALUES (?,?,?)");
+                    pps.setString(1, campo1);
+                    pps.setString(2, campo2);
+                    pps.setString(3, "1");
+                    pps.executeUpdate();
+                    pps.close();
+                    
+                    ResultSet id_pack = st2.executeQuery("SELECT PCK_ID_PACK FROM pack WHERE PCK_NOMBRE = '"+campo1+"'");
+                    id_pack.next();
+                    
+                    
+                    ResultSet id_articulo = st3.executeQuery("SELECT ART_ID_ARTICULO, ART_NOMBRE FROM articulo");
+                    int i = 0;
+                    while(id_articulo.next()){
+                        
+                        if(id_articulo.getString(2).equals(lista3.get(i))){
+                            
+                            c_articulo = obtener_cantidad(lista2.get(i));
+                            pps = con.prepareStatement("INSERT INTO pack_has_articulo (PCK_ID_PACK, ART_ID_ARTICULO, CANTIDAD) VALUES (?,?,?)");
+                            pps.setString(1, id_pack.getString(1));
+                            pps.setString(2, id_articulo.getString(1));
+                            pps.setString(3, c_articulo);
+                            pps.executeUpdate();
+                            pps.close();
+                            i++;
+                        }
+                        
+                    }
+                    
+                    
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                }
+                
+                Mostrar_PACKS("");
+                cargarLista1(1);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "no se pudo agregar pack");
+        }  
+    }//GEN-LAST:event_savepack_buttonActionPerformed
+//desactivar pack
+    private void deactivatepack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_buttonActionPerformed
+        int cantidad_filas = packs_table.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (packs_table.isCellSelected(i, 4) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("update pack set estado = ? where PCK_ID_PACK = ?");
+                    if ("activado".equals(packs_table.getValueAt(i, 3))){
+                        pps.setString(1,"0");
+                    }
+                    else pps.setString(1,"1"); 
+                    pps.setString(2, (String) packs_table.getValueAt(i,0));
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_PACKS("");
+    }//GEN-LAST:event_deactivatepack_buttonActionPerformed
+//cancelar cat_articulo
+    private void jButton38ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton38ActionPerformed
+        cat_art_nombre_field.setText(null);
+        cat_art_codigo_field.setText(null);
+    }//GEN-LAST:event_jButton38ActionPerformed
+//desactivar cat_articulo
+    private void jButton39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton39ActionPerformed
+        int cantidad_filas = cat_art_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (cat_art_tabla.isCellSelected(i, 3) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("update categoria_articulo set estado = ? where CAT_CODIGO = ?;");
+                    if ("activada".equals(cat_art_tabla.getValueAt(i, 2))){
+                        pps.setString(1,"0");
+                    }
+                    else pps.setString(1,"1"); 
+                    pps.setString(2, (String) cat_art_tabla.getValueAt(i,1));
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_CAT_ARTICULO("");
+        Mostrar_ART_CAT_COMBO();
+    }//GEN-LAST:event_jButton39ActionPerformed
+//cancelar cat_venta
+    private void jButton43ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton43ActionPerformed
+        cat_ven_nombre_field.setText(null);
+        cat_ven_codigo_field.setText(null);        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton43ActionPerformed
+//eliminar cat_venta
+    private void jButton44ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton44ActionPerformed
+        int cantidad_filas = cat_ven_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (cat_ven_tabla.isCellSelected(i, 1) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("DELETE FROM estados_venta WHERE EST_CODIGO = ?;");
+                    pps.setString(1,(String) cat_ven_tabla.getValueAt(i, 1)); 
+                    pps.executeUpdate();
+                    pps.close();
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_CAT_VENTA("");
+    }//GEN-LAST:event_jButton44ActionPerformed
 
     /**
      * @param args the command line arguments
