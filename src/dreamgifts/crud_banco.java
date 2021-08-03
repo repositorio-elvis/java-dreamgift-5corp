@@ -82,8 +82,8 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_COMBOX_BANCOS();
         Mostrar_COMBOX_RRSS();
         Mostrar_COMBOX_COMUNAS();
-        Mostrar_COMBOX_ESTADOS();
-        Mostrar_VENTA_TABLA("");
+        //Mostrar_COMBOX_ESTADOS();
+        //Mostrar_VENTA_TABLA("");
         
         
                 
@@ -470,7 +470,7 @@ public class crud_banco extends javax.swing.JFrame {
            }       
        }
     
-    private void Mostrar_COMBOX_ESTADOS(){
+    /*private void Mostrar_COMBOX_ESTADOS(){
 
            venta_estado_box.removeAllItems();
            Statement st;
@@ -485,7 +485,7 @@ public class crud_banco extends javax.swing.JFrame {
                Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
            }       
        }
-    
+    */
     
     private void Mostrar_DESPACHOS_TABLA(String valor){
         Statement st;
@@ -558,10 +558,10 @@ public class crud_banco extends javax.swing.JFrame {
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, CLI_ID_CLIENTE, "
-                    + "VTA_NOMBRE_DESTINATARIO, BAN_DESCRIPCION, VTA_CODIGO_TRANSFERENCIA, VTA_FECHA_TRANSFERENCIA, EST_DESCRIPCION FROM venta "
-                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO "
-                    + "INNER JOIN bancos ON venta.BAN_ID_BANCO = bancos.BAN_ID_BANCO where CONCAT(VTA_ID_VENTA, ' ',CLI_ID_CLIENTE) LIKE '%"+valor+"%'");
+            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, VTA_NOMBRE_DESTINATARIO, CLI_ID_CLIENTE, "
+                    + "VTA_FECHA_ENTREGA, PCK_NOMBRE, PCK_COSTO, EST_DESCRIPCION FROM venta "
+                    + "INNER JOIN pack ON venta.PCK_ID_PACK = pack.PCK_ID_PACK "
+                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO where CONCAT(VTA_ID_VENTA, ' ',CLI_ID_CLIENTE) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -571,7 +571,7 @@ public class crud_banco extends javax.swing.JFrame {
                 datos[5]=rs.getString(6);
                 datos[6]=rs.getString(7);
                 modelo.addRow(datos);           
-                
+   
             }
             ven_con_tabla.setModel(modelo);
             st.close();
@@ -582,83 +582,7 @@ public class crud_banco extends javax.swing.JFrame {
     }
     
     
-    private void Mostrar_PEDIDO(){
-        Statement st;
-        Statement stc;
-        Statement rut;
-        String campo1 = venta_num_pedido_field.getText();
-        String campo2 = venta_rut_field.getText();
-        try {
-            rut = con.createStatement();
-            ResultSet rut1 = rut.executeQuery("SELECT CLI_ID_CLIENTE FROM cliente WHERE CLI_ID_CLIENTE = '"+campo2+"'");
-            
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT CLI_NOMBRE, CLI_CORREO, CLI_CELULAR FROM cliente where CLI_ID_CLIENTE LIKE '"+campo2+"'");
-            
-            stc = con.createStatement();
-            ResultSet id_nomb = stc.executeQuery("SELECT CLI_ID_CLIENTE, VTA_NOMBRE_DESTINATARIO, VTA_FECHA_ENTREGA, "
-                    + "VTA_DIRECCION_DESTINATARIO, COM_DESCRIPCION, VTA_SALUDO, RRS_NOMBRE, EST_DESCRIPCION, "
-                    + "PCK_NOMBRE, VTA_HORA_ENTREGA_INICIAL, VTA_HORA_ENTREGA_FINAL FROM venta "
-                    + "INNER JOIN rrss ON venta.RRSS_ID_RRSS = rrss.RRS_ID_RRSS "
-                    + "INNER JOIN comunas ON venta.COM_ID_COMUNA = comunas.COM_ID_COMUNA "
-                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO "
-                    + "INNER JOIN pack ON venta.PCK_ID_PACK = pack.PCK_ID_PACK where VTA_ID_VENTA LIKE '"+campo1+"'");
-            id_nomb.next();
-            
-            if ("".equals(campo1)){
-                JOptionPane.showMessageDialog(null, "rellene todos los campos");
-                
-            }else if (rs.next()){
-                
-                venta_nom_cli_field.setText(rs.getString(1));
-                venta_email_field.setText(rs.getString(2));
-                venta_telefono_field.setText(rs.getString(3));
-                venta_rut_field.setText(id_nomb.getString(1));
-                venta_destinatario_field.setText(id_nomb.getString(2));
-                venta_fecha_entrega.setText(id_nomb.getString(3));
-                venta_direccion_field.setText(id_nomb.getString(4));
-                venta_comuna_box.setSelectedItem(id_nomb.getString(5));
-                venta_saludo_field.setText(id_nomb.getString(6));
-                venta_rrss_box.setSelectedItem(id_nomb.getString(7));
-                venta_estado_box.setSelectedItem(id_nomb.getString(8));
-                venta_pack_box.setSelectedItem(id_nomb.getString(9));
-                venta_fecha_entrega_ini.setText(id_nomb.getString(10));
-                venta_entrega_fin.setText(id_nomb.getString(11));
-                
-             } else {
-                    JOptionPane.showMessageDialog(null, "RUT NO REGISTRADO");
-                    st.close();
-            }
-            
-                        
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
-    
-    private void BUSCAR_RUT(){
-        Statement st;
-        String campo1 = venta_rut_field.getText();
-        try {
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT CLI_NOMBRE, CLI_CORREO, CLI_CELULAR FROM cliente where CLI_ID_CLIENTE LIKE '"+campo1+"'");
-            
-            if (rs.next()){
-                venta_nom_cli_field.setText(rs.getString(1));
-                venta_email_field.setText(rs.getString(2));
-                venta_telefono_field.setText(rs.getString(3));
-                
-            } else {
-                    JOptionPane.showMessageDialog(null, "RUT NO REGISTRADO");
-                    st.close();
-            }
-            
-                        
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
        
         
@@ -725,8 +649,6 @@ public class crud_banco extends javax.swing.JFrame {
         pesta_ventas = new javax.swing.JTabbedPane();
         tab_datosventa = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
-        jLabel80 = new javax.swing.JLabel();
-        venta_num_pedido_field = new javax.swing.JTextField();
         jLabel81 = new javax.swing.JLabel();
         jLabel86 = new javax.swing.JLabel();
         venta_nom_cli_field = new javax.swing.JTextField();
@@ -736,7 +658,9 @@ public class crud_banco extends javax.swing.JFrame {
         venta_telefono_field = new javax.swing.JTextField();
         venta_buscar_rut = new javax.swing.JButton();
         venta_rut_field = new javax.swing.JTextField();
-        venta_buscar_n_pedido = new javax.swing.JButton();
+        jLabel106 = new javax.swing.JLabel();
+        venta_rrss_box = new javax.swing.JComboBox<>();
+        check_regalo = new javax.swing.JCheckBox();
         jPanel23 = new javax.swing.JPanel();
         jLabel84 = new javax.swing.JLabel();
         venta_destinatario_field = new javax.swing.JTextField();
@@ -751,24 +675,17 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel92 = new javax.swing.JLabel();
         venta_saludo_field = new javax.swing.JTextField();
         venta_pack_box = new javax.swing.JComboBox<>();
-        jLabel93 = new javax.swing.JLabel();
         jLabel94 = new javax.swing.JLabel();
-        jLabel106 = new javax.swing.JLabel();
-        venta_rrss_box = new javax.swing.JComboBox<>();
-        jLabel116 = new javax.swing.JLabel();
-        venta_estado_box = new javax.swing.JComboBox<>();
-        venta_fecha_entrega = new javax.swing.JTextField();
-        venta_fecha_entrega_ini = new javax.swing.JTextField();
-        venta_entrega_fin = new javax.swing.JTextField();
         venta_bt_modificar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
-        jLabel50 = new javax.swing.JLabel();
         jLabel51 = new javax.swing.JLabel();
-        result_subtotal = new javax.swing.JLabel();
-        result_envio = new javax.swing.JLabel();
         result_total = new javax.swing.JLabel();
         jSeparator9 = new javax.swing.JSeparator();
+        jLabel116 = new javax.swing.JLabel();
+        venta_fono_despacho_field = new javax.swing.JTextField();
+        venta_fecha_entrega = new com.toedter.calendar.JDateChooser();
+        venta_fecha_entrega_ini = new javax.swing.JComboBox<>();
         tab_confirmpago = new javax.swing.JPanel();
         jPanel24 = new javax.swing.JPanel();
         jLabel82 = new javax.swing.JLabel();
@@ -1150,25 +1067,13 @@ public class crud_banco extends javax.swing.JFrame {
 
         jPanel22.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Datos cliente solicitante", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
-        jLabel80.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel80.setText("Número pedido:");
-
-        venta_num_pedido_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_num_pedido_field.setText("12");
-        venta_num_pedido_field.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                venta_num_pedido_fieldActionPerformed(evt);
-            }
-        });
-
         jLabel81.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel81.setText("RUT");
+        jLabel81.setText("Rut:");
 
         jLabel86.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel86.setText("Nombre cliente:");
 
         venta_nom_cli_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_nom_cli_field.setText("Francisco Tapiado");
         venta_nom_cli_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 venta_nom_cli_fieldActionPerformed(evt);
@@ -1176,7 +1081,6 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         venta_email_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_email_field.setText("fjtp1407@gmail.com");
         venta_email_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 venta_email_fieldActionPerformed(evt);
@@ -1190,7 +1094,6 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel88.setText("Teléfono");
 
         venta_telefono_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_telefono_field.setText("228575245");
         venta_telefono_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 venta_telefono_fieldActionPerformed(evt);
@@ -1213,13 +1116,13 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        venta_buscar_n_pedido.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_buscar_n_pedido.setText("Rellenar");
-        venta_buscar_n_pedido.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                venta_buscar_n_pedidoActionPerformed(evt);
-            }
-        });
+        jLabel106.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel106.setText("Red Social:");
+
+        venta_rrss_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_rrss_box.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
+        check_regalo.setText("Para REGALO");
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -1227,48 +1130,44 @@ public class crud_banco extends javax.swing.JFrame {
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel22Layout.createSequentialGroup()
-                        .addComponent(jLabel80)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(venta_num_pedido_field, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(venta_buscar_n_pedido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(223, 223, 223))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel22Layout.createSequentialGroup()
-                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel86)
-                            .addComponent(jLabel87))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(venta_email_field, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
-                            .addComponent(venta_nom_cli_field))))
-                .addGap(100, 100, 100)
-                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel88, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                    .addComponent(jLabel81, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel86)
+                    .addComponent(jLabel87)
+                    .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
-                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel22Layout.createSequentialGroup()
-                        .addComponent(venta_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(venta_buscar_rut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(venta_telefono_field, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43))
+                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel22Layout.createSequentialGroup()
+                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(venta_nom_cli_field, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+                            .addComponent(venta_email_field))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel88, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel106, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(venta_telefono_field)
+                            .addComponent(venta_rrss_box, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(106, 106, 106))
+                    .addGroup(jPanel22Layout.createSequentialGroup()
+                        .addComponent(venta_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(check_regalo, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(venta_buscar_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel22Layout.setVerticalGroup(
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel22Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel80)
-                        .addComponent(venta_num_pedido_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel81)
-                        .addComponent(venta_buscar_n_pedido))
-                    .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(venta_buscar_rut)
-                        .addComponent(venta_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(venta_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel81))
+                    .addComponent(check_regalo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel86)
                     .addComponent(venta_nom_cli_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1277,17 +1176,18 @@ public class crud_banco extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel87)
-                    .addComponent(venta_email_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(venta_email_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(venta_rrss_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel106))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Datos destinatario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         jLabel84.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel84.setText("Nombre destinatario:");
+        jLabel84.setText("Nombre Despacho:");
 
         venta_destinatario_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_destinatario_field.setText("Nombre de Prueba");
         venta_destinatario_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 venta_destinatario_fieldActionPerformed(evt);
@@ -1311,16 +1211,15 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         venta_entrega_ini.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_entrega_ini.setText("Horario Inicio Entrega:");
+        venta_entrega_ini.setText("Horario Entrega:");
 
         jLabel89.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel89.setText("Fecha entrega:");
+        jLabel89.setText("Fecha Entrega:");
 
         jLabel90.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel90.setText("Dirección:");
 
         venta_direccion_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_direccion_field.setText("Pasaje 1");
         venta_direccion_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 venta_direccion_fieldActionPerformed(evt);
@@ -1331,34 +1230,16 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel91.setText("Comuna:");
 
         venta_comuna_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_comuna_box.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Comuna 1", "Comuna 2", "Comuna 3", "Comuna 4" }));
 
         jLabel92.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel92.setText("Saludo:");
 
         venta_saludo_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_saludo_field.setText("Saludo de Prueba");
 
         venta_pack_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_pack_box.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pack 1", "Pack 2", " " }));
-
-        jLabel93.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel93.setText("Hora Fin Entrega:");
 
         jLabel94.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel94.setText("Pack:");
-
-        jLabel106.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel106.setText("Red Social:");
-
-        venta_rrss_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_rrss_box.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
-
-        jLabel116.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel116.setText("Estado:");
-
-        venta_estado_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        venta_estado_box.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "En Proceso", "Pagado", "No Pagado", " " }));
 
         venta_bt_modificar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         venta_bt_modificar.setText("Modificar");
@@ -1368,20 +1249,11 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jLabel23.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel23.setText("Subtotal:");
-
-        jLabel50.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel50.setText("Envíos:");
+        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel23.setText("DETALLE DE VENTA:");
 
         jLabel51.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel51.setText("TOTAL:");
-
-        result_subtotal.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        result_subtotal.setText("$0");
-
-        result_envio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        result_envio.setText("$0");
 
         result_total.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         result_total.setText("$0");
@@ -1390,34 +1262,27 @@ public class crud_banco extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(38, 38, 38)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator9)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel50, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 230, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(result_subtotal, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(result_envio, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(result_total, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(67, 67, 67))
+                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator9)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                                .addComponent(result_total, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(67, 67, 67))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel23)
-                    .addComponent(result_subtotal))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel50)
-                    .addComponent(result_envio))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1426,6 +1291,19 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(21, 21, 21))
         );
 
+        jLabel116.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel116.setText("Telefono Despacho:");
+
+        venta_fono_despacho_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_fono_despacho_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                venta_fono_despacho_fieldActionPerformed(evt);
+            }
+        });
+
+        venta_fecha_entrega_ini.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_fecha_entrega_ini.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "09:00 - 12:00", "12:00 - 15:00", "15:00 - 18:00" }));
+
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
         jPanel23Layout.setHorizontalGroup(
@@ -1433,110 +1311,104 @@ public class crud_banco extends javax.swing.JFrame {
             .addGroup(jPanel23Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel92, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel91, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel90, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel89, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
-                    .addComponent(jLabel84))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(venta_destinatario_field)
-                    .addComponent(venta_saludo_field)
-                    .addComponent(venta_direccion_field, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addComponent(venta_comuna_box, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(venta_fecha_entrega))
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel116, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel94, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(venta_pack_box, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(venta_estado_box, 0, 267, Short.MAX_VALUE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                                .addComponent(jLabel106, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
-                                .addComponent(venta_rrss_box, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(venta_entrega_fin, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel23Layout.createSequentialGroup()
-                                    .addComponent(venta_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(venta_fecha_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel93, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(venta_bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(venta_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(venta_bt_modificar)
-                .addGap(67, 67, 67))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(venta_bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(venta_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(venta_bt_modificar)
+                        .addGap(116, 116, 116))
+                    .addGroup(jPanel23Layout.createSequentialGroup()
+                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel23Layout.createSequentialGroup()
+                                .addComponent(jLabel92, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(venta_saludo_field)
+                                .addGap(88, 88, 88))
+                            .addGroup(jPanel23Layout.createSequentialGroup()
+                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel91, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel90, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel89, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel84, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel116, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+                                .addGap(30, 30, 30)
+                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(venta_destinatario_field)
+                                    .addComponent(venta_direccion_field, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel23Layout.createSequentialGroup()
+                                        .addComponent(venta_comuna_box, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 7, Short.MAX_VALUE))
+                                    .addComponent(venta_fono_despacho_field)
+                                    .addGroup(jPanel23Layout.createSequentialGroup()
+                                        .addComponent(venta_fecha_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel23Layout.createSequentialGroup()
+                                .addGap(154, 154, 154)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                                        .addComponent(jLabel94, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(123, 123, 123)
+                                        .addComponent(venta_pack_box, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(150, 150, 150))
+                                    .addGroup(jPanel23Layout.createSequentialGroup()
+                                        .addComponent(venta_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(venta_fecha_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addContainerGap())))))))
         );
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel23Layout.createSequentialGroup()
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(venta_rrss_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel106))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(venta_estado_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel116))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel94)
-                            .addComponent(venta_pack_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(venta_entrega_ini)
-                            .addComponent(venta_fecha_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel93)
-                            .addComponent(venta_entrega_fin, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel84)
-                            .addComponent(venta_destinatario_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel89)
-                            .addComponent(venta_fecha_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(15, 15, 15)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel90)
-                            .addComponent(venta_direccion_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel91)
-                            .addComponent(venta_comuna_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel92)
-                            .addComponent(venta_saludo_field, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap()
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel94)
+                    .addComponent(venta_pack_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(venta_bt_cancelar)
-                    .addComponent(venta_bt_guardar)
-                    .addComponent(venta_bt_modificar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(venta_entrega_ini)
+                    .addComponent(venta_fecha_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(venta_bt_guardar)
+                        .addComponent(venta_bt_modificar))
+                    .addComponent(venta_bt_cancelar))
+                .addContainerGap(125, Short.MAX_VALUE))
+            .addGroup(jPanel23Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel84)
+                    .addComponent(venta_destinatario_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel116)
+                    .addComponent(venta_fono_despacho_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel89)
+                    .addComponent(venta_fecha_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel90)
+                    .addComponent(venta_direccion_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel91)
+                    .addComponent(venta_comuna_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(venta_saludo_field, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel92))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout tab_datosventaLayout = new javax.swing.GroupLayout(tab_datosventa);
@@ -1547,7 +1419,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(tab_datosventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, 1294, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(179, Short.MAX_VALUE))
         );
         tab_datosventaLayout.setVerticalGroup(
@@ -1743,11 +1615,11 @@ public class crud_banco extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Número Pedido", "Rut Cliente", "Nombre Cliente", "Banco", "Cod Transaccion", "Fecha Pago", "Estado Venta", "Acción"
+                "Número Pedido", "Nombre Despacho", "Rut Cliente", "Fecha Entrega", "Nombre Pack", "Precio", "Estado Venta", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -3345,7 +3217,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(pesta_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(224, Short.MAX_VALUE))
+                .addContainerGap(1124, Short.MAX_VALUE))
         );
 
         Panel_tab_menu.addTab("Informes", tab_informes);
@@ -6838,10 +6710,6 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_CAT_VENTA("");
     }//GEN-LAST:event_jButton44ActionPerformed
 
-    private void venta_num_pedido_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_num_pedido_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_venta_num_pedido_fieldActionPerformed
-
     private void venta_nom_cli_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_nom_cli_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_venta_nom_cli_fieldActionPerformed
@@ -6855,112 +6723,52 @@ public class crud_banco extends javax.swing.JFrame {
     }//GEN-LAST:event_venta_telefono_fieldActionPerformed
 
     private void venta_buscar_rutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_buscar_rutActionPerformed
-        //Mostrar_RUT(venta_rut_field.getText());
-        BUSCAR_RUT();
+        
+        
+        Statement st;
+        //Statement stc;
+        String campo1 = venta_rut_field.getText();
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT CLI_NOMBRE, CLI_CORREO, CLI_CELULAR FROM cliente where CLI_ID_CLIENTE LIKE '"+campo1+"'");
+            
+            //stc = con.createStatement();
+            //ResultSet id_venta = stc.executeQuery("SELECT VTA_NOMBRE_DESTINATARIO FROM venta");
+            //id_venta.next();
+            rs.next();
+            if (check_regalo.isSelected()){
+                venta_nom_cli_field.setText(rs.getString(1));
+                venta_nom_cli_field.setEnabled(false);
+                venta_email_field.setText(rs.getString(2));
+                venta_email_field.setEnabled(false);
+                venta_telefono_field.setText(rs.getString(3));
+                venta_telefono_field.setEnabled(false);
+                JOptionPane.showMessageDialog(null, "PARA REGALO");
+                
+            } else {
+                venta_nom_cli_field.setText(rs.getString(1));
+                venta_nom_cli_field.setEnabled(false);
+                venta_email_field.setText(rs.getString(2));
+                venta_email_field.setEnabled(false);
+                venta_telefono_field.setText(rs.getString(3));
+                venta_telefono_field.setEnabled(false);
+                venta_destinatario_field.setText(rs.getString(1));
+                venta_destinatario_field.setEnabled(false);
+                venta_fono_despacho_field.setText(rs.getString(3));
+                venta_fono_despacho_field.setEnabled(false);
+                JOptionPane.showMessageDialog(null, "RELLENADO");
+                st.close();
+            }
+            
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_venta_buscar_rutActionPerformed
 
     private void venta_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_rut_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_venta_rut_fieldActionPerformed
-
-    private void venta_buscar_n_pedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_buscar_n_pedidoActionPerformed
-        Mostrar_PEDIDO();// TODO add your handling code here:
-    }//GEN-LAST:event_venta_buscar_n_pedidoActionPerformed
-
-    private void venta_destinatario_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_destinatario_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_venta_destinatario_fieldActionPerformed
-
-    private void venta_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_guardarActionPerformed
-        //CREAR_VENTA();
-        Statement stc;
-        String campo1 = venta_num_pedido_field.getText();
-        String campo2 = venta_rut_field.getText();
-        String campo3 = venta_destinatario_field.getText();
-        String campo4 = (String) venta_comuna_box.getSelectedItem();
-
-        try {
-            if ("".equals(campo1)){
-                JOptionPane.showMessageDialog(null, "rellene todos los campos");
-            }
-
-            else {
-                stc = con.createStatement();
-                ResultSet id_comuna = stc.executeQuery("SELECT COM_ID_COMUNA FROM comunas WHERE BAN_DESCRIPCION	 = '"+campo4+"'");
-                id_comuna.next();
-                //java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
-                //java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
-                PreparedStatement pps = con.prepareStatement("INSERT INTO venta (VTA_ID_VENTA, CLI_ID_CLIENTE, VTA_NOMBRE_DESTINATARIO, COM_ID_COMUNA, ESTADO) VALUES (?,?,?,?,?)");
-                pps.setString(1, campo1);
-                pps.setString(2, campo2);
-                pps.setString(3, campo3);
-                pps.setString(4, id_comuna.getString(1));
-                pps.setString(5, "1");
-
-                //pps.setDate(5, cli_fec_nacimiento_field1);
-
-                pps.executeUpdate();
-                pps.close();
-                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Codigo no permitido");
-        }
-    }//GEN-LAST:event_venta_bt_guardarActionPerformed
-
-    private void venta_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_cancelarActionPerformed
-        venta_num_pedido_field.setText(null);
-        venta_rut_field.setText(null);
-        venta_nom_cli_field.setText(null);
-        venta_email_field.setText(null);
-        venta_telefono_field.setText(null);
-
-        venta_destinatario_field.setText(null);
-        venta_fecha_entrega.setText(null);
-        venta_direccion_field.setText(null);
-        venta_comuna_box.setSelectedItem(null);
-        venta_saludo_field.setText(null);
-        venta_rrss_box.setSelectedItem(null);
-
-        venta_estado_box.setSelectedItem(null);
-        venta_pack_box.setSelectedItem(null);
-        venta_fecha_entrega_ini.setText(null);
-        venta_entrega_fin.setText(null);
-    }//GEN-LAST:event_venta_bt_cancelarActionPerformed
-
-    private void venta_direccion_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_direccion_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_venta_direccion_fieldActionPerformed
-
-    private void venta_bt_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_modificarActionPerformed
-        String campo1 = venta_destinatario_field.getText();
-
-        try {
-            if ("".equals(campo1)){
-                JOptionPane.showMessageDialog(null, "rellene todos los campos");
-            }
-
-            else {
-                //java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
-                //java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
-                PreparedStatement pps = con.prepareStatement("UPDATE venta SET VTA_NOMBRE_DESTINATARIO=? WHERE VTA_ID_VENTA=?");
-                pps.setString(1, campo1);
-                pps.setString(2, venta_num_pedido_field.getText());
-
-                //pps.setDate(5, cli_fec_nacimiento_field1);
-
-                pps.executeUpdate();
-                pps.close();
-                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Codigo no permitido");
-        }
-    }//GEN-LAST:event_venta_bt_modificarActionPerformed
 
     private void ven_con_n_pedido_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_n_pedido_fieldActionPerformed
         // TODO add your handling code here:
@@ -7014,11 +6822,12 @@ public class crud_banco extends javax.swing.JFrame {
                     stc = con.createStatement();
                     ResultSet id_banco = stc.executeQuery("SELECT BAN_ID_BANCO FROM bancos WHERE BAN_DESCRIPCION = '"+campo1+"'");
                     id_banco.next();
-                    pps = con.prepareStatement("update venta set BAN_ID_BANCO = ?, VTA_FECHA_TRANSFERENCIA = ?, VTA_CODIGO_TRANSFERENCIA = ? where VTA_ID_VENTA = ?");
+                    pps = con.prepareStatement("update venta set BAN_ID_BANCO = ?, VTA_FECHA_TRANSFERENCIA = ?, VTA_CODIGO_TRANSFERENCIA = ?, ESTADOS_ID_ESTADO = ? where VTA_ID_VENTA = ?");
                     pps.setString(1, id_banco.getString(1));
                     pps.setDate(2, ven_con_fecha_pago_field1);
                     pps.setString(3, campo2);
-                    pps.setString(4, campo4);
+                    pps.setString(4, "2");
+                    pps.setString(5, campo4);
                     pps.executeUpdate();
                     pps.close();
                     JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
@@ -7039,11 +6848,15 @@ public class crud_banco extends javax.swing.JFrame {
 
     private void ven_con_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_cancelarActionPerformed
         ven_con_n_pedido_field.setText(null);
+        ven_con_n_pedido_field.setEnabled(true);
         ven_con_rut_field.setText(null);
-        ven_con_banco_combox.setSelectedItem(null);
+        ven_con_rut_field.setEnabled(true);
         ven_con_nom_cliente_field.setText(null);
+        ven_con_nom_cliente_field.setEnabled(true);
+        ven_con_banco_combox.setSelectedItem(null);
         ven_con_fecha_pago_field.setDate(null);
         ven_con_cod_tran_field.setText(null);
+        
     }//GEN-LAST:event_ven_con_bt_cancelarActionPerformed
 
     private void ven_con_bar_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bar_buscarActionPerformed
@@ -7097,21 +6910,11 @@ public class crud_banco extends javax.swing.JFrame {
             if (ven_con_tabla.isCellSelected(i, 7) == true){
                 ven_con_n_pedido_field.setText((String) ven_con_tabla.getValueAt(i,0));
                 ven_con_n_pedido_field.setEnabled(false);
-                ven_con_rut_field.setText((String) ven_con_tabla.getValueAt(i,1));
+                ven_con_rut_field.setText((String) ven_con_tabla.getValueAt(i,2));
                 ven_con_rut_field.setEnabled(false);
-                ven_con_nom_cliente_field.setText((String) ven_con_tabla.getValueAt(i,2));
+                ven_con_nom_cliente_field.setText((String) ven_con_tabla.getValueAt(i,1));
                 ven_con_nom_cliente_field.setEnabled(false);
-                
-                ven_con_banco_combox.setSelectedItem((String) ven_con_tabla.getValueAt(i,3));
-                ven_con_cod_tran_field.setText((String) ven_con_tabla.getValueAt(i,4));
-                
-                String fecha = ven_con_tabla.getValueAt(i,5).toString();
-                SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
-                try {
-                    ven_con_fecha_pago_field.setDate(formatofecha.parse(fecha));
-                } catch (ParseException ex) {
-                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
             }
         }
     }//GEN-LAST:event_ven_con_bt_editarActionPerformed
@@ -7119,6 +6922,135 @@ public class crud_banco extends javax.swing.JFrame {
     private void ven_con_bt_recargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_recargarActionPerformed
         Mostrar_VENTA_TABLA("");
     }//GEN-LAST:event_ven_con_bt_recargarActionPerformed
+
+    private void venta_fono_despacho_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_fono_despacho_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_fono_despacho_fieldActionPerformed
+
+    private void venta_bt_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_modificarActionPerformed
+        String campo1 = venta_destinatario_field.getText();
+
+        try {
+            if ("".equals(campo1)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+
+            else {
+                //java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
+                //java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
+                PreparedStatement pps = con.prepareStatement("UPDATE venta SET VTA_NOMBRE_DESTINATARIO=? WHERE VTA_ID_VENTA=?");
+                pps.setString(1, campo1);
+                //pps.setString(2, venta_num_pedido_field.getText());
+
+                //pps.setDate(5, cli_fec_nacimiento_field1);
+
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }
+    }//GEN-LAST:event_venta_bt_modificarActionPerformed
+
+    private void venta_direccion_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_direccion_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_direccion_fieldActionPerformed
+
+    private void venta_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_cancelarActionPerformed
+        //venta_num_pedido_field.setText(null);
+        venta_rut_field.setText(null);
+        venta_nom_cli_field.setText(null);
+        venta_nom_cli_field.setEnabled(true);
+        venta_email_field.setText(null);
+        venta_email_field.setEnabled(true);
+        venta_telefono_field.setText(null);
+        venta_fono_despacho_field.setText(null);
+        venta_fono_despacho_field.setEnabled(true);
+        venta_destinatario_field.setText(null);
+        venta_destinatario_field.setEnabled(true);
+        venta_fecha_entrega.setDate(null);
+        venta_direccion_field.setText(null);
+        venta_comuna_box.setSelectedItem(null);
+        venta_saludo_field.setText(null);
+        venta_rrss_box.setSelectedItem(null);
+
+        //venta_estado_box.setSelectedItem(null);
+        venta_pack_box.setSelectedItem(null);
+        venta_fecha_entrega_ini.setSelectedItem(null);
+        //venta_entrega_fin.setText(null);
+    }//GEN-LAST:event_venta_bt_cancelarActionPerformed
+
+    private void venta_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_guardarActionPerformed
+        Statement stc;
+        Statement sts;
+        Statement std;
+
+        String campo1 = venta_rut_field.getText();
+        String campo2 = (String) venta_rrss_box.getSelectedItem();
+        String campo3 = venta_destinatario_field.getText();
+        String campo4 = venta_fono_despacho_field.getText();
+        //venta_fecha_entrega1
+        String campo5 = venta_direccion_field.getText();
+        String campo6 = (String) venta_comuna_box.getSelectedItem();
+        String campo7 = venta_saludo_field.getText();
+        String campo8 = (String) venta_pack_box.getSelectedItem();
+        String campo9 = (String) venta_fecha_entrega_ini.getSelectedItem();
+
+
+        try {
+            if ("".equals(campo1)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+
+            else {
+                java.util.Date utilDate = (java.util.Date) venta_fecha_entrega.getDate();
+                java.sql.Date venta_fecha_entrega1 = new java.sql.Date(utilDate.getTime());
+
+                stc = con.createStatement();
+                ResultSet id_comuna = stc.executeQuery("SELECT COM_ID_COMUNA FROM comunas WHERE COM_DESCRIPCION  = '"+campo6+"'");
+                id_comuna.next();
+
+                sts = con.createStatement();
+                ResultSet id_pack = sts.executeQuery("SELECT PCK_ID_PACK FROM pack WHERE PCK_NOMBRE  = '"+campo8+"'");
+                id_pack.next();
+
+                std = con.createStatement();
+                ResultSet id_rrss = std.executeQuery("SELECT RRS_ID_RRSS FROM rrss WHERE RRS_NOMBRE  = '"+campo2+"'");
+                id_rrss.next();
+
+
+                PreparedStatement pps = con.prepareStatement("INSERT INTO venta (CLI_ID_CLIENTE, RRSS_ID_RRSS, VTA_NOMBRE_DESTINATARIO, VTA_TELEFONO, "
+                        + "VTA_FECHA_ENTREGA, VTA_DIRECCION_DESTINATARIO, COM_ID_COMUNA, VTA_SALUDO, PCK_ID_PACK, "
+                        + "VTA_HORA_ENTREGA_INICIAL, ESTADOS_ID_ESTADO) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+                pps.setString(1, campo1);
+                pps.setString(2, id_rrss.getString(1));
+                pps.setString(3, campo3);
+                pps.setString(4, campo4);
+                pps.setDate(5, venta_fecha_entrega1);
+                pps.setString(6, campo5);
+                pps.setString(7, id_comuna.getString(1));
+                pps.setString(8, campo7);
+                pps.setString(9, id_pack.getString(1));
+                pps.setString(10, campo9);
+                pps.setString(11, "1");
+
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }
+    }//GEN-LAST:event_venta_bt_guardarActionPerformed
+
+    private void venta_destinatario_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_destinatario_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_destinatario_fieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -7188,6 +7120,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField cat_ven_codigo_field;
     private javax.swing.JTextField cat_ven_nombre_field;
     private javax.swing.JTable cat_ven_tabla;
+    private javax.swing.JCheckBox check_regalo;
     private javax.swing.JButton cli_bt_buscar;
     private javax.swing.JButton cli_bt_cancelar;
     private javax.swing.JButton cli_bt_desactivar;
@@ -7364,7 +7297,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel55;
@@ -7381,7 +7313,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel80;
     private javax.swing.JLabel jLabel81;
     private javax.swing.JLabel jLabel82;
     private javax.swing.JLabel jLabel83;
@@ -7394,7 +7325,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel90;
     private javax.swing.JLabel jLabel91;
     private javax.swing.JLabel jLabel92;
-    private javax.swing.JLabel jLabel93;
     private javax.swing.JLabel jLabel94;
     private javax.swing.JLabel jLabel95;
     private javax.swing.JLabel jLabel96;
@@ -7498,8 +7428,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable prov_tabla;
     private javax.swing.JTextField prov_telefono_field;
     private javax.swing.JPasswordField repet_pass_field;
-    private javax.swing.JLabel result_envio;
-    private javax.swing.JLabel result_subtotal;
     private javax.swing.JLabel result_total;
     private javax.swing.JButton rrss_bt_buscar;
     private javax.swing.JFormattedTextField rrss_buscar_bar;
@@ -7554,19 +7482,16 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton venta_bt_cancelar;
     private javax.swing.JButton venta_bt_guardar;
     private javax.swing.JButton venta_bt_modificar;
-    private javax.swing.JButton venta_buscar_n_pedido;
     private javax.swing.JButton venta_buscar_rut;
     private javax.swing.JComboBox<String> venta_comuna_box;
     private javax.swing.JTextField venta_destinatario_field;
     private javax.swing.JTextField venta_direccion_field;
     private javax.swing.JTextField venta_email_field;
-    private javax.swing.JTextField venta_entrega_fin;
     private javax.swing.JLabel venta_entrega_ini;
-    private javax.swing.JComboBox<String> venta_estado_box;
-    private javax.swing.JTextField venta_fecha_entrega;
-    private javax.swing.JTextField venta_fecha_entrega_ini;
+    private com.toedter.calendar.JDateChooser venta_fecha_entrega;
+    private javax.swing.JComboBox<String> venta_fecha_entrega_ini;
+    private javax.swing.JTextField venta_fono_despacho_field;
     private javax.swing.JTextField venta_nom_cli_field;
-    private javax.swing.JTextField venta_num_pedido_field;
     private javax.swing.JComboBox<String> venta_pack_box;
     private javax.swing.JComboBox<String> venta_rrss_box;
     private javax.swing.JTextField venta_rut_field;
