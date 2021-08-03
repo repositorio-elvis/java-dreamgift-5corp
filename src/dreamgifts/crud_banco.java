@@ -553,21 +553,23 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_VENTA_TABLA(String valor){
         Statement st;
-        String []datos = new String [5];   
+        String []datos = new String [7];   
         DefaultTableModel modelo = (DefaultTableModel) ven_con_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, CLI_ID_CLIENTE, VTA_CODIGO_TRANSFERENCIA, ESTADO, BAN_ID_BANCO FROM venta where CONCAT(VTA_ID_VENTA, ' ',CLI_ID_CLIENTE) LIKE '%"+valor+"%'");
+            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, CLI_ID_CLIENTE, "
+                    + "VTA_NOMBRE_DESTINATARIO, BAN_DESCRIPCION, VTA_CODIGO_TRANSFERENCIA, VTA_FECHA_TRANSFERENCIA, EST_DESCRIPCION FROM venta "
+                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO "
+                    + "INNER JOIN bancos ON venta.BAN_ID_BANCO = bancos.BAN_ID_BANCO where CONCAT(VTA_ID_VENTA, ' ',CLI_ID_CLIENTE) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
-                datos[1]=rs.getString(3);
-                datos[2]=rs.getString(2); 
-                datos[3]=rs.getString(5);
-                if ("1".equals(rs.getString(4))){
-                    datos[4] = "activada";
-                }
-                else datos[4]= "desactivada";
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3); 
+                datos[3]=rs.getString(4);
+                datos[4]=rs.getString(5);
+                datos[5]=rs.getString(6);
+                datos[6]=rs.getString(7);
                 modelo.addRow(datos);           
                 
             }
@@ -658,37 +660,7 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    private void Mostrar_NUMEROPEDIDO(){
-        Statement st;  
-        Statement stc;
-        String campo1 = ven_con_rut_field.getText();
-        String campo2 = ven_con_n_pedido_field.getText();
-        try {
-            
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, CLI_ID_CLIENTE, VTA_CODIGO_TRANSFERENCIA, VTA_FECHA_TRANSFERENCIA, BAN_DESCRIPCION"
-                    + " FROM venta INNER JOIN bancos ON venta.BAN_ID_BANCO = bancos.BAN_ID_BANCO where VTA_ID_VENTA LIKE '"+campo2+"'");
-            
-            stc = con.createStatement();
-            ResultSet id_nomb = stc.executeQuery("SELECT CLI_ID_CLIENTE, CLI_NOMBRE FROM cliente where CLI_ID_CLIENTE LIKE '"+campo1+"'");
-            id_nomb.next();
-            
-            while (rs.next()){
-                ven_con_n_pedido_field.setText(rs.getString(1));
-                ven_con_rut_field.setText(rs.getString(2));
-                ven_con_nom_cliente_field.setText(id_nomb.getString(2));
-                ven_con_cod_tran_field.setText(rs.getString(3));
-                ven_con_fecha_pago_field.setText(rs.getString(4));
-                ven_con_banco_combox.setSelectedItem(rs.getString(5));
-                
-            }
-            st.close();
-                        
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+       
         
     private void cargarLista1(int flag){
         lista1.removeAllElements();
@@ -804,7 +776,6 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel96 = new javax.swing.JLabel();
         ven_con_rut_field = new javax.swing.JTextField();
         jLabel97 = new javax.swing.JLabel();
-        ven_con_n_bt_buscar = new javax.swing.JButton();
         ven_con_banco_combox = new javax.swing.JComboBox<>();
         jLabel100 = new javax.swing.JLabel();
         ven_con_nom_cliente_field = new javax.swing.JTextField();
@@ -813,13 +784,14 @@ public class crud_banco extends javax.swing.JFrame {
         ven_con_cod_tran_field = new javax.swing.JTextField();
         ven_con_bt_confirmar = new javax.swing.JButton();
         ven_con_bt_cancelar = new javax.swing.JButton();
-        ven_con_fecha_pago_field = new javax.swing.JTextField();
+        ven_con_fecha_pago_field = new com.toedter.calendar.JDateChooser();
         jLabel108 = new javax.swing.JLabel();
         ven_con_bar_buscar = new javax.swing.JFormattedTextField();
         ven_con_bt_buscar = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
         ven_con_tabla = new javax.swing.JTable();
-        ven_con_bt_desactivar = new javax.swing.JButton();
+        ven_con_bt_editar = new javax.swing.JButton();
+        ven_con_bt_recargar = new javax.swing.JButton();
         tab_listadestinos = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
         jLabel109 = new javax.swing.JLabel();
@@ -1596,7 +1568,6 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel82.setText("Número pedido:");
 
         ven_con_n_pedido_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        ven_con_n_pedido_field.setText("12");
         ven_con_n_pedido_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ven_con_n_pedido_fieldActionPerformed(evt);
@@ -1615,14 +1586,6 @@ public class crud_banco extends javax.swing.JFrame {
 
         jLabel97.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel97.setText("Banco:");
-
-        ven_con_n_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        ven_con_n_bt_buscar.setText("Buscar");
-        ven_con_n_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ven_con_n_bt_buscarActionPerformed(evt);
-            }
-        });
 
         ven_con_banco_combox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         ven_con_banco_combox.addActionListener(new java.awt.event.ActionListener() {
@@ -1655,7 +1618,7 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         ven_con_bt_confirmar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        ven_con_bt_confirmar.setText("Guardar");
+        ven_con_bt_confirmar.setText("Confirmar");
         ven_con_bt_confirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ven_con_bt_confirmarActionPerformed(evt);
@@ -1676,75 +1639,74 @@ public class crud_banco extends javax.swing.JFrame {
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel24Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel82, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel97)
-                    .addComponent(jLabel96, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(ven_con_rut_field, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel24Layout.createSequentialGroup()
-                        .addComponent(ven_con_n_pedido_field, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ven_con_n_bt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(ven_con_banco_combox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 148, Short.MAX_VALUE)
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel24Layout.createSequentialGroup()
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel82, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel96, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ven_con_rut_field, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                            .addComponent(ven_con_n_pedido_field)))
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addComponent(jLabel100, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ven_con_nom_cliente_field)))
+                .addGap(148, 148, 148)
+                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel24Layout.createSequentialGroup()
                         .addComponent(ven_con_bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(25, 25, 25)
                         .addComponent(ven_con_bt_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel24Layout.createSequentialGroup()
+                    .addGroup(jPanel24Layout.createSequentialGroup()
                         .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel100, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel102))
                         .addGap(28, 28, 28)
-                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(ven_con_cod_tran_field, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(ven_con_nom_cliente_field, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(ven_con_fecha_pago_field, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(ven_con_cod_tran_field, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                            .addComponent(ven_con_fecha_pago_field, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addComponent(jLabel97)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
+                        .addComponent(ven_con_banco_combox, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30))
         );
         jPanel24Layout.setVerticalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel24Layout.createSequentialGroup()
                         .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel82)
+                            .addComponent(ven_con_n_pedido_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ven_con_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel96))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel100)
                             .addComponent(ven_con_nom_cliente_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel101)
-                            .addGroup(jPanel24Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(ven_con_fecha_pago_field, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(79, 79, 79))
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel97)
+                            .addComponent(ven_con_banco_combox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ven_con_fecha_pago_field, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel101))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ven_con_cod_tran_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel102))
                         .addGap(30, 30, 30)
                         .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(ven_con_bt_confirmar)
-                            .addComponent(ven_con_bt_cancelar)))
-                    .addGroup(jPanel24Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel82)
-                                .addComponent(ven_con_n_pedido_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(ven_con_n_bt_buscar))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(ven_con_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel96))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel97)
-                            .addComponent(ven_con_banco_combox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(30, 30, 30))
+                            .addComponent(ven_con_bt_cancelar))
+                        .addGap(30, 30, 30))))
         );
 
         jLabel108.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -1771,21 +1733,21 @@ public class crud_banco extends javax.swing.JFrame {
         ven_con_tabla.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         ven_con_tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Número Pedido", "Cod Transaccion", "Rut Cliente", "Banco", "Estado", "Acción"
+                "Número Pedido", "Rut Cliente", "Nombre Cliente", "Banco", "Cod Transaccion", "Fecha Pago", "Estado Venta", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1800,12 +1762,21 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
         jScrollPane5.setViewportView(ven_con_tabla);
+        ven_con_tabla.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        ven_con_bt_desactivar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        ven_con_bt_desactivar.setText("Desactivar");
-        ven_con_bt_desactivar.addActionListener(new java.awt.event.ActionListener() {
+        ven_con_bt_editar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_editar.setText("Editar");
+        ven_con_bt_editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ven_con_bt_desactivarActionPerformed(evt);
+                ven_con_bt_editarActionPerformed(evt);
+            }
+        });
+
+        ven_con_bt_recargar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_recargar.setText("RECARGAR");
+        ven_con_bt_recargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_con_bt_recargarActionPerformed(evt);
             }
         });
 
@@ -1818,11 +1789,13 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGroup(tab_confirmpagoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1222, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(tab_confirmpagoLayout.createSequentialGroup()
-                        .addGap(231, 231, 231)
+                        .addGap(95, 95, 95)
                         .addComponent(jLabel108, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(89, 89, 89)
-                        .addComponent(ven_con_bt_desactivar)
-                        .addGap(69, 69, 69)
+                        .addGap(38, 38, 38)
+                        .addComponent(ven_con_bt_recargar)
+                        .addGap(21, 21, 21)
+                        .addComponent(ven_con_bt_editar)
+                        .addGap(108, 108, 108)
                         .addComponent(ven_con_bar_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
                         .addComponent(ven_con_bt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1839,7 +1812,8 @@ public class crud_banco extends javax.swing.JFrame {
                     .addComponent(ven_con_bar_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
                     .addComponent(jLabel108)
                     .addComponent(ven_con_bt_buscar)
-                    .addComponent(ven_con_bt_desactivar))
+                    .addComponent(ven_con_bt_editar)
+                    .addComponent(ven_con_bt_recargar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(280, 280, 280))
@@ -6912,7 +6886,7 @@ public class crud_banco extends javax.swing.JFrame {
 
             else {
                 stc = con.createStatement();
-                ResultSet id_comuna = stc.executeQuery("SELECT COM_ID_COMUNA FROM comunas WHERE COM_DESCRIPCION = '"+campo4+"'");
+                ResultSet id_comuna = stc.executeQuery("SELECT COM_ID_COMUNA FROM comunas WHERE BAN_DESCRIPCION	 = '"+campo4+"'");
                 id_comuna.next();
                 //java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
                 //java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
@@ -6996,10 +6970,6 @@ public class crud_banco extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ven_con_rut_fieldActionPerformed
 
-    private void ven_con_n_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_n_bt_buscarActionPerformed
-        Mostrar_NUMEROPEDIDO();
-    }//GEN-LAST:event_ven_con_n_bt_buscarActionPerformed
-
     private void ven_con_banco_comboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_banco_comboxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ven_con_banco_comboxActionPerformed
@@ -7013,40 +6983,58 @@ public class crud_banco extends javax.swing.JFrame {
     }//GEN-LAST:event_ven_con_cod_tran_fieldActionPerformed
 
     private void ven_con_bt_confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_confirmarActionPerformed
-        //MODIFICAR_CONFIRMACION();
         Statement stc;
-        String campo1 = ven_con_cod_tran_field.getText();
-        String campo2 = ven_con_fecha_pago_field.getText();
-        String campo3 = (String) ven_con_banco_combox.getSelectedItem();
-
+        String campo1 = (String) ven_con_banco_combox.getSelectedItem();
+        String campo2 = ven_con_cod_tran_field.getText();
+        String campo4 = ven_con_n_pedido_field.getText();
+        //String campo1 = cli_nombre_field.getText();
+        //String campo2 = cli_telefono_field.getText();
+        //String campo3 = cli_email_field.getText();
+        //String campo4 = cli_rut_field.getText();  
+        java.util.Date utilDate = (java.util.Date) ven_con_fecha_pago_field.getDate();
+        java.sql.Date ven_con_fecha_pago_field1 = new java.sql.Date(utilDate.getTime());
+        int flag = 1;
         try {
-            if ("".equals(campo1)){
+            if ("".equals(campo1) || "".equals(campo2)){
                 JOptionPane.showMessageDialog(null, "rellene todos los campos");
             }
-
+            
             else {
-                stc = con.createStatement();
-                ResultSet id_banco = stc.executeQuery("SELECT BAN_ID_BANCO FROM bancos WHERE BAN_DESCRIPCION = '"+campo3+"'");
-                id_banco.next();
-                //java.util.Date utilDate = (java.util.Date) ven_con_fecha_pago_field.getDate();
-                //java.sql.Date ven_con_fecha_pago_field1 = new java.sql.Date(utilDate.getTime());
-                PreparedStatement pps = con.prepareStatement("UPDATE venta SET VTA_CODIGO_TRANSFERENCIA=?, VTA_FECHA_TRANSFERENCIA=?, BAN_ID_BANCO=? WHERE VTA_ID_VENTA=?");
-                pps.setString(1, campo1);
-                pps.setString(2, campo2);
-                pps.setString(3, id_banco.getString(1));
-                //pps.setDate(2, ven_con_fecha_pago_field1);
-                pps.setString(4, ven_con_n_pedido_field.getText());
+                PreparedStatement pps;
+                Statement st;
+                st = con.createStatement();
+                ResultSet rut = st.executeQuery("SELECT VTA_ID_VENTA FROM venta");
+                while (rut.next()){
+                    if (rut.getString(1).equals(campo4)){
+                        flag = 0;
+                    }
+                }
+                
+                if (flag == 0){
+                    stc = con.createStatement();
+                    ResultSet id_banco = stc.executeQuery("SELECT BAN_ID_BANCO FROM bancos WHERE BAN_DESCRIPCION = '"+campo1+"'");
+                    id_banco.next();
+                    pps = con.prepareStatement("update venta set BAN_ID_BANCO = ?, VTA_FECHA_TRANSFERENCIA = ?, VTA_CODIGO_TRANSFERENCIA = ? where VTA_ID_VENTA = ?");
+                    pps.setString(1, id_banco.getString(1));
+                    pps.setDate(2, ven_con_fecha_pago_field1);
+                    pps.setString(3, campo2);
+                    pps.setString(4, campo4);
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                    cli_rut_field.setEnabled(true); 
+                }
+                else{
 
-                pps.executeUpdate();
-                pps.close();
-                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                    JOptionPane.showMessageDialog(null, "ERROR ");
+                }
+                Mostrar_VENTA_TABLA("");
             }
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Codigo no permitido");
         }
-        Mostrar_VENTA_TABLA("");
     }//GEN-LAST:event_ven_con_bt_confirmarActionPerformed
 
     private void ven_con_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_cancelarActionPerformed
@@ -7054,7 +7042,7 @@ public class crud_banco extends javax.swing.JFrame {
         ven_con_rut_field.setText(null);
         ven_con_banco_combox.setSelectedItem(null);
         ven_con_nom_cliente_field.setText(null);
-        ven_con_fecha_pago_field.setText(null);
+        ven_con_fecha_pago_field.setDate(null);
         ven_con_cod_tran_field.setText(null);
     }//GEN-LAST:event_ven_con_bt_cancelarActionPerformed
 
@@ -7069,31 +7057,6 @@ public class crud_banco extends javax.swing.JFrame {
     private void ven_con_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_ven_con_tablaComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_ven_con_tablaComponentAdded
-
-    private void ven_con_bt_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_desactivarActionPerformed
-        int cantidad_filas = ven_con_tabla.getRowCount();
-
-        for (int i = 0; i <= cantidad_filas; i++){
-            if (ven_con_tabla.isCellSelected(i, 5) == true){
-                try {
-                    PreparedStatement pps;
-                    pps = con.prepareStatement("update venta set ESTADO = ? where VTA_ID_VENTA = ?");
-                    System.out.print("pase");
-                    if ("activada".equals(ven_con_tabla.getValueAt(i, 4))){
-                        pps.setString(1,"0");
-                    }
-                    else pps.setString(1,"1");
-                    pps.setString(2, (String) ven_con_tabla.getValueAt(i,0));
-                    pps.executeUpdate();
-                    pps.close();
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        Mostrar_VENTA_TABLA("");
-    }//GEN-LAST:event_ven_con_bt_desactivarActionPerformed
 
     private void jFormattedTextField15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField15ActionPerformed
         // TODO add your handling code here:
@@ -7126,6 +7089,36 @@ public class crud_banco extends javax.swing.JFrame {
     private void bt_recargar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recargar1ActionPerformed
         Mostrar_DESPACHOS_TABLA("");
     }//GEN-LAST:event_bt_recargar1ActionPerformed
+
+    private void ven_con_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_editarActionPerformed
+        int cantidad_filas = ven_con_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (ven_con_tabla.isCellSelected(i, 7) == true){
+                ven_con_n_pedido_field.setText((String) ven_con_tabla.getValueAt(i,0));
+                ven_con_n_pedido_field.setEnabled(false);
+                ven_con_rut_field.setText((String) ven_con_tabla.getValueAt(i,1));
+                ven_con_rut_field.setEnabled(false);
+                ven_con_nom_cliente_field.setText((String) ven_con_tabla.getValueAt(i,2));
+                ven_con_nom_cliente_field.setEnabled(false);
+                
+                ven_con_banco_combox.setSelectedItem((String) ven_con_tabla.getValueAt(i,3));
+                ven_con_cod_tran_field.setText((String) ven_con_tabla.getValueAt(i,4));
+                
+                String fecha = ven_con_tabla.getValueAt(i,5).toString();
+                SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    ven_con_fecha_pago_field.setDate(formatofecha.parse(fecha));
+                } catch (ParseException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_ven_con_bt_editarActionPerformed
+
+    private void ven_con_bt_recargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_recargarActionPerformed
+        Mostrar_VENTA_TABLA("");
+    }//GEN-LAST:event_ven_con_bt_recargarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -7550,10 +7543,10 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton ven_con_bt_buscar;
     private javax.swing.JButton ven_con_bt_cancelar;
     private javax.swing.JButton ven_con_bt_confirmar;
-    private javax.swing.JButton ven_con_bt_desactivar;
+    private javax.swing.JButton ven_con_bt_editar;
+    private javax.swing.JButton ven_con_bt_recargar;
     private javax.swing.JTextField ven_con_cod_tran_field;
-    private javax.swing.JTextField ven_con_fecha_pago_field;
-    private javax.swing.JButton ven_con_n_bt_buscar;
+    private com.toedter.calendar.JDateChooser ven_con_fecha_pago_field;
     private javax.swing.JTextField ven_con_n_pedido_field;
     private javax.swing.JTextField ven_con_nom_cliente_field;
     private javax.swing.JTextField ven_con_rut_field;
