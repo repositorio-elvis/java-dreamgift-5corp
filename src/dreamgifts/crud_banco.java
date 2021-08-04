@@ -488,6 +488,8 @@ public class crud_banco extends javax.swing.JFrame {
     */
     
     private void Mostrar_DESPACHOS_TABLA(String valor){
+        String campo1 = "2";
+        String campo2 = "3";
         Statement st;
         String []datos = new String [7];   
         DefaultTableModel modelo = (DefaultTableModel) tabla_despachos.getModel();
@@ -499,7 +501,7 @@ public class crud_banco extends javax.swing.JFrame {
                     + "VTA_HORA_ENTREGA_INICIAL, EST_DESCRIPCION FROM venta "
                     + "INNER JOIN comunas ON venta.COM_ID_COMUNA = comunas.COM_ID_COMUNA "
                     + "INNER JOIN pack ON venta.PCK_ID_PACK = pack.PCK_ID_PACK "
-                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO where VTA_ID_VENTA LIKE '%"+valor+"%'");
+                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO where (ESTADOS_ID_ESTADO LIKE '"+campo1+"') OR (ESTADOS_ID_ESTADO LIKE '"+campo2+"') OR (VTA_ID_VENTA LIKE '"+valor+"') order by VTA_FECHA_ENTREGA desc");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -519,39 +521,10 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
-    private void Mostrar_DESTINOS_TABLA(String valor){
-        Statement st;
-        String []datos = new String [7];   
-        DefaultTableModel modelo = (DefaultTableModel) tabla_destinos.getModel();
-        modelo.setNumRows(0);
-        try {
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, PCK_NOMBRE, VTA_NOMBRE_DESTINATARIO, "
-                    + "COM_DESCRIPCION, VTA_DIRECCION_DESTINATARIO, VTA_FECHA_ENTREGA, "
-                    + "VTA_HORA_ENTREGA_INICIAL FROM venta "
-                    + "INNER JOIN comunas ON venta.COM_ID_COMUNA = comunas.COM_ID_COMUNA "
-                    + "INNER JOIN pack ON venta.PCK_ID_PACK = pack.PCK_ID_PACK where VTA_ID_VENTA LIKE '%"+valor+"%'");
-            while (rs.next()){
-                datos[0]=rs.getString(1); 
-                datos[1]=rs.getString(2);
-                datos[2]=rs.getString(3); 
-                datos[3]=rs.getString(4);
-                datos[4]=rs.getString(5);
-                datos[5]=rs.getString(6);
-                datos[6]=rs.getString(7);
-                modelo.addRow(datos);           
-                
-            }
-            tabla_destinos.setModel(modelo);
-            st.close();
-                        
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
     
     
     private void Mostrar_VENTA_TABLA(String valor){
+        String campo1 = "1";
         Statement st;
         String []datos = new String [7];   
         DefaultTableModel modelo = (DefaultTableModel) ven_con_tabla.getModel();
@@ -561,7 +534,7 @@ public class crud_banco extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, VTA_NOMBRE_DESTINATARIO, CLI_ID_CLIENTE, "
                     + "VTA_FECHA_ENTREGA, PCK_NOMBRE, PCK_COSTO, EST_DESCRIPCION FROM venta "
                     + "INNER JOIN pack ON venta.PCK_ID_PACK = pack.PCK_ID_PACK "
-                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO where CONCAT(VTA_ID_VENTA, ' ',CLI_ID_CLIENTE) LIKE '%"+valor+"%'");
+                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO where (ESTADOS_ID_ESTADO LIKE '"+campo1+"') AND (CLI_ID_CLIENTE LIKE '%"+valor+"%')");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -709,26 +682,19 @@ public class crud_banco extends javax.swing.JFrame {
         ven_con_tabla = new javax.swing.JTable();
         ven_con_bt_editar = new javax.swing.JButton();
         ven_con_bt_recargar = new javax.swing.JButton();
-        tab_listadestinos = new javax.swing.JPanel();
-        jPanel21 = new javax.swing.JPanel();
-        jLabel109 = new javax.swing.JLabel();
-        jFormattedTextField15 = new javax.swing.JFormattedTextField();
-        jButton57 = new javax.swing.JButton();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        tabla_destinos = new javax.swing.JTable();
-        jButton47 = new javax.swing.JButton();
-        jButton28 = new javax.swing.JButton();
-        bt_recargar = new javax.swing.JButton();
-        tab_actudespacho = new javax.swing.JPanel();
+        tab_listadodespachos = new javax.swing.JPanel();
         jPanel26 = new javax.swing.JPanel();
         jLabel111 = new javax.swing.JLabel();
-        jFormattedTextField17 = new javax.swing.JFormattedTextField();
-        jButton61 = new javax.swing.JButton();
+        ven_desp_buscar_field = new javax.swing.JFormattedTextField();
+        ven_desp_bar_buscar = new javax.swing.JButton();
         jScrollPane9 = new javax.swing.JScrollPane();
         tabla_despachos = new javax.swing.JTable();
         jButton49 = new javax.swing.JButton();
         jButton50 = new javax.swing.JButton();
         bt_recargar1 = new javax.swing.JButton();
+        ven_con_bt_entregado = new javax.swing.JButton();
+        ven_con_bt_reconfirmar = new javax.swing.JButton();
+        ven_con_bt_rependiente = new javax.swing.JButton();
         tab_compras = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         jSeparator7 = new javax.swing.JSeparator();
@@ -1237,6 +1203,16 @@ public class crud_banco extends javax.swing.JFrame {
         venta_saludo_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         venta_pack_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_pack_box.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                venta_pack_boxItemStateChanged(evt);
+            }
+        });
+        venta_pack_box.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                venta_pack_boxActionPerformed(evt);
+            }
+        });
 
         jLabel94.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel94.setText("Pack:");
@@ -1341,9 +1317,7 @@ public class crud_banco extends javax.swing.JFrame {
                                         .addComponent(venta_comuna_box, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 7, Short.MAX_VALUE))
                                     .addComponent(venta_fono_despacho_field)
-                                    .addGroup(jPanel23Layout.createSequentialGroup()
-                                        .addComponent(venta_fecha_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                    .addComponent(venta_fecha_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel23Layout.createSequentialGroup()
                                 .addGap(154, 154, 154)
@@ -1693,153 +1667,26 @@ public class crud_banco extends javax.swing.JFrame {
 
         pesta_ventas.addTab("Confirmación", tab_confirmpago);
 
-        jPanel21.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Despacho", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
-
-        jLabel109.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel109.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel109.setText("Ventas pendientes de pago");
-
-        jFormattedTextField15.setToolTipText("buscar...");
-        jFormattedTextField15.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField15ActionPerformed(evt);
-            }
-        });
-
-        jButton57.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton57.setText("Buscar");
-
-        jScrollPane6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-
-        tabla_destinos.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tabla_destinos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "N° Pedido", "Nombre Pack", "Destinatario", "Comuna", "Dirección", "Fecha Entrega", "Hora Entrega", "Acción"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        tabla_destinos.getTableHeader().setReorderingAllowed(false);
-        tabla_destinos.addContainerListener(new java.awt.event.ContainerAdapter() {
-            public void componentAdded(java.awt.event.ContainerEvent evt) {
-                tabla_destinosComponentAdded(evt);
-            }
-        });
-        jScrollPane6.setViewportView(tabla_destinos);
-
-        jButton47.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton47.setText("Imprimir");
-
-        jButton28.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton28.setText("Descargar");
-        jButton28.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton28ActionPerformed(evt);
-            }
-        });
-
-        bt_recargar.setText("RECARGAR");
-        bt_recargar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_recargarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
-        jPanel21.setLayout(jPanel21Layout);
-        jPanel21Layout.setHorizontalGroup(
-            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel21Layout.createSequentialGroup()
-                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel21Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1320, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(jButton47, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel21Layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addComponent(bt_recargar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel109, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(104, 104, 104)
-                        .addComponent(jFormattedTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton57, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(43, 43, 43))
-        );
-        jPanel21Layout.setVerticalGroup(
-            jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel21Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jFormattedTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton57, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel109, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
-                    .addComponent(bt_recargar))
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton47)
-                    .addComponent(jButton28))
-                .addGap(30, 30, 30))
-        );
-
-        javax.swing.GroupLayout tab_listadestinosLayout = new javax.swing.GroupLayout(tab_listadestinos);
-        tab_listadestinos.setLayout(tab_listadestinosLayout);
-        tab_listadestinosLayout.setHorizontalGroup(
-            tab_listadestinosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tab_listadestinosLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(50, 50, 50))
-        );
-        tab_listadestinosLayout.setVerticalGroup(
-            tab_listadestinosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tab_listadestinosLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(393, Short.MAX_VALUE))
-        );
-
-        pesta_ventas.addTab("Lista Destinos", tab_listadestinos);
-
         jPanel26.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Despacho", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         jLabel111.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel111.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel111.setText("Actualización Despacho");
+        jLabel111.setText("Listado de Despachos");
 
-        jFormattedTextField17.setToolTipText("buscar...");
-        jFormattedTextField17.addActionListener(new java.awt.event.ActionListener() {
+        ven_desp_buscar_field.setToolTipText("buscar...");
+        ven_desp_buscar_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField17ActionPerformed(evt);
+                ven_desp_buscar_fieldActionPerformed(evt);
             }
         });
 
-        jButton61.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton61.setText("Buscar");
+        ven_desp_bar_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_desp_bar_buscar.setText("Buscar");
+        ven_desp_bar_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_desp_bar_buscarActionPerformed(evt);
+            }
+        });
 
         jScrollPane9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
@@ -1893,6 +1740,30 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
+        ven_con_bt_entregado.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_entregado.setText("ENTREGADO");
+        ven_con_bt_entregado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_con_bt_entregadoActionPerformed(evt);
+            }
+        });
+
+        ven_con_bt_reconfirmar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_reconfirmar.setText("CONFIRMAR");
+        ven_con_bt_reconfirmar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_con_bt_reconfirmarActionPerformed(evt);
+            }
+        });
+
+        ven_con_bt_rependiente.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_rependiente.setText("PENDIENTE");
+        ven_con_bt_rependiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_con_bt_rependienteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
@@ -1905,8 +1776,14 @@ public class crud_banco extends javax.swing.JFrame {
                             .addComponent(jScrollPane9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1320, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel26Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(ven_con_bt_rependiente, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(ven_con_bt_reconfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(ven_con_bt_entregado, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(42, 42, 42)
                                 .addComponent(jButton50, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton49, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel26Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
@@ -1914,9 +1791,9 @@ public class crud_banco extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel111, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(107, 107, 107)
-                        .addComponent(jFormattedTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(ven_desp_buscar_field, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton61, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ven_desp_bar_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(43, 43, 43))
         );
         jPanel26Layout.setVerticalGroup(
@@ -1926,9 +1803,9 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel26Layout.createSequentialGroup()
                         .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jFormattedTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton61, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel111, javax.swing.GroupLayout.PREFERRED_SIZE, 24, Short.MAX_VALUE))
+                            .addComponent(ven_desp_buscar_field, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ven_desp_bar_buscar)
+                            .addComponent(jLabel111, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE))
                     .addGroup(jPanel26Layout.createSequentialGroup()
                         .addComponent(bt_recargar1)
@@ -1937,28 +1814,33 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton49)
-                    .addComponent(jButton50))
+                    .addComponent(jButton50)
+                    .addComponent(ven_con_bt_entregado)
+                    .addComponent(ven_con_bt_reconfirmar)
+                    .addComponent(ven_con_bt_rependiente))
                 .addGap(30, 30, 30))
         );
 
-        javax.swing.GroupLayout tab_actudespachoLayout = new javax.swing.GroupLayout(tab_actudespacho);
-        tab_actudespacho.setLayout(tab_actudespachoLayout);
-        tab_actudespachoLayout.setHorizontalGroup(
-            tab_actudespachoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tab_actudespachoLayout.createSequentialGroup()
+        javax.swing.GroupLayout tab_listadodespachosLayout = new javax.swing.GroupLayout(tab_listadodespachos);
+        tab_listadodespachos.setLayout(tab_listadodespachosLayout);
+        tab_listadodespachosLayout.setHorizontalGroup(
+            tab_listadodespachosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tab_listadodespachosLayout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addComponent(jPanel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(50, 50, 50))
         );
-        tab_actudespachoLayout.setVerticalGroup(
-            tab_actudespachoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tab_actudespachoLayout.createSequentialGroup()
+        tab_listadodespachosLayout.setVerticalGroup(
+            tab_listadodespachosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tab_listadodespachosLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jPanel26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(393, Short.MAX_VALUE))
+                .addContainerGap(382, Short.MAX_VALUE))
         );
 
-        pesta_ventas.addTab("Actualización Despachos", tab_actudespacho);
+        jPanel26.getAccessibleContext().setAccessibleName("Despachos");
+
+        pesta_ventas.addTab("Listado Despachos", tab_listadodespachos);
 
         javax.swing.GroupLayout tab_ventasLayout = new javax.swing.GroupLayout(tab_ventas);
         tab_ventas.setLayout(tab_ventasLayout);
@@ -6710,202 +6592,29 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_CAT_VENTA("");
     }//GEN-LAST:event_jButton44ActionPerformed
 
-    private void venta_nom_cli_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_nom_cli_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_venta_nom_cli_fieldActionPerformed
-
-    private void venta_email_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_email_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_venta_email_fieldActionPerformed
-
-    private void venta_telefono_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_telefono_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_venta_telefono_fieldActionPerformed
-
-    private void venta_buscar_rutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_buscar_rutActionPerformed
-        
-        
-        Statement st;
-        //Statement stc;
-        String campo1 = venta_rut_field.getText();
-        try {
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT CLI_NOMBRE, CLI_CORREO, CLI_CELULAR FROM cliente where CLI_ID_CLIENTE LIKE '"+campo1+"'");
-            
-            //stc = con.createStatement();
-            //ResultSet id_venta = stc.executeQuery("SELECT VTA_NOMBRE_DESTINATARIO FROM venta");
-            //id_venta.next();
-            rs.next();
-            if (check_regalo.isSelected()){
-                venta_nom_cli_field.setText(rs.getString(1));
-                venta_nom_cli_field.setEnabled(false);
-                venta_email_field.setText(rs.getString(2));
-                venta_email_field.setEnabled(false);
-                venta_telefono_field.setText(rs.getString(3));
-                venta_telefono_field.setEnabled(false);
-                JOptionPane.showMessageDialog(null, "PARA REGALO");
-                
-            } else {
-                venta_nom_cli_field.setText(rs.getString(1));
-                venta_nom_cli_field.setEnabled(false);
-                venta_email_field.setText(rs.getString(2));
-                venta_email_field.setEnabled(false);
-                venta_telefono_field.setText(rs.getString(3));
-                venta_telefono_field.setEnabled(false);
-                venta_destinatario_field.setText(rs.getString(1));
-                venta_destinatario_field.setEnabled(false);
-                venta_fono_despacho_field.setText(rs.getString(3));
-                venta_fono_despacho_field.setEnabled(false);
-                JOptionPane.showMessageDialog(null, "RELLENADO");
-                st.close();
-            }
-            
-                        
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_venta_buscar_rutActionPerformed
-
-    private void venta_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_rut_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_venta_rut_fieldActionPerformed
-
-    private void ven_con_n_pedido_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_n_pedido_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ven_con_n_pedido_fieldActionPerformed
-
-    private void ven_con_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_rut_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ven_con_rut_fieldActionPerformed
-
-    private void ven_con_banco_comboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_banco_comboxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ven_con_banco_comboxActionPerformed
-
-    private void ven_con_nom_cliente_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_nom_cliente_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ven_con_nom_cliente_fieldActionPerformed
-
-    private void ven_con_cod_tran_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_cod_tran_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ven_con_cod_tran_fieldActionPerformed
-
-    private void ven_con_bt_confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_confirmarActionPerformed
-        Statement stc;
-        String campo1 = (String) ven_con_banco_combox.getSelectedItem();
-        String campo2 = ven_con_cod_tran_field.getText();
-        String campo4 = ven_con_n_pedido_field.getText();
-        //String campo1 = cli_nombre_field.getText();
-        //String campo2 = cli_telefono_field.getText();
-        //String campo3 = cli_email_field.getText();
-        //String campo4 = cli_rut_field.getText();  
-        java.util.Date utilDate = (java.util.Date) ven_con_fecha_pago_field.getDate();
-        java.sql.Date ven_con_fecha_pago_field1 = new java.sql.Date(utilDate.getTime());
-        int flag = 1;
-        try {
-            if ("".equals(campo1) || "".equals(campo2)){
-                JOptionPane.showMessageDialog(null, "rellene todos los campos");
-            }
-            
-            else {
-                PreparedStatement pps;
-                Statement st;
-                st = con.createStatement();
-                ResultSet rut = st.executeQuery("SELECT VTA_ID_VENTA FROM venta");
-                while (rut.next()){
-                    if (rut.getString(1).equals(campo4)){
-                        flag = 0;
-                    }
-                }
-                
-                if (flag == 0){
-                    stc = con.createStatement();
-                    ResultSet id_banco = stc.executeQuery("SELECT BAN_ID_BANCO FROM bancos WHERE BAN_DESCRIPCION = '"+campo1+"'");
-                    id_banco.next();
-                    pps = con.prepareStatement("update venta set BAN_ID_BANCO = ?, VTA_FECHA_TRANSFERENCIA = ?, VTA_CODIGO_TRANSFERENCIA = ?, ESTADOS_ID_ESTADO = ? where VTA_ID_VENTA = ?");
-                    pps.setString(1, id_banco.getString(1));
-                    pps.setDate(2, ven_con_fecha_pago_field1);
-                    pps.setString(3, campo2);
-                    pps.setString(4, "2");
-                    pps.setString(5, campo4);
-                    pps.executeUpdate();
-                    pps.close();
-                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
-                    cli_rut_field.setEnabled(true); 
-                }
-                else{
-
-                    JOptionPane.showMessageDialog(null, "ERROR ");
-                }
-                Mostrar_VENTA_TABLA("");
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Codigo no permitido");
-        }
-    }//GEN-LAST:event_ven_con_bt_confirmarActionPerformed
-
-    private void ven_con_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_cancelarActionPerformed
-        ven_con_n_pedido_field.setText(null);
-        ven_con_n_pedido_field.setEnabled(true);
-        ven_con_rut_field.setText(null);
-        ven_con_rut_field.setEnabled(true);
-        ven_con_nom_cliente_field.setText(null);
-        ven_con_nom_cliente_field.setEnabled(true);
-        ven_con_banco_combox.setSelectedItem(null);
-        ven_con_fecha_pago_field.setDate(null);
-        ven_con_cod_tran_field.setText(null);
-        
-    }//GEN-LAST:event_ven_con_bt_cancelarActionPerformed
-
-    private void ven_con_bar_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bar_buscarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ven_con_bar_buscarActionPerformed
-
-    private void ven_con_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_buscarActionPerformed
-        Mostrar_VENTA_TABLA(ven_con_bar_buscar.getText());
-    }//GEN-LAST:event_ven_con_bt_buscarActionPerformed
-
-    private void ven_con_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_ven_con_tablaComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ven_con_tablaComponentAdded
-
-    private void jFormattedTextField15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField15ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField15ActionPerformed
-
-    private void tabla_destinosComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tabla_destinosComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabla_destinosComponentAdded
-
-    private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton28ActionPerformed
-
-    private void bt_recargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recargarActionPerformed
-        Mostrar_DESTINOS_TABLA("");
-    }//GEN-LAST:event_bt_recargarActionPerformed
-
-    private void jFormattedTextField17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField17ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField17ActionPerformed
-
-    private void tabla_despachosComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tabla_despachosComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabla_despachosComponentAdded
+    private void bt_recargar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recargar1ActionPerformed
+        Mostrar_DESPACHOS_TABLA("");
+    }//GEN-LAST:event_bt_recargar1ActionPerformed
 
     private void jButton50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton50ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton50ActionPerformed
 
-    private void bt_recargar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recargar1ActionPerformed
-        Mostrar_DESPACHOS_TABLA("");
-    }//GEN-LAST:event_bt_recargar1ActionPerformed
+    private void tabla_despachosComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tabla_despachosComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabla_despachosComponentAdded
+
+    private void ven_desp_buscar_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_desp_buscar_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_desp_buscar_fieldActionPerformed
+
+    private void ven_con_bt_recargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_recargarActionPerformed
+        Mostrar_VENTA_TABLA("");
+    }//GEN-LAST:event_ven_con_bt_recargarActionPerformed
 
     private void ven_con_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_editarActionPerformed
         int cantidad_filas = ven_con_tabla.getRowCount();
-        
+
         for (int i = 0; i <= cantidad_filas; i++){
             if (ven_con_tabla.isCellSelected(i, 7) == true){
                 ven_con_n_pedido_field.setText((String) ven_con_tabla.getValueAt(i,0));
@@ -6919,9 +6628,103 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ven_con_bt_editarActionPerformed
 
-    private void ven_con_bt_recargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_recargarActionPerformed
-        Mostrar_VENTA_TABLA("");
-    }//GEN-LAST:event_ven_con_bt_recargarActionPerformed
+    private void ven_con_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_ven_con_tablaComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_tablaComponentAdded
+
+    private void ven_con_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_buscarActionPerformed
+        Mostrar_VENTA_TABLA(ven_con_bar_buscar.getText());
+    }//GEN-LAST:event_ven_con_bt_buscarActionPerformed
+
+    private void ven_con_bar_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bar_buscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_bar_buscarActionPerformed
+
+    private void ven_con_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_cancelarActionPerformed
+        ven_con_n_pedido_field.setText(null);
+        ven_con_n_pedido_field.setEnabled(true);
+        ven_con_rut_field.setText(null);
+        ven_con_rut_field.setEnabled(true);
+        ven_con_nom_cliente_field.setText(null);
+        ven_con_nom_cliente_field.setEnabled(true);
+        ven_con_banco_combox.setSelectedItem(null);
+        ven_con_fecha_pago_field.setDate(null);
+        ven_con_cod_tran_field.setText(null);
+
+    }//GEN-LAST:event_ven_con_bt_cancelarActionPerformed
+
+    private void ven_con_bt_confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_confirmarActionPerformed
+        Statement stc;
+        String campo1 = (String) ven_con_banco_combox.getSelectedItem();
+        String campo2 = ven_con_cod_tran_field.getText();
+        String campo4 = ven_con_n_pedido_field.getText();
+        //String campo1 = cli_nombre_field.getText();
+        //String campo2 = cli_telefono_field.getText();
+        //String campo3 = cli_email_field.getText();
+        //String campo4 = cli_rut_field.getText();
+        java.util.Date utilDate = (java.util.Date) ven_con_fecha_pago_field.getDate();
+        java.sql.Date ven_con_fecha_pago_field1 = new java.sql.Date(utilDate.getTime());
+        int flag = 1;
+        try {
+            if ("".equals(campo1) || "".equals(campo2)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+
+            else {
+                PreparedStatement pps;
+                Statement st;
+                st = con.createStatement();
+                ResultSet rut = st.executeQuery("SELECT VTA_ID_VENTA FROM venta");
+                while (rut.next()){
+                    if (rut.getString(1).equals(campo4)){
+                        flag = 0;
+                    }
+                }
+
+                if (flag == 0){
+                    stc = con.createStatement();
+                    ResultSet id_banco = stc.executeQuery("SELECT BAN_ID_BANCO FROM bancos WHERE BAN_DESCRIPCION = '"+campo1+"'");
+                    id_banco.next();
+                    pps = con.prepareStatement("update venta set BAN_ID_BANCO = ?, VTA_FECHA_TRANSFERENCIA = ?, VTA_CODIGO_TRANSFERENCIA = ?, ESTADOS_ID_ESTADO = ? where VTA_ID_VENTA = ?");
+                    pps.setString(1, id_banco.getString(1));
+                    pps.setDate(2, ven_con_fecha_pago_field1);
+                    pps.setString(3, campo2);
+                    pps.setString(4, "2");
+                    pps.setString(5, campo4);
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                    cli_rut_field.setEnabled(true);
+                }
+
+                Mostrar_VENTA_TABLA("");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }
+    }//GEN-LAST:event_ven_con_bt_confirmarActionPerformed
+
+    private void ven_con_cod_tran_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_cod_tran_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_cod_tran_fieldActionPerformed
+
+    private void ven_con_nom_cliente_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_nom_cliente_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_nom_cliente_fieldActionPerformed
+
+    private void ven_con_banco_comboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_banco_comboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_banco_comboxActionPerformed
+
+    private void ven_con_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_rut_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_rut_fieldActionPerformed
+
+    private void ven_con_n_pedido_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_n_pedido_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_n_pedido_fieldActionPerformed
 
     private void venta_fono_despacho_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_fono_despacho_fieldActionPerformed
         // TODO add your handling code here:
@@ -6954,6 +6757,28 @@ public class crud_banco extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Codigo no permitido");
         }
     }//GEN-LAST:event_venta_bt_modificarActionPerformed
+
+    private void venta_pack_boxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_pack_boxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_pack_boxActionPerformed
+
+    private void venta_pack_boxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_venta_pack_boxItemStateChanged
+
+        String campo1 = (String) venta_pack_box.getSelectedItem();
+        Statement st;
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT PCK_COSTO FROM pack where PCK_NOMBRE = '"+campo1+"'");
+            while (rs.next()){
+                result_total.setText(rs.getString(1));
+            }
+            st.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_venta_pack_boxItemStateChanged
 
     private void venta_direccion_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_direccion_fieldActionPerformed
         // TODO add your handling code here:
@@ -6999,7 +6824,6 @@ public class crud_banco extends javax.swing.JFrame {
         String campo8 = (String) venta_pack_box.getSelectedItem();
         String campo9 = (String) venta_fecha_entrega_ini.getSelectedItem();
 
-
         try {
             if ("".equals(campo1)){
                 JOptionPane.showMessageDialog(null, "rellene todos los campos");
@@ -7021,10 +6845,9 @@ public class crud_banco extends javax.swing.JFrame {
                 ResultSet id_rrss = std.executeQuery("SELECT RRS_ID_RRSS FROM rrss WHERE RRS_NOMBRE  = '"+campo2+"'");
                 id_rrss.next();
 
-
                 PreparedStatement pps = con.prepareStatement("INSERT INTO venta (CLI_ID_CLIENTE, RRSS_ID_RRSS, VTA_NOMBRE_DESTINATARIO, VTA_TELEFONO, "
-                        + "VTA_FECHA_ENTREGA, VTA_DIRECCION_DESTINATARIO, COM_ID_COMUNA, VTA_SALUDO, PCK_ID_PACK, "
-                        + "VTA_HORA_ENTREGA_INICIAL, ESTADOS_ID_ESTADO) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+                    + "VTA_FECHA_ENTREGA, VTA_DIRECCION_DESTINATARIO, COM_ID_COMUNA, VTA_SALUDO, PCK_ID_PACK, "
+                    + "VTA_HORA_ENTREGA_INICIAL, ESTADOS_ID_ESTADO) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
                 pps.setString(1, campo1);
                 pps.setString(2, id_rrss.getString(1));
                 pps.setString(3, campo3);
@@ -7051,6 +6874,131 @@ public class crud_banco extends javax.swing.JFrame {
     private void venta_destinatario_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_destinatario_fieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_venta_destinatario_fieldActionPerformed
+
+    private void venta_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_rut_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_rut_fieldActionPerformed
+
+    private void venta_buscar_rutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_buscar_rutActionPerformed
+
+        Statement st;
+        //Statement stc;
+        String campo1 = venta_rut_field.getText();
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT CLI_NOMBRE, CLI_CORREO, CLI_CELULAR FROM cliente where CLI_ID_CLIENTE LIKE '"+campo1+"'");
+
+            //stc = con.createStatement();
+            //ResultSet id_venta = stc.executeQuery("SELECT VTA_NOMBRE_DESTINATARIO FROM venta");
+            //id_venta.next();
+            rs.next();
+            if (check_regalo.isSelected()){
+                venta_nom_cli_field.setText(rs.getString(1));
+                venta_nom_cli_field.setEnabled(false);
+                venta_email_field.setText(rs.getString(2));
+                venta_email_field.setEnabled(false);
+                venta_telefono_field.setText(rs.getString(3));
+                venta_telefono_field.setEnabled(false);
+                JOptionPane.showMessageDialog(null, "PARA REGALO");
+
+            } else {
+                venta_nom_cli_field.setText(rs.getString(1));
+                venta_nom_cli_field.setEnabled(false);
+                venta_email_field.setText(rs.getString(2));
+                venta_email_field.setEnabled(false);
+                venta_telefono_field.setText(rs.getString(3));
+                venta_telefono_field.setEnabled(false);
+                venta_destinatario_field.setText(rs.getString(1));
+                venta_destinatario_field.setEnabled(false);
+                venta_fono_despacho_field.setText(rs.getString(3));
+                venta_fono_despacho_field.setEnabled(false);
+                JOptionPane.showMessageDialog(null, "RELLENADO");
+                st.close();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_venta_buscar_rutActionPerformed
+
+    private void venta_telefono_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_telefono_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_telefono_fieldActionPerformed
+
+    private void venta_email_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_email_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_email_fieldActionPerformed
+
+    private void venta_nom_cli_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_nom_cli_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_nom_cli_fieldActionPerformed
+
+    private void ven_con_bt_entregadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_entregadoActionPerformed
+        int cantidad_filas = tabla_despachos.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (tabla_despachos.isCellSelected(i, 7) == true){
+                try {                        
+                    PreparedStatement pps = con.prepareStatement("UPDATE venta SET ESTADOS_ID_ESTADO = ? where VTA_ID_VENTA = ?"); 
+                    pps.setString(1, "3");
+                    pps.setString(2,(String) tabla_despachos.getValueAt(i,0));
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_DESPACHOS_TABLA("");
+    }//GEN-LAST:event_ven_con_bt_entregadoActionPerformed
+
+    private void ven_desp_bar_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_desp_bar_buscarActionPerformed
+        Mostrar_DESPACHOS_TABLA(ven_desp_buscar_field.getText());
+    }//GEN-LAST:event_ven_desp_bar_buscarActionPerformed
+
+    private void ven_con_bt_reconfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_reconfirmarActionPerformed
+        int cantidad_filas = tabla_despachos.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (tabla_despachos.isCellSelected(i, 7) == true){
+                try {                        
+                    PreparedStatement pps = con.prepareStatement("UPDATE venta SET ESTADOS_ID_ESTADO = ? where VTA_ID_VENTA = ?"); 
+                    pps.setString(1, "2");
+                    pps.setString(2,(String) tabla_despachos.getValueAt(i,0));
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_DESPACHOS_TABLA("");
+    }//GEN-LAST:event_ven_con_bt_reconfirmarActionPerformed
+
+    private void ven_con_bt_rependienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_rependienteActionPerformed
+        int cantidad_filas = tabla_despachos.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (tabla_despachos.isCellSelected(i, 7) == true){
+                try {                        
+                    PreparedStatement pps = con.prepareStatement("UPDATE venta SET ESTADOS_ID_ESTADO = ? where VTA_ID_VENTA = ?"); 
+                    pps.setString(1, "1");
+                    pps.setString(2,(String) tabla_despachos.getValueAt(i,0));
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                   
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }
+        }
+        Mostrar_DESPACHOS_TABLA("");
+    }//GEN-LAST:event_ven_con_bt_rependienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -7104,7 +7052,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton ban_desactivar;
     private javax.swing.JTextField ban_nombre_field;
     private javax.swing.JTable ban_tabla;
-    private javax.swing.JButton bt_recargar;
     private javax.swing.JButton bt_recargar1;
     private javax.swing.JButton cancelpack_button;
     private javax.swing.JButton canceluser_button;
@@ -7192,7 +7139,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton jButton20;
     private javax.swing.JButton jButton23;
     private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton28;
     private javax.swing.JButton jButton29;
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton38;
@@ -7202,15 +7148,12 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton jButton43;
     private javax.swing.JButton jButton44;
     private javax.swing.JButton jButton45;
-    private javax.swing.JButton jButton47;
     private javax.swing.JButton jButton49;
     private javax.swing.JButton jButton50;
     private javax.swing.JButton jButton51;
     private javax.swing.JButton jButton55;
     private javax.swing.JButton jButton56;
-    private javax.swing.JButton jButton57;
     private javax.swing.JButton jButton60;
-    private javax.swing.JButton jButton61;
     private javax.swing.JButton jButton62;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton72;
@@ -7230,8 +7173,6 @@ public class crud_banco extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jDateChooser5;
     private com.toedter.calendar.JDateChooser jDateChooser6;
     private javax.swing.JFormattedTextField jFormattedTextField10;
-    private javax.swing.JFormattedTextField jFormattedTextField15;
-    private javax.swing.JFormattedTextField jFormattedTextField17;
     private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -7244,7 +7185,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel106;
     private javax.swing.JLabel jLabel107;
     private javax.swing.JLabel jLabel108;
-    private javax.swing.JLabel jLabel109;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel110;
     private javax.swing.JLabel jLabel111;
@@ -7342,7 +7282,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel21;
     private javax.swing.JPanel jPanel22;
     private javax.swing.JPanel jPanel23;
     private javax.swing.JPanel jPanel24;
@@ -7372,7 +7311,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane27;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JSeparator jSeparator1;
@@ -7433,7 +7371,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField rrss_buscar_bar;
     private javax.swing.JButton savepack_button;
     private javax.swing.JButton saveuser_button;
-    private javax.swing.JPanel tab_actudespacho;
     private javax.swing.JPanel tab_administrador;
     private javax.swing.JPanel tab_articulos;
     private javax.swing.JPanel tab_bancos;
@@ -7449,7 +7386,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JPanel tab_informe_inventario;
     private javax.swing.JPanel tab_informe_ventas;
     private javax.swing.JPanel tab_informes;
-    private javax.swing.JPanel tab_listadestinos;
+    private javax.swing.JPanel tab_listadodespachos;
     private javax.swing.JPanel tab_packs;
     private javax.swing.JPanel tab_provee;
     private javax.swing.JPanel tab_regcompra;
@@ -7458,7 +7395,6 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JPanel tab_usuarios;
     private javax.swing.JPanel tab_ventas;
     private javax.swing.JTable tabla_despachos;
-    private javax.swing.JTable tabla_destinos;
     private javax.swing.JButton topack_button;
     private javax.swing.JButton topack_button1;
     private javax.swing.JLabel username;
@@ -7472,13 +7408,18 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton ven_con_bt_cancelar;
     private javax.swing.JButton ven_con_bt_confirmar;
     private javax.swing.JButton ven_con_bt_editar;
+    private javax.swing.JButton ven_con_bt_entregado;
     private javax.swing.JButton ven_con_bt_recargar;
+    private javax.swing.JButton ven_con_bt_reconfirmar;
+    private javax.swing.JButton ven_con_bt_rependiente;
     private javax.swing.JTextField ven_con_cod_tran_field;
     private com.toedter.calendar.JDateChooser ven_con_fecha_pago_field;
     private javax.swing.JTextField ven_con_n_pedido_field;
     private javax.swing.JTextField ven_con_nom_cliente_field;
     private javax.swing.JTextField ven_con_rut_field;
     private javax.swing.JTable ven_con_tabla;
+    private javax.swing.JButton ven_desp_bar_buscar;
+    private javax.swing.JFormattedTextField ven_desp_buscar_field;
     private javax.swing.JButton venta_bt_cancelar;
     private javax.swing.JButton venta_bt_guardar;
     private javax.swing.JButton venta_bt_modificar;
