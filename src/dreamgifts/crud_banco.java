@@ -4,13 +4,14 @@
  * and open the template in the editor.
  */
 package dreamgifts;
-
+import dreamgifts.Articulos; 
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.SpinnerNumberModel;
-
+import java.util.ArrayList; 
+import java.util.ArrayList; 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -63,6 +64,7 @@ public class crud_banco extends javax.swing.JFrame {
     Vector<String> lista1;
     Vector<String> lista2;
     Vector<String> lista3;
+    ArrayList <Articulos> ListaArticulos = new ArrayList <> ();
     public static String id_pack_actualizar;
     public crud_banco() {
         initComponents();
@@ -104,15 +106,17 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_ARTICULO(String valor){
         Statement st;
+        ListaArticulos.clear();
         String []datos = new String [8];   
         DefaultTableModel modelo = (DefaultTableModel) jTable2.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT ART_NOMBRE, ART_CODIGO, ART_MARCA, ART_DESCRIPCION, ART_FECHA_VENCIMIENTO, articulo.estado, proveedor.PRO_RAZON, categoria_articulo.CAT_DESCRIPCION "
+            ResultSet rs = st.executeQuery("SELECT ART_NOMBRE, ART_CODIGO, ART_MARCA, ART_DESCRIPCION, ART_FECHA_VENCIMIENTO, articulo.estado, proveedor.PRO_RAZON, categoria_articulo.CAT_DESCRIPCION, ART_ID_ARTICULO, ART_STOCK, ART_LOTE "
                     + "FROM articulo INNER JOIN proveedor ON articulo.PRO_ID_PROVEEDOR = proveedor.PRO_ID_PROVEEDOR "
                     + "INNER JOIN categoria_articulo ON categoria_articulo.ID_CAT = articulo.CATEGORIA_ARTICULO_ID_CAT "
                     + "where CONCAT(ART_NOMBRE, ' ',ART_CODIGO) LIKE '%"+valor+"%'");
+            int i = 0;
             while (rs.next()){
                 datos[0]=rs.getString(2); 
                 datos[1]=rs.getString(1);
@@ -125,7 +129,13 @@ public class crud_banco extends javax.swing.JFrame {
                     datos[7] = "activado";
                 }
                 else datos[7]= "desactivado";
-                modelo.addRow(datos);           
+                if(valor.equals("")){
+                    modelo.addRow(datos);           
+                    Articulos temporal;
+                    temporal = new Articulos(rs.getString(9),rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(10), rs.getString(11), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
+                    ListaArticulos.add(i, temporal);
+                    i++;
+                }
                 
             }
             jTable2.setModel(modelo);
@@ -133,7 +143,7 @@ public class crud_banco extends javax.swing.JFrame {
                         
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-        }    
+        } 
     }
     
     private void Mostrar_PACKS(String valor){
