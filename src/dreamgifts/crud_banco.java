@@ -80,7 +80,12 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_ART_CAT_COMBO();
         Mostrar_ART_PRO_COMBO();
         Mostrar_PACKS("");
-        
+        Mostrar_COMBOX_PACKS();
+        Mostrar_COMBOX_BANCOS();
+        Mostrar_COMBOX_RRSS();
+        Mostrar_COMBOX_COMUNAS();
+        //Mostrar_COMBOX_ESTADOS();
+        //Mostrar_VENTA_TABLA("");
         
         
                 
@@ -407,6 +412,189 @@ public class crud_banco extends javax.swing.JFrame {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+    //PESTAÑA VENTAS
+    
+    private void Mostrar_COMBOX_PACKS(){
+
+           venta_pack_box.removeAllItems();
+           Statement st;
+           try{
+               st = con.createStatement();
+               ResultSet rs = st.executeQuery("SELECT PCK_NOMBRE FROM pack WHERE estado = 1");
+               while (rs.next()){
+                   venta_pack_box.addItem(rs.getString(1));
+               }
+           }
+           catch (SQLException ex) {
+               Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+           }       
+       }
+    
+    private void Mostrar_COMBOX_BANCOS(){
+
+           ven_con_banco_combox.removeAllItems();
+           Statement st;
+           try{
+               st = con.createStatement();
+               ResultSet rs = st.executeQuery("SELECT BAN_DESCRIPCION FROM bancos WHERE estado = 1");
+               while (rs.next()){
+                   ven_con_banco_combox.addItem(rs.getString(1));
+               }
+           }
+           catch (SQLException ex) {
+               Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+           }       
+       }
+    
+    private void Mostrar_COMBOX_RRSS(){
+
+           venta_rrss_box.removeAllItems();
+           Statement st;
+           try{
+               st = con.createStatement();
+               ResultSet rs = st.executeQuery("SELECT RRS_NOMBRE FROM rrss WHERE estado = 1");
+               while (rs.next()){
+                   venta_rrss_box.addItem(rs.getString(1));
+               }
+           }
+           catch (SQLException ex) {
+               Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+           }       
+       }
+    
+    private void Mostrar_COMBOX_COMUNAS(){
+
+           venta_comuna_box.removeAllItems();
+           Statement st;
+           try{
+               st = con.createStatement();
+               ResultSet rs = st.executeQuery("SELECT COM_DESCRIPCION FROM comunas WHERE estado = 1");
+               while (rs.next()){
+                   venta_comuna_box.addItem(rs.getString(1));
+               }
+           }
+           catch (SQLException ex) {
+               Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+           }       
+       }
+    
+    /*private void Mostrar_COMBOX_ESTADOS(){
+
+           venta_estado_box.removeAllItems();
+           Statement st;
+           try{
+               st = con.createStatement();
+               ResultSet rs = st.executeQuery("SELECT EST_DESCRIPCION FROM estados_venta");
+               while (rs.next()){
+                   venta_estado_box.addItem(rs.getString(1));
+               }
+           }
+           catch (SQLException ex) {
+               Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+           }       
+       }
+    */
+    
+    private void Mostrar_DESPACHOS_TABLA(String valor){
+        Statement st;
+        String []datos = new String [7];   
+        DefaultTableModel modelo = (DefaultTableModel) tabla_despachos.getModel();
+        modelo.setNumRows(0);
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, PCK_NOMBRE, VTA_NOMBRE_DESTINATARIO, "
+                    + "COM_DESCRIPCION, VTA_FECHA_ENTREGA, "
+                    + "VTA_HORA_ENTREGA_INICIAL, EST_DESCRIPCION FROM venta "
+                    + "INNER JOIN comunas ON venta.COM_ID_COMUNA = comunas.COM_ID_COMUNA "
+                    + "INNER JOIN pack ON venta.PCK_ID_PACK = pack.PCK_ID_PACK "
+                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO where VTA_ID_VENTA LIKE '%"+valor+"%'");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3); 
+                datos[3]=rs.getString(4);
+                datos[4]=rs.getString(5);
+                datos[5]=rs.getString(6);
+                datos[6]=rs.getString(7);
+                modelo.addRow(datos);           
+                
+            }
+            tabla_despachos.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void Mostrar_DESTINOS_TABLA(String valor){
+        Statement st;
+        String []datos = new String [7];   
+        DefaultTableModel modelo = (DefaultTableModel) tabla_destinos.getModel();
+        modelo.setNumRows(0);
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, PCK_NOMBRE, VTA_NOMBRE_DESTINATARIO, "
+                    + "COM_DESCRIPCION, VTA_DIRECCION_DESTINATARIO, VTA_FECHA_ENTREGA, "
+                    + "VTA_HORA_ENTREGA_INICIAL FROM venta "
+                    + "INNER JOIN comunas ON venta.COM_ID_COMUNA = comunas.COM_ID_COMUNA "
+                    + "INNER JOIN pack ON venta.PCK_ID_PACK = pack.PCK_ID_PACK where VTA_ID_VENTA LIKE '%"+valor+"%'");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3); 
+                datos[3]=rs.getString(4);
+                datos[4]=rs.getString(5);
+                datos[5]=rs.getString(6);
+                datos[6]=rs.getString(7);
+                modelo.addRow(datos);           
+                
+            }
+            tabla_destinos.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    private void Mostrar_VENTA_TABLA(String valor){
+        Statement st;
+        String []datos = new String [7];   
+        DefaultTableModel modelo = (DefaultTableModel) ven_con_tabla.getModel();
+        modelo.setNumRows(0);
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT VTA_ID_VENTA, VTA_NOMBRE_DESTINATARIO, CLI_ID_CLIENTE, "
+                    + "VTA_FECHA_ENTREGA, PCK_NOMBRE, PCK_COSTO, EST_DESCRIPCION FROM venta "
+                    + "INNER JOIN pack ON venta.PCK_ID_PACK = pack.PCK_ID_PACK "
+                    + "INNER JOIN estados_venta ON venta.ESTADOS_ID_ESTADO = estados_venta.EST_ID_ESTADO where CONCAT(VTA_ID_VENTA, ' ',CLI_ID_CLIENTE) LIKE '%"+valor+"%'");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3); 
+                datos[3]=rs.getString(4);
+                datos[4]=rs.getString(5);
+                datos[5]=rs.getString(6);
+                datos[6]=rs.getString(7);
+                modelo.addRow(datos);           
+   
+            }
+            ven_con_tabla.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    
+    
+       
         
     private void cargarLista1(int flag){
         lista1.removeAllElements();
@@ -471,81 +659,86 @@ public class crud_banco extends javax.swing.JFrame {
         pesta_ventas = new javax.swing.JTabbedPane();
         tab_datosventa = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
-        jLabel80 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
-        jButton53 = new javax.swing.JButton();
-        jButton54 = new javax.swing.JButton();
         jLabel81 = new javax.swing.JLabel();
-        jTextField28 = new javax.swing.JTextField();
         jLabel86 = new javax.swing.JLabel();
-        jTextField30 = new javax.swing.JTextField();
+        venta_nom_cli_field = new javax.swing.JTextField();
+        venta_email_field = new javax.swing.JTextField();
         jLabel87 = new javax.swing.JLabel();
-        jTextField31 = new javax.swing.JTextField();
         jLabel88 = new javax.swing.JLabel();
-        jTextField32 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        venta_telefono_field = new javax.swing.JTextField();
+        venta_buscar_rut = new javax.swing.JButton();
+        venta_rut_field = new javax.swing.JTextField();
+        jLabel106 = new javax.swing.JLabel();
+        venta_rrss_box = new javax.swing.JComboBox<>();
+        check_regalo = new javax.swing.JCheckBox();
         jPanel23 = new javax.swing.JPanel();
         jLabel84 = new javax.swing.JLabel();
-        jTextField14 = new javax.swing.JTextField();
-        jButton58 = new javax.swing.JButton();
-        jButton59 = new javax.swing.JButton();
-        jLabel85 = new javax.swing.JLabel();
+        venta_destinatario_field = new javax.swing.JTextField();
+        venta_bt_guardar = new javax.swing.JButton();
+        venta_bt_cancelar = new javax.swing.JButton();
+        venta_entrega_ini = new javax.swing.JLabel();
         jLabel89 = new javax.swing.JLabel();
         jLabel90 = new javax.swing.JLabel();
-        jTextField34 = new javax.swing.JTextField();
-        jDateChooser3 = new com.toedter.calendar.JDateChooser();
+        venta_direccion_field = new javax.swing.JTextField();
         jLabel91 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox<>();
+        venta_comuna_box = new javax.swing.JComboBox<>();
         jLabel92 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jComboBox6 = new javax.swing.JComboBox<>();
-        jComboBox7 = new javax.swing.JComboBox<>();
-        jComboBox8 = new javax.swing.JComboBox<>();
-        jLabel93 = new javax.swing.JLabel();
+        venta_saludo_field = new javax.swing.JTextField();
+        venta_pack_box = new javax.swing.JComboBox<>();
         jLabel94 = new javax.swing.JLabel();
+        venta_bt_modificar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel51 = new javax.swing.JLabel();
+        result_total = new javax.swing.JLabel();
+        jSeparator9 = new javax.swing.JSeparator();
+        jLabel116 = new javax.swing.JLabel();
+        venta_fono_despacho_field = new javax.swing.JTextField();
+        venta_fecha_entrega = new com.toedter.calendar.JDateChooser();
+        venta_fecha_entrega_ini = new javax.swing.JComboBox<>();
         tab_confirmpago = new javax.swing.JPanel();
         jPanel24 = new javax.swing.JPanel();
         jLabel82 = new javax.swing.JLabel();
-        jTextField29 = new javax.swing.JTextField();
+        ven_con_n_pedido_field = new javax.swing.JTextField();
         jLabel96 = new javax.swing.JLabel();
-        jTextField35 = new javax.swing.JTextField();
+        ven_con_rut_field = new javax.swing.JTextField();
         jLabel97 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jComboBox13 = new javax.swing.JComboBox<>();
+        ven_con_banco_combox = new javax.swing.JComboBox<>();
         jLabel100 = new javax.swing.JLabel();
-        jTextField37 = new javax.swing.JTextField();
+        ven_con_nom_cliente_field = new javax.swing.JTextField();
         jLabel101 = new javax.swing.JLabel();
         jLabel102 = new javax.swing.JLabel();
-        jTextField39 = new javax.swing.JTextField();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
+        ven_con_cod_tran_field = new javax.swing.JTextField();
+        ven_con_bt_confirmar = new javax.swing.JButton();
+        ven_con_bt_cancelar = new javax.swing.JButton();
+        ven_con_fecha_pago_field = new com.toedter.calendar.JDateChooser();
         jLabel108 = new javax.swing.JLabel();
-        jFormattedTextField14 = new javax.swing.JFormattedTextField();
-        jButton52 = new javax.swing.JButton();
+        ven_con_bar_buscar = new javax.swing.JFormattedTextField();
+        ven_con_bt_buscar = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
-        tabla_ventaspendientes = new javax.swing.JTable();
-        jButton42 = new javax.swing.JButton();
+        ven_con_tabla = new javax.swing.JTable();
+        ven_con_bt_editar = new javax.swing.JButton();
+        ven_con_bt_recargar = new javax.swing.JButton();
         tab_listadestinos = new javax.swing.JPanel();
         jPanel21 = new javax.swing.JPanel();
         jLabel109 = new javax.swing.JLabel();
         jFormattedTextField15 = new javax.swing.JFormattedTextField();
         jButton57 = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tabla_ventaspendientes1 = new javax.swing.JTable();
+        tabla_destinos = new javax.swing.JTable();
         jButton47 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jButton28 = new javax.swing.JButton();
+        bt_recargar = new javax.swing.JButton();
         tab_actudespacho = new javax.swing.JPanel();
         jPanel26 = new javax.swing.JPanel();
         jLabel111 = new javax.swing.JLabel();
         jFormattedTextField17 = new javax.swing.JFormattedTextField();
         jButton61 = new javax.swing.JButton();
         jScrollPane9 = new javax.swing.JScrollPane();
-        tabla_ventaspendientes3 = new javax.swing.JTable();
+        tabla_despachos = new javax.swing.JTable();
         jButton49 = new javax.swing.JButton();
-        jButton22 = new javax.swing.JButton();
         jButton50 = new javax.swing.JButton();
+        bt_recargar1 = new javax.swing.JButton();
         tab_compras = new javax.swing.JPanel();
         jLabel20 = new javax.swing.JLabel();
         jSeparator7 = new javax.swing.JSeparator();
@@ -884,84 +1077,62 @@ public class crud_banco extends javax.swing.JFrame {
 
         jPanel22.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Datos cliente solicitante", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
-        jLabel80.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel80.setText("Número pedido:");
-
-        jTextField13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField13.setText("00012");
-        jTextField13.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField13ActionPerformed(evt);
-            }
-        });
-
-        jButton53.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton53.setText("Guardar");
-        jButton53.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton53ActionPerformed(evt);
-            }
-        });
-
-        jButton54.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton54.setText("Cancelar");
-        jButton54.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton54ActionPerformed(evt);
-            }
-        });
-
         jLabel81.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel81.setText("RUT");
-
-        jTextField28.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField28.setText("13675655-9");
-        jTextField28.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField28ActionPerformed(evt);
-            }
-        });
+        jLabel81.setText("Rut:");
 
         jLabel86.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel86.setText("Nombre cliente:");
 
-        jTextField30.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField30.setText("Francisco Tapiado");
-        jTextField30.addActionListener(new java.awt.event.ActionListener() {
+        venta_nom_cli_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_nom_cli_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField30ActionPerformed(evt);
+                venta_nom_cli_fieldActionPerformed(evt);
+            }
+        });
+
+        venta_email_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_email_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                venta_email_fieldActionPerformed(evt);
             }
         });
 
         jLabel87.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel87.setText("Email:");
 
-        jTextField31.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField31.setText("fjtp1407@gmail.com");
-        jTextField31.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField31ActionPerformed(evt);
-            }
-        });
-
         jLabel88.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel88.setText("Teléfono");
 
-        jTextField32.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField32.setText("228575245");
-        jTextField32.addActionListener(new java.awt.event.ActionListener() {
+        venta_telefono_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_telefono_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField32ActionPerformed(evt);
+                venta_telefono_fieldActionPerformed(evt);
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Buscar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        venta_buscar_rut.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_buscar_rut.setText("Buscar");
+        venta_buscar_rut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                venta_buscar_rutActionPerformed(evt);
             }
         });
+
+        venta_rut_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_rut_field.setText("13562567-8");
+        venta_rut_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                venta_rut_fieldActionPerformed(evt);
+            }
+        });
+
+        jLabel106.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel106.setText("Red Social:");
+
+        venta_rrss_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_rrss_box.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
+
+        check_regalo.setText("Para REGALO");
 
         javax.swing.GroupLayout jPanel22Layout = new javax.swing.GroupLayout(jPanel22);
         jPanel22.setLayout(jPanel22Layout);
@@ -969,138 +1140,179 @@ public class crud_banco extends javax.swing.JFrame {
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel22Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel86)
+                    .addComponent(jLabel87)
+                    .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel22Layout.createSequentialGroup()
-                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel22Layout.createSequentialGroup()
-                                .addComponent(jLabel80)
-                                .addGap(30, 30, 30)
-                                .addComponent(jTextField13, javax.swing.GroupLayout.DEFAULT_SIZE, 654, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel22Layout.createSequentialGroup()
-                                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel86)
-                                    .addComponent(jLabel87))
-                                .addGap(30, 30, 30)
-                                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField31, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTextField30))))
-                        .addGap(100, 100, 100)
                         .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel88, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
-                            .addComponent(jLabel81, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel22Layout.createSequentialGroup()
-                                .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jTextField32, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(venta_nom_cli_field, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+                            .addComponent(venta_email_field))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel88, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel106, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(venta_telefono_field)
+                            .addComponent(venta_rrss_box, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(106, 106, 106))
                     .addGroup(jPanel22Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton54, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton53, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(43, 43, 43))
+                        .addComponent(venta_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(check_regalo, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(venta_buscar_rut, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel22Layout.setVerticalGroup(
             jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel22Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel80)
-                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel81)
-                        .addComponent(jTextField28, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(venta_buscar_rut)
+                        .addComponent(venta_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel81))
+                    .addComponent(check_regalo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel86)
-                    .addComponent(jTextField30, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(venta_nom_cli_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel88)
-                    .addComponent(jTextField32, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(venta_telefono_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel87)
-                    .addComponent(jTextField31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel22Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton53)
-                    .addComponent(jButton54))
-                .addGap(30, 30, 30))
+                    .addComponent(venta_email_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(venta_rrss_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel106))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         jPanel23.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Datos destinatario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         jLabel84.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel84.setText("Nombre destinatario:");
+        jLabel84.setText("Nombre Despacho:");
 
-        jTextField14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField14.setText("Facebook");
-        jTextField14.addActionListener(new java.awt.event.ActionListener() {
+        venta_destinatario_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_destinatario_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField14ActionPerformed(evt);
+                venta_destinatario_fieldActionPerformed(evt);
             }
         });
 
-        jButton58.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton58.setText("Guardar");
-        jButton58.addActionListener(new java.awt.event.ActionListener() {
+        venta_bt_guardar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_bt_guardar.setText("Guardar");
+        venta_bt_guardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton58ActionPerformed(evt);
+                venta_bt_guardarActionPerformed(evt);
             }
         });
 
-        jButton59.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton59.setText("Cancelar");
-        jButton59.addActionListener(new java.awt.event.ActionListener() {
+        venta_bt_cancelar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_bt_cancelar.setText("Cancelar");
+        venta_bt_cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton59ActionPerformed(evt);
+                venta_bt_cancelarActionPerformed(evt);
             }
         });
 
-        jLabel85.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel85.setText("Horario Inicio Entrega:");
+        venta_entrega_ini.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_entrega_ini.setText("Horario Entrega:");
 
         jLabel89.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel89.setText("Fecha entrega:");
+        jLabel89.setText("Fecha Entrega:");
 
         jLabel90.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel90.setText("Dirección:");
 
-        jTextField34.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField34.setText("Facebook");
-        jTextField34.addActionListener(new java.awt.event.ActionListener() {
+        venta_direccion_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_direccion_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField34ActionPerformed(evt);
+                venta_direccion_fieldActionPerformed(evt);
             }
         });
 
         jLabel91.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel91.setText("Comuna:");
 
-        jComboBox5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        venta_comuna_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         jLabel92.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel92.setText("Saludo:");
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField1.setText("jTextField1");
+        venta_saludo_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        jComboBox6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox8.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel93.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel93.setText("Hora Fin Entrega:");
+        venta_pack_box.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         jLabel94.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel94.setText("Pack:");
+
+        venta_bt_modificar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_bt_modificar.setText("Modificar");
+        venta_bt_modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                venta_bt_modificarActionPerformed(evt);
+            }
+        });
+
+        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel23.setText("DETALLE DE VENTA:");
+
+        jLabel51.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel51.setText("TOTAL:");
+
+        result_total.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        result_total.setText("$0");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(38, 38, 38)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator9)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel51, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                                .addComponent(result_total, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(67, 67, 67))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel23)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel51)
+                    .addComponent(result_total))
+                .addGap(21, 21, 21))
+        );
+
+        jLabel116.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel116.setText("Telefono Despacho:");
+
+        venta_fono_despacho_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_fono_despacho_field.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                venta_fono_despacho_fieldActionPerformed(evt);
+            }
+        });
+
+        venta_fecha_entrega_ini.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        venta_fecha_entrega_ini.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "09:00 - 12:00", "12:00 - 15:00", "15:00 - 18:00" }));
 
         javax.swing.GroupLayout jPanel23Layout = new javax.swing.GroupLayout(jPanel23);
         jPanel23.setLayout(jPanel23Layout);
@@ -1108,100 +1320,126 @@ public class crud_banco extends javax.swing.JFrame {
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel23Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel23Layout.createSequentialGroup()
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton59, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton58, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(venta_bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(venta_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(venta_bt_modificar)
+                        .addGap(116, 116, 116))
                     .addGroup(jPanel23Layout.createSequentialGroup()
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel23Layout.createSequentialGroup()
+                                .addComponent(jLabel92, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(venta_saludo_field)
+                                .addGap(88, 88, 88))
                             .addGroup(jPanel23Layout.createSequentialGroup()
                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel92, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel91, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel90, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel89, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
+                                    .addComponent(jLabel89, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel84, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel116, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE))
                                 .addGap(30, 30, 30)
                                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1)
+                                    .addComponent(venta_destinatario_field)
+                                    .addComponent(venta_direccion_field, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel23Layout.createSequentialGroup()
-                                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jTextField34, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jDateChooser3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(jPanel23Layout.createSequentialGroup()
-                                .addComponent(jLabel84)
-                                .addGap(30, 30, 30)
-                                .addComponent(jTextField14)))
-                        .addGap(100, 100, 100)
-                        .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel85, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel94, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel93, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(30, 30, 30)
+                                        .addComponent(venta_comuna_box, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 7, Short.MAX_VALUE))
+                                    .addComponent(venta_fono_despacho_field)
+                                    .addGroup(jPanel23Layout.createSequentialGroup()
+                                        .addComponent(venta_fecha_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                         .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jComboBox6, javax.swing.GroupLayout.Alignment.TRAILING, 0, 267, Short.MAX_VALUE)
-                                .addComponent(jComboBox7, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addGap(43, 43, 43))
+                            .addGroup(jPanel23Layout.createSequentialGroup()
+                                .addGap(154, 154, 154)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
+                                        .addComponent(jLabel94, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(123, 123, 123)
+                                        .addComponent(venta_pack_box, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(150, 150, 150))
+                                    .addGroup(jPanel23Layout.createSequentialGroup()
+                                        .addComponent(venta_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(venta_fecha_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addContainerGap())))))))
         );
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel23Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel94)
+                    .addComponent(venta_pack_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(venta_entrega_ini)
+                    .addComponent(venta_fecha_entrega_ini, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(venta_bt_guardar)
+                        .addComponent(venta_bt_modificar))
+                    .addComponent(venta_bt_cancelar))
+                .addContainerGap(125, Short.MAX_VALUE))
+            .addGroup(jPanel23Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel84)
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel94))
+                    .addComponent(venta_destinatario_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel116)
+                    .addComponent(venta_fono_despacho_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel89)
-                    .addComponent(jDateChooser3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel85)))
+                    .addComponent(venta_fecha_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel90)
-                    .addComponent(jTextField34, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel93))
+                    .addComponent(venta_direccion_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel91)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(venta_comuna_box, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(venta_saludo_field, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel92))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton58)
-                    .addComponent(jButton59))
-                .addGap(30, 30, 30))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout tab_datosventaLayout = new javax.swing.GroupLayout(tab_datosventa);
         tab_datosventa.setLayout(tab_datosventaLayout);
         tab_datosventaLayout.setHorizontalGroup(
             tab_datosventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_datosventaLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(tab_datosventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(50, 50, 50))
+            .addGroup(tab_datosventaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tab_datosventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(179, Short.MAX_VALUE))
         );
         tab_datosventaLayout.setVerticalGroup(
             tab_datosventaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_datosventaLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
+            .addGroup(tab_datosventaLayout.createSequentialGroup()
+                .addGap(29, 29, 29)
                 .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(138, 138, 138))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         pesta_ventas.addTab("Venta", tab_datosventa);
@@ -1211,45 +1449,40 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel82.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel82.setText("Número pedido:");
 
-        jTextField29.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField29.setText("00012");
-        jTextField29.addActionListener(new java.awt.event.ActionListener() {
+        ven_con_n_pedido_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_n_pedido_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField29ActionPerformed(evt);
+                ven_con_n_pedido_fieldActionPerformed(evt);
             }
         });
 
         jLabel96.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel96.setText("Rut:");
 
-        jTextField35.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField35.addActionListener(new java.awt.event.ActionListener() {
+        ven_con_rut_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_rut_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField35ActionPerformed(evt);
+                ven_con_rut_fieldActionPerformed(evt);
             }
         });
 
         jLabel97.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel97.setText("Banco:");
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton5.setText("Buscar");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        ven_con_banco_combox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_banco_combox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                ven_con_banco_comboxActionPerformed(evt);
             }
         });
-
-        jComboBox13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jComboBox13.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel100.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel100.setText("Nombre cliente:");
 
-        jTextField37.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField37.addActionListener(new java.awt.event.ActionListener() {
+        ven_con_nom_cliente_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_nom_cliente_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField37ActionPerformed(evt);
+                ven_con_nom_cliente_fieldActionPerformed(evt);
             }
         });
 
@@ -1259,23 +1492,28 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel102.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel102.setText("Código Transacción:");
 
-        jTextField39.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField39.addActionListener(new java.awt.event.ActionListener() {
+        ven_con_cod_tran_field.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_cod_tran_field.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField39ActionPerformed(evt);
+                ven_con_cod_tran_fieldActionPerformed(evt);
             }
         });
 
-        jButton12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton12.setText("Confirmar");
-        jButton12.addActionListener(new java.awt.event.ActionListener() {
+        ven_con_bt_confirmar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_confirmar.setText("Confirmar");
+        ven_con_bt_confirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
+                ven_con_bt_confirmarActionPerformed(evt);
             }
         });
 
-        jButton13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton13.setText("Cancelar");
+        ven_con_bt_cancelar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_cancelar.setText("Cancelar");
+        ven_con_bt_cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_con_bt_cancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel24Layout = new javax.swing.GroupLayout(jPanel24);
         jPanel24.setLayout(jPanel24Layout);
@@ -1283,155 +1521,184 @@ public class crud_banco extends javax.swing.JFrame {
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel24Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel82, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel97)
-                    .addComponent(jLabel96, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField35, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel24Layout.createSequentialGroup()
-                        .addComponent(jTextField29, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jComboBox13, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 331, Short.MAX_VALUE)
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel100, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel102))
-                .addGap(40, 40, 40)
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel24Layout.createSequentialGroup()
-                        .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel82, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel96, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ven_con_rut_field, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                            .addComponent(ven_con_n_pedido_field)))
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addComponent(jLabel100, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(ven_con_nom_cliente_field)))
+                .addGap(148, 148, 148)
+                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addComponent(ven_con_bt_cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(25, 25, 25)
-                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTextField39, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField37, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jDateChooser2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ven_con_bt_confirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel101, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel102))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(ven_con_cod_tran_field, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                            .addComponent(ven_con_fecha_pago_field, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addComponent(jLabel97)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
+                        .addComponent(ven_con_banco_combox, javax.swing.GroupLayout.PREFERRED_SIZE, 393, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(30, 30, 30))
         );
         jPanel24Layout.setVerticalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel82)
-                        .addComponent(jTextField29, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel100)
-                        .addComponent(jTextField37, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton5)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField35, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel101))
-                    .addComponent(jLabel96)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addContainerGap()
                 .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel82)
+                            .addComponent(ven_con_n_pedido_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
                         .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ven_con_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel96))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel100)
+                            .addComponent(ven_con_nom_cliente_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(79, 79, 79))
+                    .addGroup(jPanel24Layout.createSequentialGroup()
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel97)
-                            .addComponent(jTextField39, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(ven_con_banco_combox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ven_con_fecha_pago_field, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel101))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(ven_con_cod_tran_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel102))
                         .addGap(30, 30, 30)
                         .addGroup(jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton12)
-                            .addComponent(jButton13)))
-                    .addComponent(jComboBox13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30))
+                            .addComponent(ven_con_bt_confirmar)
+                            .addComponent(ven_con_bt_cancelar))
+                        .addGap(30, 30, 30))))
         );
 
         jLabel108.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel108.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel108.setText("Ventas pendientes de pago");
 
-        jFormattedTextField14.setToolTipText("buscar...");
-        jFormattedTextField14.addActionListener(new java.awt.event.ActionListener() {
+        ven_con_bar_buscar.setToolTipText("buscar...");
+        ven_con_bar_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField14ActionPerformed(evt);
+                ven_con_bar_buscarActionPerformed(evt);
             }
         });
 
-        jButton52.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton52.setText("Buscar");
+        ven_con_bt_buscar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_buscar.setText("Buscar");
+        ven_con_bt_buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_con_bt_buscarActionPerformed(evt);
+            }
+        });
 
         jScrollPane5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        tabla_ventaspendientes.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tabla_ventaspendientes.setModel(new javax.swing.table.DefaultTableModel(
+        ven_con_tabla.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Número Pedido", "Fecha Pedido", "Nombre Cliente", "Número Teléfono", "Monto", "Pack", "Acción"
+                "Número Pedido", "Nombre Despacho", "Rut Cliente", "Fecha Entrega", "Nombre Pack", "Precio", "Estado Venta", "Acción"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        tabla_ventaspendientes.setColumnSelectionAllowed(true);
-        tabla_ventaspendientes.getTableHeader().setReorderingAllowed(false);
-        tabla_ventaspendientes.addContainerListener(new java.awt.event.ContainerAdapter() {
+        ven_con_tabla.setColumnSelectionAllowed(true);
+        ven_con_tabla.getTableHeader().setReorderingAllowed(false);
+        ven_con_tabla.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
-                tabla_ventaspendientesComponentAdded(evt);
+                ven_con_tablaComponentAdded(evt);
             }
         });
-        jScrollPane5.setViewportView(tabla_ventaspendientes);
+        jScrollPane5.setViewportView(ven_con_tabla);
+        ven_con_tabla.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        jButton42.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton42.setText("Desactivar");
+        ven_con_bt_editar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_editar.setText("Editar");
+        ven_con_bt_editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_con_bt_editarActionPerformed(evt);
+            }
+        });
+
+        ven_con_bt_recargar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        ven_con_bt_recargar.setText("RECARGAR");
+        ven_con_bt_recargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ven_con_bt_recargarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout tab_confirmpagoLayout = new javax.swing.GroupLayout(tab_confirmpago);
         tab_confirmpago.setLayout(tab_confirmpagoLayout);
         tab_confirmpagoLayout.setHorizontalGroup(
             tab_confirmpagoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_confirmpagoLayout.createSequentialGroup()
+            .addGroup(tab_confirmpagoLayout.createSequentialGroup()
                 .addGap(50, 50, 50)
-                .addGroup(tab_confirmpagoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(tab_confirmpagoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1222, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(tab_confirmpagoLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton42, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(tab_confirmpagoLayout.createSequentialGroup()
-                        .addComponent(jLabel108, javax.swing.GroupLayout.PREFERRED_SIZE, 891, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jFormattedTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton52, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(50, 50, 50))
+                        .addGap(95, 95, 95)
+                        .addComponent(jLabel108, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
+                        .addComponent(ven_con_bt_recargar)
+                        .addGap(21, 21, 21)
+                        .addComponent(ven_con_bt_editar)
+                        .addGap(108, 108, 108)
+                        .addComponent(ven_con_bar_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addComponent(ven_con_bt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(207, Short.MAX_VALUE))
         );
         tab_confirmpagoLayout.setVerticalGroup(
             tab_confirmpagoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_confirmpagoLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
-                .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(tab_confirmpagoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jFormattedTextField14)
+                    .addComponent(ven_con_bar_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
                     .addComponent(jLabel108)
-                    .addComponent(jButton52, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jButton42)
-                .addGap(215, 215, 215))
+                    .addComponent(ven_con_bt_buscar)
+                    .addComponent(ven_con_bt_editar)
+                    .addComponent(ven_con_bt_recargar))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(280, 280, 280))
         );
 
         pesta_ventas.addTab("Confirmación", tab_confirmpago);
@@ -1454,8 +1721,8 @@ public class crud_banco extends javax.swing.JFrame {
 
         jScrollPane6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        tabla_ventaspendientes1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tabla_ventaspendientes1.setModel(new javax.swing.table.DefaultTableModel(
+        tabla_destinos.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tabla_destinos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -1467,7 +1734,7 @@ public class crud_banco extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Registro Venta", "Pack", "Destinatario", "Fecha Entrega", "Comuna", "Dirección", "Hora Entrega", "Acción"
+                "N° Pedido", "Nombre Pack", "Destinatario", "Comuna", "Dirección", "Fecha Entrega", "Hora Entrega", "Acción"
             }
         ) {
             Class[] types = new Class [] {
@@ -1478,24 +1745,16 @@ public class crud_banco extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        tabla_ventaspendientes1.getTableHeader().setReorderingAllowed(false);
-        tabla_ventaspendientes1.addContainerListener(new java.awt.event.ContainerAdapter() {
+        tabla_destinos.getTableHeader().setReorderingAllowed(false);
+        tabla_destinos.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
-                tabla_ventaspendientes1ComponentAdded(evt);
+                tabla_destinosComponentAdded(evt);
             }
         });
-        jScrollPane6.setViewportView(tabla_ventaspendientes1);
+        jScrollPane6.setViewportView(tabla_destinos);
 
         jButton47.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton47.setText("Imprimir");
-
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton3.setText("Descargar / Imprimir");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
 
         jButton28.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton28.setText("Descargar");
@@ -1505,27 +1764,37 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
+        bt_recargar.setText("RECARGAR");
+        bt_recargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_recargarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel21Layout = new javax.swing.GroupLayout(jPanel21);
         jPanel21.setLayout(jPanel21Layout);
         jPanel21Layout.setHorizontalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel21Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel21Layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1320, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(jButton47, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel21Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(bt_recargar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel109, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                        .addGap(104, 104, 104)
                         .addComponent(jFormattedTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton57, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel21Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton28, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(jButton47, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(jButton57, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(43, 43, 43))
         );
         jPanel21Layout.setVerticalGroup(
@@ -1533,12 +1802,12 @@ public class crud_banco extends javax.swing.JFrame {
             .addGroup(jPanel21Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel109, javax.swing.GroupLayout.PREFERRED_SIZE, 24, Short.MAX_VALUE)
                     .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jFormattedTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton57, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(30, 30, 30)
+                        .addComponent(jLabel109, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE))
+                    .addComponent(bt_recargar))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1584,8 +1853,8 @@ public class crud_banco extends javax.swing.JFrame {
 
         jScrollPane9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
-        tabla_ventaspendientes3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tabla_ventaspendientes3.setModel(new javax.swing.table.DefaultTableModel(
+        tabla_despachos.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        tabla_despachos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null},
@@ -1597,7 +1866,7 @@ public class crud_banco extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Registro Venta", "Pack", "Destinatario", "Fecha Entrega", "Comuna", "Dirección", "Hora Entrega", "Estado"
+                "N° Pedido", "Nombre Pack", "Destinatario", "Comuna", "Fecha Entrega", "Hora Entrega", "Estado de Venta", "Acción"
             }
         ) {
             Class[] types = new Class [] {
@@ -1608,24 +1877,16 @@ public class crud_banco extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        tabla_ventaspendientes3.getTableHeader().setReorderingAllowed(false);
-        tabla_ventaspendientes3.addContainerListener(new java.awt.event.ContainerAdapter() {
+        tabla_despachos.getTableHeader().setReorderingAllowed(false);
+        tabla_despachos.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
-                tabla_ventaspendientes3ComponentAdded(evt);
+                tabla_despachosComponentAdded(evt);
             }
         });
-        jScrollPane9.setViewportView(tabla_ventaspendientes3);
+        jScrollPane9.setViewportView(tabla_despachos);
 
         jButton49.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton49.setText("Imprimir");
-
-        jButton22.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton22.setText("Descargar / Imprimir");
-        jButton22.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton22ActionPerformed(evt);
-            }
-        });
 
         jButton50.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton50.setText("Descargar");
@@ -1635,27 +1896,37 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
+        bt_recargar1.setText("RECARGAR");
+        bt_recargar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_recargar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel26Layout = new javax.swing.GroupLayout(jPanel26);
         jPanel26.setLayout(jPanel26Layout);
         jPanel26Layout.setHorizontalGroup(
             jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel26Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel26Layout.createSequentialGroup()
-                        .addComponent(jButton22)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane9, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1320, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel26Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButton50, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30)
+                                .addComponent(jButton49, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel26Layout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addComponent(bt_recargar1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel111, javax.swing.GroupLayout.PREFERRED_SIZE, 626, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                        .addGap(107, 107, 107)
                         .addComponent(jFormattedTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton61, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel26Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton50, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(jButton49, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane9, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(jButton61, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(43, 43, 43))
         );
         jPanel26Layout.setVerticalGroup(
@@ -1663,12 +1934,15 @@ public class crud_banco extends javax.swing.JFrame {
             .addGroup(jPanel26Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel111, javax.swing.GroupLayout.PREFERRED_SIZE, 24, Short.MAX_VALUE)
-                    .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jFormattedTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton61, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton22, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(30, 30, 30)
+                    .addGroup(jPanel26Layout.createSequentialGroup()
+                        .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jFormattedTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton61, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel111, javax.swing.GroupLayout.PREFERRED_SIZE, 24, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE))
+                    .addGroup(jPanel26Layout.createSequentialGroup()
+                        .addComponent(bt_recargar1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addGroup(jPanel26Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1694,7 +1968,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addContainerGap(393, Short.MAX_VALUE))
         );
 
-        pesta_ventas.addTab("Actualización Despacho", tab_actudespacho);
+        pesta_ventas.addTab("Actualización Despachos", tab_actudespacho);
 
         javax.swing.GroupLayout tab_ventasLayout = new javax.swing.GroupLayout(tab_ventas);
         tab_ventas.setLayout(tab_ventasLayout);
@@ -1706,7 +1980,7 @@ public class crud_banco extends javax.swing.JFrame {
             .addGroup(tab_ventasLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pesta_ventas)
-                .addContainerGap())
+                .addGap(48, 48, 48))
         );
         tab_ventasLayout.setVerticalGroup(
             tab_ventasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2953,7 +3227,7 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(pesta_admin1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(225, Short.MAX_VALUE))
+                .addContainerGap(1124, Short.MAX_VALUE))
         );
 
         Panel_tab_menu.addTab("Informes", tab_informes);
@@ -6101,118 +6375,6 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_BANCO(ban_buscar_bar.getText());
     }//GEN-LAST:event_ban_bt_buscarActionPerformed
 
-    private void jTextField13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField13ActionPerformed
-
-    private void jButton53ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton53ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton53ActionPerformed
-
-    private void jButton54ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton54ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton54ActionPerformed
-
-    private void jTextField28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField28ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField28ActionPerformed
-
-    private void jTextField30ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField30ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField30ActionPerformed
-
-    private void jTextField31ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField31ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField31ActionPerformed
-
-    private void jTextField32ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField32ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField32ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jTextField14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField14ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField14ActionPerformed
-
-    private void jButton58ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton58ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton58ActionPerformed
-
-    private void jButton59ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton59ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton59ActionPerformed
-
-    private void jTextField34ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField34ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField34ActionPerformed
-
-    private void jTextField29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField29ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField29ActionPerformed
-
-    private void jTextField35ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField35ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField35ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jTextField37ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField37ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField37ActionPerformed
-
-    private void jTextField39ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField39ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField39ActionPerformed
-
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton12ActionPerformed
-
-    private void jFormattedTextField14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField14ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField14ActionPerformed
-
-    private void tabla_ventaspendientesComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tabla_ventaspendientesComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabla_ventaspendientesComponentAdded
-
-    private void jFormattedTextField15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField15ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField15ActionPerformed
-
-    private void tabla_ventaspendientes1ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tabla_ventaspendientes1ComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabla_ventaspendientes1ComponentAdded
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton28ActionPerformed
-
-    private void jFormattedTextField17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField17ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField17ActionPerformed
-
-    private void tabla_ventaspendientes3ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tabla_ventaspendientes3ComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tabla_ventaspendientes3ComponentAdded
-
-    private void jButton22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton22ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton22ActionPerformed
-
-    private void jButton50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton50ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton50ActionPerformed
-
     private void jTextField17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField17ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField17ActionPerformed
@@ -6558,6 +6720,348 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_CAT_VENTA("");
     }//GEN-LAST:event_jButton44ActionPerformed
 
+    private void venta_nom_cli_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_nom_cli_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_nom_cli_fieldActionPerformed
+
+    private void venta_email_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_email_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_email_fieldActionPerformed
+
+    private void venta_telefono_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_telefono_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_telefono_fieldActionPerformed
+
+    private void venta_buscar_rutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_buscar_rutActionPerformed
+        
+        
+        Statement st;
+        //Statement stc;
+        String campo1 = venta_rut_field.getText();
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT CLI_NOMBRE, CLI_CORREO, CLI_CELULAR FROM cliente where CLI_ID_CLIENTE LIKE '"+campo1+"'");
+            
+            //stc = con.createStatement();
+            //ResultSet id_venta = stc.executeQuery("SELECT VTA_NOMBRE_DESTINATARIO FROM venta");
+            //id_venta.next();
+            rs.next();
+            if (check_regalo.isSelected()){
+                venta_nom_cli_field.setText(rs.getString(1));
+                venta_nom_cli_field.setEnabled(false);
+                venta_email_field.setText(rs.getString(2));
+                venta_email_field.setEnabled(false);
+                venta_telefono_field.setText(rs.getString(3));
+                venta_telefono_field.setEnabled(false);
+                JOptionPane.showMessageDialog(null, "PARA REGALO");
+                
+            } else {
+                venta_nom_cli_field.setText(rs.getString(1));
+                venta_nom_cli_field.setEnabled(false);
+                venta_email_field.setText(rs.getString(2));
+                venta_email_field.setEnabled(false);
+                venta_telefono_field.setText(rs.getString(3));
+                venta_telefono_field.setEnabled(false);
+                venta_destinatario_field.setText(rs.getString(1));
+                venta_destinatario_field.setEnabled(false);
+                venta_fono_despacho_field.setText(rs.getString(3));
+                venta_fono_despacho_field.setEnabled(false);
+                JOptionPane.showMessageDialog(null, "RELLENADO");
+                st.close();
+            }
+            
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_venta_buscar_rutActionPerformed
+
+    private void venta_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_rut_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_rut_fieldActionPerformed
+
+    private void ven_con_n_pedido_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_n_pedido_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_n_pedido_fieldActionPerformed
+
+    private void ven_con_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_rut_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_rut_fieldActionPerformed
+
+    private void ven_con_banco_comboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_banco_comboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_banco_comboxActionPerformed
+
+    private void ven_con_nom_cliente_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_nom_cliente_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_nom_cliente_fieldActionPerformed
+
+    private void ven_con_cod_tran_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_cod_tran_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_cod_tran_fieldActionPerformed
+
+    private void ven_con_bt_confirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_confirmarActionPerformed
+        Statement stc;
+        String campo1 = (String) ven_con_banco_combox.getSelectedItem();
+        String campo2 = ven_con_cod_tran_field.getText();
+        String campo4 = ven_con_n_pedido_field.getText();
+        //String campo1 = cli_nombre_field.getText();
+        //String campo2 = cli_telefono_field.getText();
+        //String campo3 = cli_email_field.getText();
+        //String campo4 = cli_rut_field.getText();  
+        java.util.Date utilDate = (java.util.Date) ven_con_fecha_pago_field.getDate();
+        java.sql.Date ven_con_fecha_pago_field1 = new java.sql.Date(utilDate.getTime());
+        int flag = 1;
+        try {
+            if ("".equals(campo1) || "".equals(campo2)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+            
+            else {
+                PreparedStatement pps;
+                Statement st;
+                st = con.createStatement();
+                ResultSet rut = st.executeQuery("SELECT VTA_ID_VENTA FROM venta");
+                while (rut.next()){
+                    if (rut.getString(1).equals(campo4)){
+                        flag = 0;
+                    }
+                }
+                
+                if (flag == 0){
+                    stc = con.createStatement();
+                    ResultSet id_banco = stc.executeQuery("SELECT BAN_ID_BANCO FROM bancos WHERE BAN_DESCRIPCION = '"+campo1+"'");
+                    id_banco.next();
+                    pps = con.prepareStatement("update venta set BAN_ID_BANCO = ?, VTA_FECHA_TRANSFERENCIA = ?, VTA_CODIGO_TRANSFERENCIA = ?, ESTADOS_ID_ESTADO = ? where VTA_ID_VENTA = ?");
+                    pps.setString(1, id_banco.getString(1));
+                    pps.setDate(2, ven_con_fecha_pago_field1);
+                    pps.setString(3, campo2);
+                    pps.setString(4, "2");
+                    pps.setString(5, campo4);
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                    cli_rut_field.setEnabled(true); 
+                }
+                else{
+
+                    JOptionPane.showMessageDialog(null, "ERROR ");
+                }
+                Mostrar_VENTA_TABLA("");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }
+    }//GEN-LAST:event_ven_con_bt_confirmarActionPerformed
+
+    private void ven_con_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_cancelarActionPerformed
+        ven_con_n_pedido_field.setText(null);
+        ven_con_n_pedido_field.setEnabled(true);
+        ven_con_rut_field.setText(null);
+        ven_con_rut_field.setEnabled(true);
+        ven_con_nom_cliente_field.setText(null);
+        ven_con_nom_cliente_field.setEnabled(true);
+        ven_con_banco_combox.setSelectedItem(null);
+        ven_con_fecha_pago_field.setDate(null);
+        ven_con_cod_tran_field.setText(null);
+        
+    }//GEN-LAST:event_ven_con_bt_cancelarActionPerformed
+
+    private void ven_con_bar_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bar_buscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_bar_buscarActionPerformed
+
+    private void ven_con_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_buscarActionPerformed
+        Mostrar_VENTA_TABLA(ven_con_bar_buscar.getText());
+    }//GEN-LAST:event_ven_con_bt_buscarActionPerformed
+
+    private void ven_con_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_ven_con_tablaComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ven_con_tablaComponentAdded
+
+    private void jFormattedTextField15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField15ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFormattedTextField15ActionPerformed
+
+    private void tabla_destinosComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tabla_destinosComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabla_destinosComponentAdded
+
+    private void jButton28ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton28ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton28ActionPerformed
+
+    private void bt_recargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recargarActionPerformed
+        Mostrar_DESTINOS_TABLA("");
+    }//GEN-LAST:event_bt_recargarActionPerformed
+
+    private void jFormattedTextField17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField17ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFormattedTextField17ActionPerformed
+
+    private void tabla_despachosComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_tabla_despachosComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabla_despachosComponentAdded
+
+    private void jButton50ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton50ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton50ActionPerformed
+
+    private void bt_recargar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recargar1ActionPerformed
+        Mostrar_DESPACHOS_TABLA("");
+    }//GEN-LAST:event_bt_recargar1ActionPerformed
+
+    private void ven_con_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_editarActionPerformed
+        int cantidad_filas = ven_con_tabla.getRowCount();
+        
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (ven_con_tabla.isCellSelected(i, 7) == true){
+                ven_con_n_pedido_field.setText((String) ven_con_tabla.getValueAt(i,0));
+                ven_con_n_pedido_field.setEnabled(false);
+                ven_con_rut_field.setText((String) ven_con_tabla.getValueAt(i,2));
+                ven_con_rut_field.setEnabled(false);
+                ven_con_nom_cliente_field.setText((String) ven_con_tabla.getValueAt(i,1));
+                ven_con_nom_cliente_field.setEnabled(false);
+
+            }
+        }
+    }//GEN-LAST:event_ven_con_bt_editarActionPerformed
+
+    private void ven_con_bt_recargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ven_con_bt_recargarActionPerformed
+        Mostrar_VENTA_TABLA("");
+    }//GEN-LAST:event_ven_con_bt_recargarActionPerformed
+
+    private void venta_fono_despacho_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_fono_despacho_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_fono_despacho_fieldActionPerformed
+
+    private void venta_bt_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_modificarActionPerformed
+        String campo1 = venta_destinatario_field.getText();
+
+        try {
+            if ("".equals(campo1)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+
+            else {
+                //java.util.Date utilDate = (java.util.Date) cli_fec_nacimiento_field.getDate();
+                //java.sql.Date cli_fec_nacimiento_field1 = new java.sql.Date(utilDate.getTime());
+                PreparedStatement pps = con.prepareStatement("UPDATE venta SET VTA_NOMBRE_DESTINATARIO=? WHERE VTA_ID_VENTA=?");
+                pps.setString(1, campo1);
+                //pps.setString(2, venta_num_pedido_field.getText());
+
+                //pps.setDate(5, cli_fec_nacimiento_field1);
+
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }
+    }//GEN-LAST:event_venta_bt_modificarActionPerformed
+
+    private void venta_direccion_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_direccion_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_direccion_fieldActionPerformed
+
+    private void venta_bt_cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_cancelarActionPerformed
+        //venta_num_pedido_field.setText(null);
+        venta_rut_field.setText(null);
+        venta_nom_cli_field.setText(null);
+        venta_nom_cli_field.setEnabled(true);
+        venta_email_field.setText(null);
+        venta_email_field.setEnabled(true);
+        venta_telefono_field.setText(null);
+        venta_fono_despacho_field.setText(null);
+        venta_fono_despacho_field.setEnabled(true);
+        venta_destinatario_field.setText(null);
+        venta_destinatario_field.setEnabled(true);
+        venta_fecha_entrega.setDate(null);
+        venta_direccion_field.setText(null);
+        venta_comuna_box.setSelectedItem(null);
+        venta_saludo_field.setText(null);
+        venta_rrss_box.setSelectedItem(null);
+
+        //venta_estado_box.setSelectedItem(null);
+        venta_pack_box.setSelectedItem(null);
+        venta_fecha_entrega_ini.setSelectedItem(null);
+        //venta_entrega_fin.setText(null);
+    }//GEN-LAST:event_venta_bt_cancelarActionPerformed
+
+    private void venta_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_bt_guardarActionPerformed
+        Statement stc;
+        Statement sts;
+        Statement std;
+
+        String campo1 = venta_rut_field.getText();
+        String campo2 = (String) venta_rrss_box.getSelectedItem();
+        String campo3 = venta_destinatario_field.getText();
+        String campo4 = venta_fono_despacho_field.getText();
+        //venta_fecha_entrega1
+        String campo5 = venta_direccion_field.getText();
+        String campo6 = (String) venta_comuna_box.getSelectedItem();
+        String campo7 = venta_saludo_field.getText();
+        String campo8 = (String) venta_pack_box.getSelectedItem();
+        String campo9 = (String) venta_fecha_entrega_ini.getSelectedItem();
+
+
+        try {
+            if ("".equals(campo1)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+
+            else {
+                java.util.Date utilDate = (java.util.Date) venta_fecha_entrega.getDate();
+                java.sql.Date venta_fecha_entrega1 = new java.sql.Date(utilDate.getTime());
+
+                stc = con.createStatement();
+                ResultSet id_comuna = stc.executeQuery("SELECT COM_ID_COMUNA FROM comunas WHERE COM_DESCRIPCION  = '"+campo6+"'");
+                id_comuna.next();
+
+                sts = con.createStatement();
+                ResultSet id_pack = sts.executeQuery("SELECT PCK_ID_PACK FROM pack WHERE PCK_NOMBRE  = '"+campo8+"'");
+                id_pack.next();
+
+                std = con.createStatement();
+                ResultSet id_rrss = std.executeQuery("SELECT RRS_ID_RRSS FROM rrss WHERE RRS_NOMBRE  = '"+campo2+"'");
+                id_rrss.next();
+
+
+                PreparedStatement pps = con.prepareStatement("INSERT INTO venta (CLI_ID_CLIENTE, RRSS_ID_RRSS, VTA_NOMBRE_DESTINATARIO, VTA_TELEFONO, "
+                        + "VTA_FECHA_ENTREGA, VTA_DIRECCION_DESTINATARIO, COM_ID_COMUNA, VTA_SALUDO, PCK_ID_PACK, "
+                        + "VTA_HORA_ENTREGA_INICIAL, ESTADOS_ID_ESTADO) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+                pps.setString(1, campo1);
+                pps.setString(2, id_rrss.getString(1));
+                pps.setString(3, campo3);
+                pps.setString(4, campo4);
+                pps.setDate(5, venta_fecha_entrega1);
+                pps.setString(6, campo5);
+                pps.setString(7, id_comuna.getString(1));
+                pps.setString(8, campo7);
+                pps.setString(9, id_pack.getString(1));
+                pps.setString(10, campo9);
+                pps.setString(11, "1");
+
+                pps.executeUpdate();
+                pps.close();
+                JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }
+    }//GEN-LAST:event_venta_bt_guardarActionPerformed
+
+    private void venta_destinatario_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_venta_destinatario_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_venta_destinatario_fieldActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -6610,6 +7114,8 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton ban_desactivar;
     private javax.swing.JTextField ban_nombre_field;
     private javax.swing.JTable ban_tabla;
+    private javax.swing.JButton bt_recargar;
+    private javax.swing.JButton bt_recargar1;
     private javax.swing.JButton cancelpack_button;
     private javax.swing.JButton canceluser_button;
     private javax.swing.JButton cat_art_bt_buscar;
@@ -6624,6 +7130,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField cat_ven_codigo_field;
     private javax.swing.JTextField cat_ven_nombre_field;
     private javax.swing.JTable cat_ven_tabla;
+    private javax.swing.JCheckBox check_regalo;
     private javax.swing.JButton cli_bt_buscar;
     private javax.swing.JButton cli_bt_cancelar;
     private javax.swing.JButton cli_bt_desactivar;
@@ -6686,44 +7193,32 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTextField inf_ven_field_buscar_bar;
     private javax.swing.JTextField inf_ven_rut;
     private javax.swing.JTable inf_ven_tabla;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton18;
     private javax.swing.JButton jButton19;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
-    private javax.swing.JButton jButton22;
     private javax.swing.JButton jButton23;
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton28;
     private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton30;
     private javax.swing.JButton jButton38;
     private javax.swing.JButton jButton39;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton40;
-    private javax.swing.JButton jButton42;
     private javax.swing.JButton jButton43;
     private javax.swing.JButton jButton44;
     private javax.swing.JButton jButton45;
     private javax.swing.JButton jButton47;
     private javax.swing.JButton jButton49;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton50;
     private javax.swing.JButton jButton51;
-    private javax.swing.JButton jButton52;
-    private javax.swing.JButton jButton53;
-    private javax.swing.JButton jButton54;
     private javax.swing.JButton jButton55;
     private javax.swing.JButton jButton56;
     private javax.swing.JButton jButton57;
-    private javax.swing.JButton jButton58;
-    private javax.swing.JButton jButton59;
     private javax.swing.JButton jButton60;
     private javax.swing.JButton jButton61;
     private javax.swing.JButton jButton62;
@@ -6737,22 +7232,14 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox10;
     private javax.swing.JComboBox<String> jComboBox11;
     private javax.swing.JComboBox<String> jComboBox12;
-    private javax.swing.JComboBox<String> jComboBox13;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
-    private javax.swing.JComboBox<String> jComboBox7;
-    private javax.swing.JComboBox<String> jComboBox8;
     private javax.swing.JComboBox<String> jComboBox9;
     private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
-    private com.toedter.calendar.JDateChooser jDateChooser3;
     private com.toedter.calendar.JDateChooser jDateChooser4;
     private com.toedter.calendar.JDateChooser jDateChooser5;
     private com.toedter.calendar.JDateChooser jDateChooser6;
     private javax.swing.JFormattedTextField jFormattedTextField10;
-    private javax.swing.JFormattedTextField jFormattedTextField14;
     private javax.swing.JFormattedTextField jFormattedTextField15;
     private javax.swing.JFormattedTextField jFormattedTextField17;
     private javax.swing.JFormattedTextField jFormattedTextField2;
@@ -6764,6 +7251,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel103;
     private javax.swing.JLabel jLabel104;
     private javax.swing.JLabel jLabel105;
+    private javax.swing.JLabel jLabel106;
     private javax.swing.JLabel jLabel107;
     private javax.swing.JLabel jLabel108;
     private javax.swing.JLabel jLabel109;
@@ -6774,6 +7262,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel113;
     private javax.swing.JLabel jLabel114;
     private javax.swing.JLabel jLabel115;
+    private javax.swing.JLabel jLabel116;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel125;
     private javax.swing.JLabel jLabel126;
@@ -6788,6 +7277,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -6817,6 +7307,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel55;
     private javax.swing.JLabel jLabel56;
@@ -6832,12 +7323,10 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel80;
     private javax.swing.JLabel jLabel81;
     private javax.swing.JLabel jLabel82;
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
-    private javax.swing.JLabel jLabel85;
     private javax.swing.JLabel jLabel86;
     private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel88;
@@ -6846,13 +7335,13 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel90;
     private javax.swing.JLabel jLabel91;
     private javax.swing.JLabel jLabel92;
-    private javax.swing.JLabel jLabel93;
     private javax.swing.JLabel jLabel94;
     private javax.swing.JLabel jLabel95;
     private javax.swing.JLabel jLabel96;
     private javax.swing.JLabel jLabel97;
     private javax.swing.JLabel jLabel98;
     private javax.swing.JLabel jLabel99;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
@@ -6904,28 +7393,17 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable4;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField23;
     private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField28;
-    private javax.swing.JTextField jTextField29;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField30;
-    private javax.swing.JTextField jTextField31;
-    private javax.swing.JTextField jTextField32;
-    private javax.swing.JTextField jTextField34;
-    private javax.swing.JTextField jTextField35;
     private javax.swing.JTextField jTextField36;
-    private javax.swing.JTextField jTextField37;
-    private javax.swing.JTextField jTextField39;
     private javax.swing.JTextField jTextField41;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
@@ -6960,6 +7438,7 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JTable prov_tabla;
     private javax.swing.JTextField prov_telefono_field;
     private javax.swing.JPasswordField repet_pass_field;
+    private javax.swing.JLabel result_total;
     private javax.swing.JButton rrss_bt_buscar;
     private javax.swing.JFormattedTextField rrss_buscar_bar;
     private javax.swing.JButton savepack_button;
@@ -6988,9 +7467,8 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JPanel tab_solpedido;
     private javax.swing.JPanel tab_usuarios;
     private javax.swing.JPanel tab_ventas;
-    private javax.swing.JTable tabla_ventaspendientes;
-    private javax.swing.JTable tabla_ventaspendientes1;
-    private javax.swing.JTable tabla_ventaspendientes3;
+    private javax.swing.JTable tabla_despachos;
+    private javax.swing.JTable tabla_destinos;
     private javax.swing.JButton topack_button;
     private javax.swing.JButton topack_button1;
     private javax.swing.JLabel username;
@@ -6998,5 +7476,36 @@ public class crud_banco extends javax.swing.JFrame {
     private javax.swing.JButton usu_bt_buscar;
     private javax.swing.JFormattedTextField usu_buscar_bar;
     private javax.swing.JTable usuario_tabla;
+    private javax.swing.JComboBox<String> ven_con_banco_combox;
+    private javax.swing.JFormattedTextField ven_con_bar_buscar;
+    private javax.swing.JButton ven_con_bt_buscar;
+    private javax.swing.JButton ven_con_bt_cancelar;
+    private javax.swing.JButton ven_con_bt_confirmar;
+    private javax.swing.JButton ven_con_bt_editar;
+    private javax.swing.JButton ven_con_bt_recargar;
+    private javax.swing.JTextField ven_con_cod_tran_field;
+    private com.toedter.calendar.JDateChooser ven_con_fecha_pago_field;
+    private javax.swing.JTextField ven_con_n_pedido_field;
+    private javax.swing.JTextField ven_con_nom_cliente_field;
+    private javax.swing.JTextField ven_con_rut_field;
+    private javax.swing.JTable ven_con_tabla;
+    private javax.swing.JButton venta_bt_cancelar;
+    private javax.swing.JButton venta_bt_guardar;
+    private javax.swing.JButton venta_bt_modificar;
+    private javax.swing.JButton venta_buscar_rut;
+    private javax.swing.JComboBox<String> venta_comuna_box;
+    private javax.swing.JTextField venta_destinatario_field;
+    private javax.swing.JTextField venta_direccion_field;
+    private javax.swing.JTextField venta_email_field;
+    private javax.swing.JLabel venta_entrega_ini;
+    private com.toedter.calendar.JDateChooser venta_fecha_entrega;
+    private javax.swing.JComboBox<String> venta_fecha_entrega_ini;
+    private javax.swing.JTextField venta_fono_despacho_field;
+    private javax.swing.JTextField venta_nom_cli_field;
+    private javax.swing.JComboBox<String> venta_pack_box;
+    private javax.swing.JComboBox<String> venta_rrss_box;
+    private javax.swing.JTextField venta_rut_field;
+    private javax.swing.JTextField venta_saludo_field;
+    private javax.swing.JTextField venta_telefono_field;
     // End of variables declaration//GEN-END:variables
 }
