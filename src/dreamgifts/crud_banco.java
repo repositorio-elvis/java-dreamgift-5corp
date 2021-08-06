@@ -65,6 +65,7 @@ public class crud_banco extends javax.swing.JFrame {
     Vector<String> lista2;
     Vector<String> lista3;
     ArrayList <Articulos> ListaArticulos = new ArrayList <> ();
+    ArrayList <Packs> ListaPacks = new ArrayList <> ();
     public static String id_pack_actualizar;
     public crud_banco() {
         initComponents();
@@ -153,12 +154,14 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_PACKS(String valor){
         Statement st;
+        ListaPacks.clear();
         String []datos = new String [4];   
         DefaultTableModel modelo = (DefaultTableModel) packs_table.getModel();
         modelo.setNumRows(0);
+        int i=0;
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT PCK_ID_PACK, PCK_NOMBRE, PCK_COSTO, estado FROM pack where CONCAT(PCK_ID_PACK, ' ',PCK_NOMBRE) LIKE '%"+valor+"%'");
+            ResultSet rs = st.executeQuery("SELECT PCK_ID_PACK, PCK_NOMBRE, PCK_COSTO, estado, PCK_STOCK FROM pack where CONCAT(PCK_ID_PACK, ' ',PCK_NOMBRE) LIKE '%"+valor+"%'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -168,7 +171,12 @@ public class crud_banco extends javax.swing.JFrame {
                 }
                 else datos[3]= "desactivado";
                 modelo.addRow(datos);           
-                
+                if(valor.equals("")){           
+                    Packs temporal;
+                    temporal = new Packs(rs.getString(1),rs.getString(2), rs.getString(3), rs.getString(5), rs.getString(4));
+                    ListaPacks.add(i, temporal);
+                    i++;
+                }
             }
             packs_table.setModel(modelo);
             st.close();
@@ -612,6 +620,12 @@ public class crud_banco extends javax.swing.JFrame {
         int x = cadena.indexOf("(");
         int y = cadena.length();
         String temp = cadena.substring(x+1,y-1);
+        return temp;
+    }
+    
+    private String obtener_nombre(String cadena){
+        int x = cadena.indexOf("(");
+        String temp = cadena.substring(0,x-1);
         return temp;
     }
     
@@ -6676,6 +6690,16 @@ public class crud_banco extends javax.swing.JFrame {
         cargarLista1(1);
         packedited_list.setListData(lista2);
     }//GEN-LAST:event_cancelpack_buttonActionPerformed
+
+private void borrar_pck_art(String id) throws SQLException{
+        PreparedStatement p;
+        p = con.prepareStatement("DELETE FROM `pack_has_articulo` WHERE `pack_has_articulo`.`PCK_ID_PACK` = ?");
+        p.setString(1, id);
+        p.executeUpdate();
+        p.close();
+        id_pack_actualizar = null;
+    }
+
 //guardar pack
     private void savepack_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savepack_buttonActionPerformed
         String campo1 = namepack_field.getText();//nombre
@@ -6691,67 +6715,56 @@ public class crud_banco extends javax.swing.JFrame {
             else {
                 String c_articulo;
                 PreparedStatement pps;
-                Statement st2;
-                Statement st3;
-                Statement st;
-                st2 = con.createStatement();
-                st3 = con.createStatement();
-                st = con.createStatement();
-                ResultSet codigo = st.executeQuery("SELECT PCK_ID_PACK FROM pack");
-                while (codigo.next()){
-                    if (codigo.getString(1).equals(id_pack_actualizar)){
-                        flag = 0;
+                
+                for(int i = 0; i <= ListaPacks.size()-1; i++){
+                    if (ListaPacks.get(i).getId().equals(id_pack_actualizar)){
+                        pps = con.prepareStatement("update pack set PCK_NOMBRE = ?, PCK_COSTO = ? where PCK_ID_PACK = ?");
+                        pps.setString(1, campo1);
+                        pps.setString(2, campo2);
+                        pps.setString(3, id_pack_actualizar);
+                        pps.executeUpdate();
+                        pps.close();
+                        borrar_pck_art(id_pack_actualizar);
+                        flag = 0;                      
                     }
                 }
-                                
-                if (flag == 0){
-                    pps = con.prepareStatement("update pack set PCK_NOMBRE = ?, PCK_COSTO = ? where PCK_ID_PACK = ?");
-                    pps.setString(1, campo1);
-                    pps.setString(2, campo2);
-                    pps.setString(3, id_pack_actualizar);
-                    pps.executeUpdate();
-                    pps.close();
-                    id_pack_actualizar = null;
-                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
-                 
-                }
-                else{
+                
+                if(flag == 1){
                     pps = con.prepareStatement("INSERT INTO pack (PCK_NOMBRE, PCK_COSTO, estado) VALUES (?,?,?)");
                     pps.setString(1, campo1);
                     pps.setString(2, campo2);
                     pps.setString(3, "1");
                     pps.executeUpdate();
-                    pps.close();
-                    
-                    ResultSet id_pack = st2.executeQuery("SELECT PCK_ID_PACK FROM pack WHERE PCK_NOMBRE = '"+campo1+"'");
-                    id_pack.next();
-                    
-                    
-                    ResultSet id_articulo = st3.executeQuery("SELECT ART_ID_ARTICULO, ART_NOMBRE FROM articulo");
-                    int i = 0;
-                    while(id_articulo.next()){
-                        
-                        if(id_articulo.getString(2).equals(lista3.get(i))){
-                            
-                            c_articulo = obtener_cantidad(lista2.get(i));
-                            pps = con.prepareStatement("INSERT INTO pack_has_articulo (PCK_ID_PACK, ART_ID_ARTICULO, CANTIDAD) VALUES (?,?,?)");
-                            pps.setString(1, id_pack.getString(1));
-                            pps.setString(2, id_articulo.getString(1));
-                            pps.setString(3, c_articulo);
-                            pps.executeUpdate();
-                            pps.close();
-                            i++;
-                        }
-                        
-                    }
-                    
-                    
+                    pps.close();  
                     JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
                 }
+                else JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
                 
-                Mostrar_PACKS("");
-                cargarLista1(1);
-            }
+                Mostrar_PACKS("");   
+                System.out.print(lista2.size());
+                for(int i = 0; i <= ListaPacks.size()-1; i++){
+                    if (ListaPacks.get(i).getNombre().equals(campo1)){
+                        for(int j = 0; j <= ListaArticulos.size()-1; j++){
+                            for(int k = 0; k <= lista2.size()-1; k++){
+                                if(ListaArticulos.get(j).getNombre().equals(obtener_nombre(lista2.get(k)))){
+                                    c_articulo = obtener_cantidad(lista2.get(k));
+                                    pps = con.prepareStatement("INSERT INTO pack_has_articulo (PCK_ID_PACK, ART_ID_ARTICULO, CANTIDAD) VALUES (?,?,?)");
+                                    pps.setString(1, ListaPacks.get(i).getId());
+                                    pps.setString(2, ListaArticulos.get(j).getId());
+                                    pps.setString(3, c_articulo);
+                                    pps.executeUpdate();
+                                    pps.close();
+                                }
+                            }
+
+                        }
+                    }
+
+                }
+                
+                
+            }        
+            cargarLista1(1);
             
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
