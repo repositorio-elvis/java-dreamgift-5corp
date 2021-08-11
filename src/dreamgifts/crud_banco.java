@@ -20,6 +20,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -64,11 +66,21 @@ public class crud_banco extends javax.swing.JFrame {
     Vector<String> lista1;
     Vector<String> lista2;
     Vector<String> lista3;
+    Vector<String> lista4;
+    Vector<String> lista5;
+    Vector<String> lista6;
+    Calendar fecha_actual = new GregorianCalendar();
     ArrayList <Articulos> ListaArticulos = new ArrayList <> ();
     ArrayList <Packs> ListaPacks = new ArrayList <> ();
+    ArrayList <Orden_Compra> ListaOCompra = new ArrayList <> ();
     public static String id_pack_actualizar;
+    public static String id_orden_compra;
     public crud_banco() {
         initComponents();
+        cli_fec_nacimiento_field.setCalendar(fecha_actual);
+        jDateChooser1.setCalendar(fecha_actual);
+        jDateChooser6.setCalendar(fecha_actual);
+        Mostrar_ORDEN_COMPRA();
         Mostrar_RRSS("");
         Mostrar_COMUNA("");
         Mostrar_BANCO("");
@@ -91,7 +103,7 @@ public class crud_banco extends javax.swing.JFrame {
         BORRAR_RECOMPRA_1();
         BORRAR_RECOMPRA_2();
         //Mostrar_VENTA_TABLA("");
-        
+         
         
                 
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
@@ -102,6 +114,9 @@ public class crud_banco extends javax.swing.JFrame {
         lista1=new Vector<>();
         lista2=new Vector<>();
         lista3=new Vector<>();
+        lista4=new Vector<>();
+        lista5=new Vector<>();
+        lista6=new Vector<>();
         cargarLista1(1);
         SpinnerNumberModel nm = new SpinnerNumberModel();
         nm.setMaximum(1000);
@@ -112,6 +127,34 @@ public class crud_banco extends javax.swing.JFrame {
         
         
         
+    }
+    
+    private void Mostrar_ORDEN_COMPRA(){
+        Statement st;
+        String []datos = new String [4];   
+        DefaultTableModel modelo = (DefaultTableModel) packs_table1.getModel();
+        modelo.setNumRows(0);
+        int i=0;
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT ORC_ID_ORDEN, ORC_FECHA_ORDEN, proveedor.PRO_RAZON FROM orden_compra INNER JOIN proveedor ON orden_compra.PRO_ID_PROVEEDOR = proveedor.PRO_ID_PROVEEDOR ORDER BY ORC_ID_ORDEN ASC");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3);                
+                
+                modelo.addRow(datos);  
+                Orden_Compra temporal;
+                temporal = new Orden_Compra(rs.getString(1), rs.getString(3), rs.getString(2));
+                ListaOCompra.add(i, temporal);
+            }
+                       
+            packs_table1.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
     
     private void Mostrar_ARTICULO(String valor){
@@ -139,8 +182,8 @@ public class crud_banco extends javax.swing.JFrame {
                     datos[7] = "activado";
                 }
                 else datos[7]= "desactivado";
-                if(valor.equals("")){
-                    modelo.addRow(datos);           
+                modelo.addRow(datos);
+                if(valor.equals("")){  
                     Articulos temporal;
                     temporal = new Articulos(rs.getString(9),rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(10), rs.getString(11), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
                     ListaArticulos.add(i, temporal);
@@ -208,12 +251,14 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_ART_PRO_COMBO(){
         jComboBox2.removeAllItems();
+        jComboBox3.removeAllItems();
         Statement st;
         try{
             st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT PRO_RAZON FROM proveedor WHERE ESTADO = 1");
             while (rs.next()){
                 jComboBox2.addItem(rs.getString(1));
+                jComboBox3.addItem(rs.getString(1));
             }
         }
         catch (SQLException ex) {
@@ -664,7 +709,7 @@ public class crud_banco extends javax.swing.JFrame {
         if(flag == 1){
             packeditor_list.setListData(lista1);
             packedited_list.setListData(lista2);
-        }
+        }  
     }
     
     private void Editar_listas(String id_pack){
@@ -680,6 +725,33 @@ public class crud_banco extends javax.swing.JFrame {
             lista1.removeAll(lista3);
            
 
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void Editar_listas2(String id_orden, String proveedor){
+        try {
+            lista5.removeAllElements();
+            lista6.removeAllElements();
+            Statement st;
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, o.CANTIDAD FROM orden_compra_detalle o INNER JOIN articulo a ON a.ART_ID_ARTICULO = o.ART_ID_ARTICULO WHERE o.ORC_ID_ORDEN = "+id_orden);
+            while (rs.next()){
+                lista5.add(rs.getString(1)+" ("+rs.getString(2)+")");
+                lista6.add(rs.getString(1));
+            }
+            
+            for(int i = 0; i < ListaArticulos.size();i++){
+                Articulos actual = ListaArticulos.get(i);
+                if(actual.getPro_razon().equals(proveedor) && actual.getEstado().equals("1")){
+                    lista4.add(actual.getNombre());
+                }
+            }
+            
+            lista4.removeAll(lista6);
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -796,8 +868,6 @@ public class crud_banco extends javax.swing.JFrame {
         tab_solpedido = new javax.swing.JPanel();
         jPanel25 = new javax.swing.JPanel();
         jLabel95 = new javax.swing.JLabel();
-        jTextField17 = new javax.swing.JTextField();
-        jButton55 = new javax.swing.JButton();
         jButton56 = new javax.swing.JButton();
         jLabel98 = new javax.swing.JLabel();
         jButton23 = new javax.swing.JButton();
@@ -809,10 +879,11 @@ public class crud_banco extends javax.swing.JFrame {
         jScrollPane26 = new javax.swing.JScrollPane();
         packedited_list1 = new javax.swing.JList<>();
         jDateChooser6 = new com.toedter.calendar.JDateChooser();
+        deactivatepack_button1 = new javax.swing.JButton();
+        jComboBox3 = new javax.swing.JComboBox<>();
         Packs1 = new javax.swing.JLabel();
         jScrollPane27 = new javax.swing.JScrollPane();
         packs_table1 = new javax.swing.JTable();
-        deactivatepack_button1 = new javax.swing.JButton();
         deactivatepack_button2 = new javax.swing.JButton();
         deactivatepack_button3 = new javax.swing.JButton();
         tab_regcompra = new javax.swing.JPanel();
@@ -1129,6 +1200,7 @@ public class crud_banco extends javax.swing.JFrame {
         usuario_tabla = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         Panel_tab_menu.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Panel_tab_menu.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -2002,23 +2074,7 @@ public class crud_banco extends javax.swing.JFrame {
         jPanel25.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Solicitudes de Pedido", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         jLabel95.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel95.setText("Número pedido:");
-
-        jTextField17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField17.setText("00012");
-        jTextField17.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField17ActionPerformed(evt);
-            }
-        });
-
-        jButton55.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton55.setText("Guardar");
-        jButton55.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton55ActionPerformed(evt);
-            }
-        });
+        jLabel95.setText("Proveedor:");
 
         jButton56.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton56.setText("Cancelar");
@@ -2040,11 +2096,6 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         packeditor_list1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        packeditor_list1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane25.setViewportView(packeditor_list1);
 
         topack_button1.setText(">");
@@ -2062,12 +2113,24 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         packedited_list1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        packedited_list1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane26.setViewportView(packedited_list1);
+
+        jDateChooser6.setToolTipText("");
+
+        deactivatepack_button1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        deactivatepack_button1.setText("Generar Orden de Compra");
+        deactivatepack_button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deactivatepack_button1ActionPerformed(evt);
+            }
+        });
+
+        jComboBox3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
         jPanel25.setLayout(jPanel25Layout);
@@ -2076,27 +2139,29 @@ public class crud_banco extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel25Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton56, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton55, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(99, 99, 99))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(deactivatepack_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel25Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel25Layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
                         .addComponent(jScrollPane25, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                        .addGap(100, 100, 100)
                         .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(frompack_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(addunits_spinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(topack_button1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                                .addComponent(topack_button1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel25Layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
                         .addComponent(jLabel95)
-                        .addGap(41, 41, 41)
-                        .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52)))
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel25Layout.createSequentialGroup()
@@ -2112,12 +2177,13 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jDateChooser6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel98))
+                        .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel98)
+                            .addComponent(jButton23)))
                     .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel95)
-                        .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton23)))
-                .addGap(15, 15, 15)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(17, 17, 17)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel25Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
@@ -2129,10 +2195,10 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jScrollPane25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(24, 24, Short.MAX_VALUE)
+                .addGap(22, 22, Short.MAX_VALUE)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton55)
-                    .addComponent(jButton56))
+                    .addComponent(jButton56)
+                    .addComponent(deactivatepack_button1))
                 .addGap(30, 30, 30))
         );
 
@@ -2145,21 +2211,14 @@ public class crud_banco extends javax.swing.JFrame {
         packs_table1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         packs_table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Número Pedido", "Fecha Pedido", "Cantidad de artículos", "Selección"
+                "Número Pedido", "Fecha Pedido", "Proveedor", "Selección"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true
@@ -2181,11 +2240,13 @@ public class crud_banco extends javax.swing.JFrame {
         });
         jScrollPane27.setViewportView(packs_table1);
 
-        deactivatepack_button1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        deactivatepack_button1.setText("Generar Orden de Compra");
-
         deactivatepack_button2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         deactivatepack_button2.setText("Ver");
+        deactivatepack_button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deactivatepack_button2ActionPerformed(evt);
+            }
+        });
 
         deactivatepack_button3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         deactivatepack_button3.setText("Editar");
@@ -2202,12 +2263,11 @@ public class crud_banco extends javax.swing.JFrame {
             .addGroup(tab_solpedidoLayout.createSequentialGroup()
                 .addGroup(tab_solpedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tab_solpedidoLayout.createSequentialGroup()
-                        .addContainerGap(853, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(deactivatepack_button3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
+                        .addGap(56, 56, 56)
                         .addComponent(deactivatepack_button2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(deactivatepack_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(93, 93, 93))
                     .addGroup(tab_solpedidoLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(tab_solpedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2229,7 +2289,6 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jScrollPane27, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addGroup(tab_solpedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(deactivatepack_button1)
                     .addComponent(deactivatepack_button2)
                     .addComponent(deactivatepack_button3))
                 .addGap(319, 319, 319))
@@ -5687,7 +5746,16 @@ public class crud_banco extends javax.swing.JFrame {
 
         Panel_tab_menu.addTab("Administrador", tab_administrador);
 
-        getContentPane().add(Panel_tab_menu, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Panel_tab_menu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Panel_tab_menu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -6546,7 +6614,7 @@ public class crud_banco extends javax.swing.JFrame {
         cli_telefono_field.setText(null);
         cli_email_field.setText(null);
         cli_rut_field.setText(null);
-        cli_fec_nacimiento_field.setDate(null);
+        cli_fec_nacimiento_field.setCalendar(fecha_actual);
     }//GEN-LAST:event_cli_bt_cancelarActionPerformed
 //desactivar cliente
     private void cli_bt_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_desactivarActionPerformed
@@ -6707,37 +6775,89 @@ public class crud_banco extends javax.swing.JFrame {
     private void ban_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_bt_buscarActionPerformed
         Mostrar_BANCO(ban_buscar_bar.getText());
     }//GEN-LAST:event_ban_bt_buscarActionPerformed
-
-    private void jTextField17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField17ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField17ActionPerformed
-
-    private void jButton55ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton55ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton55ActionPerformed
-
+//cancelar orden de compra
     private void jButton56ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton56ActionPerformed
-        // TODO add your handling code here:
+        lista4.removeAllElements();
+        lista5.removeAllElements();
+        lista6.removeAllElements();
+        packeditor_list1.setListData(lista4);
+        packedited_list1.setListData(lista5);
+        jDateChooser6.setCalendar(fecha_actual);
+        jButton23.setEnabled(true);
+        
     }//GEN-LAST:event_jButton56ActionPerformed
-
+// buscar orden de compra
     private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
-        // TODO add your handling code here:
+        lista4.removeAllElements();
+        lista5.removeAllElements();
+        lista6.removeAllElements();
+        String pro_seleccionado = (String) jComboBox3.getSelectedItem();
+        
+        for(int i = 0; i < ListaArticulos.size();i++){
+            Articulos actual = ListaArticulos.get(i);
+            if(actual.getPro_razon().equals(pro_seleccionado) && actual.getEstado().equals("1")){
+                lista4.add(actual.getNombre());
+            }
+        }
+        packeditor_list1.setListData(lista4);
+        packedited_list1.setListData(lista5);
+       
     }//GEN-LAST:event_jButton23ActionPerformed
-
+//agregar articulo a compra
     private void topack_button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_topack_button1ActionPerformed
-        // TODO add your handling code here:
+        int seleccion = packeditor_list1.getSelectedIndex();
+        int cantidad = (int) addunits_spinner1.getValue();
+        packedited_list1.removeAll();
+        if(cantidad  == 0){
+            lista5.add(lista4.get(seleccion)+ " (1)");
+        }else{
+            lista5.add(lista4.get(seleccion)+ " ("+cantidad+")");
+        }
+        lista6.add(lista4.get(seleccion));
+        lista4.remove(seleccion);
+        packeditor_list1.setListData(lista4);
+        packedited_list1.setListData(lista5);
+        if (lista5.size() > 0){
+            jButton23.setEnabled(false);
+        }
     }//GEN-LAST:event_topack_button1ActionPerformed
-
+//quitar articulo a compra
     private void frompack_button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frompack_button1ActionPerformed
-        // TODO add your handling code here:
+        int seleccion = packedited_list1.getSelectedIndex();
+        packeditor_list1.removeAll();
+        int borrar = lista5.get(seleccion).indexOf("(");
+        //int y = lista2.get(i).indexOf(")");
+        String temp = lista5.get(seleccion).substring(0, borrar);
+        lista4.add(temp);
+        lista6.remove(seleccion);
+        lista5.remove(seleccion);
+        packeditor_list1.setListData(lista4);
+        packedited_list1.setListData(lista5);
+        if (lista5.isEmpty()){
+            jButton23.setEnabled(true);
+        }
+        
     }//GEN-LAST:event_frompack_button1ActionPerformed
 
     private void packs_table1ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_packs_table1ComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_packs_table1ComponentAdded
-
+//editar orden de compra
     private void deactivatepack_button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_button3ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = packs_table1.getRowCount();
+        String id_orden;
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (packs_table1.isCellSelected(i, 3) == true){
+                jComboBox3.setSelectedItem(packs_table1.getValueAt(i,2));
+                jComboBox3.setEnabled(true);
+                id_orden = (String) packs_table1.getValueAt(i,0);
+                id_orden_compra = id_orden;
+                Editar_listas2(id_orden,(String) packs_table1.getValueAt(i,2));
+                packeditor_list1.setListData(lista4);
+                packedited_list1.setListData(lista5);     
+            }
+        }
+        
     }//GEN-LAST:event_deactivatepack_button3ActionPerformed
 //guardar articulo
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -6821,7 +6941,7 @@ public class crud_banco extends javax.swing.JFrame {
         jTextField5.setText(null);
         jTextField6.setText(null);
         jTextField7.setText(null);
-        jDateChooser1.setDate(null);
+        jDateChooser1.setCalendar(fecha_actual);
     }//GEN-LAST:event_jButton8ActionPerformed
 //desactivar articulo
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -6863,6 +6983,14 @@ private void borrar_pck_art(String id) throws SQLException{
         p.executeUpdate();
         p.close();
         id_pack_actualizar = null;
+    }
+
+private void borrar_orden_art(String id) throws SQLException{
+        PreparedStatement p;
+        p = con.prepareStatement("DELETE FROM `orden_compra_detalle` WHERE `orden_compra_detalle`.`ORC_ID_ORDEN` = ?");
+        p.setString(1, id);
+        p.executeUpdate();
+        p.close();
     }
 
 //guardar pack
@@ -7726,6 +7854,113 @@ private void borrar_pck_art(String id) throws SQLException{
         Mostrar_COMPRA_RECOMPRA();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox3ActionPerformed
+//generar orden de compra
+    private void deactivatepack_button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_button1ActionPerformed
+        String campo1 = (String) jComboBox3.getSelectedItem();//nombre proveedor
+        java.util.Date utilDate = (java.util.Date) jDateChooser6.getDate();
+        java.sql.Date fecha = new java.sql.Date(utilDate.getTime());
+        jComboBox3.setEnabled(true);
+        
+        int flag = 1;
+        
+        try {
+            if (packedited_list1.getModel().getSize() == 0){
+                JOptionPane.showMessageDialog(null, "Agrege articulos a la orden de compra");
+            }
+            
+            else {
+                Statement st;
+                st = con.createStatement();
+                ResultSet id_proveedor = st.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor where PRO_RAZON = '"+campo1+"'");
+                id_proveedor.next();
+                String c_articulo;
+                PreparedStatement pps;
+                
+                for(int i = 0; i <= ListaOCompra.size()-1; i++){
+                    if (ListaOCompra.get(i).getId().equals(id_orden_compra)){
+                        pps = con.prepareStatement("update orden_compra set ORC_FECHA_ORDEN = ? where ORC_ID_ORDEN = ?");
+                        pps.setDate(1, fecha);
+                        pps.setString(2, id_orden_compra);
+                        pps.executeUpdate();
+                        pps.close();
+                        borrar_orden_art(id_orden_compra);
+                        flag = 0;                      
+                    }
+                }
+                
+                if(flag == 1){
+                    
+                    pps = con.prepareStatement("INSERT INTO orden_compra (PRO_ID_PROVEEDOR, ORC_FECHA_ORDEN) VALUES (?,?)");
+                    pps.setString(1, id_proveedor.getString(1));
+                    pps.setDate(2, fecha);
+                    pps.executeUpdate();
+                    pps.close();  
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                }
+                else JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                
+                Mostrar_ORDEN_COMPRA();
+                if(flag == 1){
+                    id_orden_compra = ListaOCompra.get(0).getId();    
+                }
+                
+                for(int j = 0; j <= ListaArticulos.size()-1; j++){
+                    for(int k = 0; k <= lista5.size()-1; k++){
+                        if(ListaArticulos.get(j).getNombre().equals(obtener_nombre(lista5.get(k)))){
+                            c_articulo = obtener_cantidad(lista5.get(k));
+                            pps = con.prepareStatement("INSERT INTO orden_compra_detalle (ART_ID_ARTICULO, OCD_CANTIDAD, ORC_ID_ORDEN) VALUES (?,?,?)");
+                            pps.setString(1, ListaArticulos.get(j).getId());
+                            pps.setString(2, c_articulo);
+                            pps.setString(3, id_orden_compra);
+                            pps.executeUpdate();
+                            pps.close();
+                        }
+                    }
+                        
+                    
+                }
+                lista4.removeAllElements();
+                lista5.removeAllElements();
+                lista6.removeAllElements();
+                packeditor_list1.setListData(lista4);
+                packedited_list1.setListData(lista5);
+                jDateChooser6.setCalendar(fecha_actual);
+                jButton23.setEnabled(true);
+                id_orden_compra = null;
+            }    
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "no se pudo crear orden de compra");
+        }        
+    }//GEN-LAST:event_deactivatepack_button1ActionPerformed
+//ver orden de compra
+    private void deactivatepack_button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_button2ActionPerformed
+        int cantidad_filas = packs_table1.getRowCount();
+        String id_orden;
+        String cadena = "Articulos Agregados: \n";
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (packs_table1.isCellSelected(i, 3) == true){
+                id_orden = (String) packs_table1.getValueAt(i, 0);
+                Statement st;
+                try {
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, o.CANTIDAD FROM orden_compra_detalle o INNER JOIN articulo a ON a.ART_ID_ARTICULO = o.ART_ID_ARTICULO WHERE o.ORC_ID_ORDEN = "+ id_orden);
+                    while (rs.next()){
+                        cadena += rs.getString(2)+" - "+rs.getString(1)+"\n";
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            }
+        }
+        JOptionPane.showMessageDialog(null, cadena);
+    }//GEN-LAST:event_deactivatepack_button2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -7900,7 +8135,6 @@ private void borrar_pck_art(String id) throws SQLException{
     private javax.swing.JButton jButton49;
     private javax.swing.JButton jButton50;
     private javax.swing.JButton jButton51;
-    private javax.swing.JButton jButton55;
     private javax.swing.JButton jButton56;
     private javax.swing.JButton jButton63;
     private javax.swing.JButton jButton64;
@@ -7910,6 +8144,7 @@ private void borrar_pck_art(String id) throws SQLException{
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser6;
@@ -8074,7 +8309,6 @@ private void borrar_pck_art(String id) throws SQLException{
     private javax.swing.JTable jTable4;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField25;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField38;

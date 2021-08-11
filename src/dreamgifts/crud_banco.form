@@ -3,6 +3,9 @@
 <Form version="1.9" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+      <Color id="Cursor Por defecto"/>
+    </Property>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -21,7 +24,18 @@
     <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,-65,0,0,6,23"/>
   </AuxValues>
 
-  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="Panel_tab_menu" min="-2" max="-2" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Component id="Panel_tab_menu" min="-2" max="-2" attributes="0"/>
+      </Group>
+    </DimensionLayout>
+  </Layout>
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="Panel_tab_menu">
       <Properties>
@@ -34,11 +48,6 @@
           <Font name="Tahoma" size="18" style="0"/>
         </Property>
       </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-          <BorderConstraints direction="Center"/>
-        </Constraint>
-      </Constraints>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
       <SubComponents>
@@ -1591,12 +1600,11 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace pref="853" max="32767" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
                                       <Component id="deactivatepack_button3" min="-2" pref="157" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                                       <Component id="deactivatepack_button2" min="-2" pref="149" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="deactivatepack_button1" min="-2" pref="253" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="50" pref="50" max="-2" attributes="0"/>
@@ -1625,7 +1633,6 @@
                               <Component id="jScrollPane27" min="-2" pref="115" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="deactivatepack_button1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="deactivatepack_button2" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="deactivatepack_button3" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -1655,16 +1662,16 @@
                               <Group type="102" alignment="1" attributes="0">
                                   <EmptySpace max="32767" attributes="0"/>
                                   <Component id="jButton56" min="-2" pref="257" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jButton55" min="-2" pref="228" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="deactivatepack_button1" min="-2" pref="253" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
                                           <Component id="jScrollPane25" min="-2" pref="594" max="-2" attributes="0"/>
-                                          <EmptySpace pref="100" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="frompack_button1" alignment="0" min="-2" pref="41" max="-2" attributes="0"/>
                                               <Group type="103" alignment="0" groupAlignment="0" attributes="0">
@@ -1672,16 +1679,18 @@
                                                   <Component id="topack_button1" alignment="1" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
+                                          <EmptySpace max="32767" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
                                           <Component id="jLabel95" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                                          <Component id="jTextField17" min="-2" pref="343" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                          <Component id="jComboBox3" min="-2" pref="399" max="-2" attributes="0"/>
                                           <EmptySpace max="32767" attributes="0"/>
                                           <Component id="jButton23" min="-2" pref="99" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jScrollPane26" alignment="0" min="-2" pref="470" max="-2" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
@@ -1701,15 +1710,17 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                                           <Component id="jDateChooser6" alignment="1" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jLabel98" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                                              <Component id="jLabel98" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              <Component id="jButton23" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                       <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                                           <Component id="jLabel95" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jTextField17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="jButton23" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="jComboBox3" alignment="3" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
@@ -1724,10 +1735,10 @@
                                           <Component id="jScrollPane26" alignment="1" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="30" pref="24" max="32767" attributes="0"/>
+                                  <EmptySpace min="30" pref="22" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="jButton55" alignment="3" min="-2" max="-2" attributes="0"/>
                                       <Component id="jButton56" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="deactivatepack_button1" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
@@ -1740,30 +1751,8 @@
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
-                            <Property name="text" type="java.lang.String" value="N&#xfa;mero pedido:"/>
+                            <Property name="text" type="java.lang.String" value="Proveedor:"/>
                           </Properties>
-                        </Component>
-                        <Component class="javax.swing.JTextField" name="jTextField17">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="18" style="0"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="00012"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField17ActionPerformed"/>
-                          </Events>
-                        </Component>
-                        <Component class="javax.swing.JButton" name="jButton55">
-                          <Properties>
-                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                              <Font name="Tahoma" size="18" style="0"/>
-                            </Property>
-                            <Property name="text" type="java.lang.String" value="Guardar"/>
-                          </Properties>
-                          <Events>
-                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton55ActionPerformed"/>
-                          </Events>
                         </Component>
                         <Component class="javax.swing.JButton" name="jButton56">
                           <Properties>
@@ -1808,13 +1797,7 @@
                                   <Font name="Tahoma" size="18" style="0"/>
                                 </Property>
                                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                                  <StringArray count="5">
-                                    <StringItem index="0" value="Item 1"/>
-                                    <StringItem index="1" value="Item 2"/>
-                                    <StringItem index="2" value="Item 3"/>
-                                    <StringItem index="3" value="Item 4"/>
-                                    <StringItem index="4" value="Item 5"/>
-                                  </StringArray>
+                                  <StringArray count="0"/>
                                 </Property>
                               </Properties>
                               <AuxValues>
@@ -1854,13 +1837,7 @@
                                   <Font name="Tahoma" size="18" style="0"/>
                                 </Property>
                                 <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-                                  <StringArray count="5">
-                                    <StringItem index="0" value="Item 1"/>
-                                    <StringItem index="1" value="Item 2"/>
-                                    <StringItem index="2" value="Item 3"/>
-                                    <StringItem index="3" value="Item 4"/>
-                                    <StringItem index="4" value="Item 5"/>
-                                  </StringArray>
+                                  <StringArray count="0"/>
                                 </Property>
                               </Properties>
                               <AuxValues>
@@ -1870,6 +1847,36 @@
                           </SubComponents>
                         </Container>
                         <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser6">
+                          <Properties>
+                            <Property name="toolTipText" type="java.lang.String" value=""/>
+                          </Properties>
+                        </Component>
+                        <Component class="javax.swing.JButton" name="deactivatepack_button1">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="18" style="0"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value="Generar Orden de Compra"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deactivatepack_button1ActionPerformed"/>
+                          </Events>
+                        </Component>
+                        <Component class="javax.swing.JComboBox" name="jComboBox3">
+                          <Properties>
+                            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                              <Font name="Tahoma" size="18" style="0"/>
+                            </Property>
+                            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                              <StringArray count="0"/>
+                            </Property>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBox3ActionPerformed"/>
+                          </Events>
+                          <AuxValues>
+                            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+                          </AuxValues>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -1900,12 +1907,36 @@
                               <Font name="Tahoma" size="18" style="0"/>
                             </Property>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="4" rowCount="8">
-                                <Column editable="false" title="N&#xfa;mero Pedido" type="java.lang.Integer"/>
+                              <Table columnCount="4" rowCount="0">
+                                <Column editable="false" title="N&#xfa;mero Pedido" type="java.lang.String"/>
                                 <Column editable="false" title="Fecha Pedido" type="java.lang.String"/>
-                                <Column editable="false" title="Cantidad de art&#xed;culos" type="java.lang.Integer"/>
+                                <Column editable="false" title="Proveedor" type="java.lang.String"/>
                                 <Column editable="true" title="Selecci&#xf3;n" type="java.lang.Boolean"/>
                               </Table>
+                            </Property>
+                            <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                              <TableColumnModel selectionModel="0">
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                                  <Title/>
+                                  <Editor/>
+                                  <Renderer/>
+                                </Column>
+                              </TableColumnModel>
                             </Property>
                             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                               <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
@@ -1917,14 +1948,6 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JButton" name="deactivatepack_button1">
-                      <Properties>
-                        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                          <Font name="Tahoma" size="18" style="0"/>
-                        </Property>
-                        <Property name="text" type="java.lang.String" value="Generar Orden de Compra"/>
-                      </Properties>
-                    </Component>
                     <Component class="javax.swing.JButton" name="deactivatepack_button2">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1932,6 +1955,9 @@
                         </Property>
                         <Property name="text" type="java.lang.String" value="Ver"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deactivatepack_button2ActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="deactivatepack_button3">
                       <Properties>
