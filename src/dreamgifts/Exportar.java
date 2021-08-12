@@ -15,6 +15,12 @@ import java.awt.Desktop;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
+/*  Funcion para exportar a pdf
+    Exportar e = new Exportar();
+    String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(Calendar.getInstance().getTime());
+    String archivo = "Informe de ventas("+timeStamp+")";
+    e.CreatePDF(archivo, inf_ven_tabla);
+    e.Abrir(archivo);*/
 
 
 public class Exportar {
