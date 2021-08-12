@@ -20,6 +20,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -64,11 +66,21 @@ public class crud_banco extends javax.swing.JFrame {
     Vector<String> lista1;
     Vector<String> lista2;
     Vector<String> lista3;
+    Vector<String> lista4;
+    Vector<String> lista5;
+    Vector<String> lista6;
+    Calendar fecha_actual = new GregorianCalendar();
     ArrayList <Articulos> ListaArticulos = new ArrayList <> ();
     ArrayList <Packs> ListaPacks = new ArrayList <> ();
+    ArrayList <Orden_Compra> ListaOCompra = new ArrayList <> ();
     public static String id_pack_actualizar;
+    public static String id_orden_compra;
     public crud_banco() {
         initComponents();
+        cli_fec_nacimiento_field.setCalendar(fecha_actual);
+        jDateChooser1.setCalendar(fecha_actual);
+        jDateChooser6.setCalendar(fecha_actual);
+        Mostrar_ORDEN_COMPRA();
         Mostrar_RRSS("");
         Mostrar_COMUNA("");
         Mostrar_BANCO("");
@@ -87,11 +99,13 @@ public class crud_banco extends javax.swing.JFrame {
         Mostrar_COMBOX_COMUNAS();
         Mostrar_COMBOX_PROVEEDORES();
         Mostrar_COMBOX_ARTICULOS();
+        Mostrar_COMPRA_RECOMPRA();
         BORRAR_RECOMPRA_1();
         BORRAR_RECOMPRA_2();
         Mostrar_LISTADO_FACTURAS();
+        c_regcom_preciototal_field.setEnabled(false);
         //Mostrar_VENTA_TABLA("");
-        
+         
         
                 
         int panelX = (getWidth() - Panel_tab_menu.getWidth() - getInsets().left - getInsets().right) / 2;
@@ -102,6 +116,9 @@ public class crud_banco extends javax.swing.JFrame {
         lista1=new Vector<>();
         lista2=new Vector<>();
         lista3=new Vector<>();
+        lista4=new Vector<>();
+        lista5=new Vector<>();
+        lista6=new Vector<>();
         cargarLista1(1);
         SpinnerNumberModel nm = new SpinnerNumberModel();
         nm.setMaximum(1000);
@@ -112,6 +129,34 @@ public class crud_banco extends javax.swing.JFrame {
         
         
         
+    }
+    
+    private void Mostrar_ORDEN_COMPRA(){
+        Statement st;
+        String []datos = new String [4];   
+        DefaultTableModel modelo = (DefaultTableModel) packs_table1.getModel();
+        modelo.setNumRows(0);
+        int i=0;
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT ORC_ID_ORDEN, ORC_FECHA_ORDEN, proveedor.PRO_RAZON FROM orden_compra INNER JOIN proveedor ON orden_compra.PRO_ID_PROVEEDOR = proveedor.PRO_ID_PROVEEDOR ORDER BY ORC_ID_ORDEN ASC");
+            while (rs.next()){
+                datos[0]=rs.getString(1); 
+                datos[1]=rs.getString(2);
+                datos[2]=rs.getString(3);                
+                
+                modelo.addRow(datos);  
+                Orden_Compra temporal;
+                temporal = new Orden_Compra(rs.getString(1), rs.getString(3), rs.getString(2));
+                ListaOCompra.add(i, temporal);
+            }
+                       
+            packs_table1.setModel(modelo);
+            st.close();
+                        
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
     
     private void Mostrar_ARTICULO(String valor){
@@ -139,8 +184,9 @@ public class crud_banco extends javax.swing.JFrame {
                     datos[7] = "activado";
                 }
                 else datos[7]= "desactivado";
-                if(valor.equals("")){
-                    modelo.addRow(datos);           
+                modelo.addRow(datos);
+                if(valor.equals("")){  
+                    modelo.addRow(datos);  
                     Articulos temporal;
                     temporal = new Articulos(rs.getString(9),rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(10), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
                     ListaArticulos.add(i, temporal);
@@ -208,12 +254,14 @@ public class crud_banco extends javax.swing.JFrame {
     
     private void Mostrar_ART_PRO_COMBO(){
         jComboBox2.removeAllItems();
+        jComboBox3.removeAllItems();
         Statement st;
         try{
             st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT PRO_RAZON FROM proveedor WHERE ESTADO = 1");
             while (rs.next()){
                 jComboBox2.addItem(rs.getString(1));
+                jComboBox3.addItem(rs.getString(1));
             }
         }
         catch (SQLException ex) {
@@ -425,16 +473,17 @@ public class crud_banco extends javax.swing.JFrame {
         }
     }
     
+    
     //PESTAÑA COMPRAS
     private void Mostrar_COMPRA_RECOMPRA(){
         Statement st;
         String campo1 = c_regcom_numfac_field.getText();
-        String []datos = new String [7];   
+        String []datos = new String [8];   
         DefaultTableModel modelo = (DefaultTableModel) c_regcom_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT DET_ID_DETALLE, FAC_NUMERO, ART_CODIGO, ART_NOMBRE, DET_CANTIDAD, "
+            ResultSet rs = st.executeQuery("SELECT DET_ID_DETALLE, FAC_NUMERO, FAC_LOTE, ART_CODIGO, ART_NOMBRE, DET_CANTIDAD, "
                     + "DET_VALORUNIDAD_FACTURA, DET_FECHA_VENCIMIENTO_DATE FROM factura_detalle "
                     + "INNER JOIN articulo ON factura_detalle.ART_ID_ARTICULO = articulo.ART_ID_ARTICULO "
                     + "INNER JOIN factura ON factura_detalle.FAC_ID_FACTURA = factura.FAC_ID_FACTURA where FAC_NUMERO LIKE '"+campo1+"'");
@@ -446,6 +495,7 @@ public class crud_banco extends javax.swing.JFrame {
                 datos[4]=rs.getString(5);
                 datos[5]=rs.getString(6);
                 datos[6]=rs.getString(7);
+                datos[7]=rs.getString(8);
                 modelo.addRow(datos);           
    
             }
@@ -461,12 +511,12 @@ public class crud_banco extends javax.swing.JFrame {
     private void Mostrar_COMPRA_AGREGAR_ART(){
         Statement st;
         String campo1 = c_regcom_numfac_field.getText();
-        String []datos = new String [7];   
+        String []datos = new String [8];   
         DefaultTableModel modelo = (DefaultTableModel) c_regcom_tabla.getModel();
         modelo.setNumRows(0);
         try {
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT DET_ID_DETALLE, FAC_NUMERO, ART_CODIGO, ART_NOMBRE, DET_CANTIDAD, "
+            ResultSet rs = st.executeQuery("SELECT DET_ID_DETALLE, FAC_NUMERO, FAC_LOTE, ART_CODIGO, ART_NOMBRE, DET_CANTIDAD, "
                     + "DET_VALORUNIDAD_FACTURA, DET_FECHA_VENCIMIENTO_DATE FROM factura_detalle "
                     + "INNER JOIN articulo ON factura_detalle.ART_ID_ARTICULO = articulo.ART_ID_ARTICULO "
                     + "INNER JOIN factura ON factura_detalle.FAC_ID_FACTURA = factura.FAC_ID_FACTURA where FAC_NUMERO LIKE '"+campo1+"'");
@@ -478,6 +528,7 @@ public class crud_banco extends javax.swing.JFrame {
                 datos[4]=rs.getString(5);
                 datos[5]=rs.getString(6);
                 datos[6]=rs.getString(7);
+                datos[7]=rs.getString(8);
                 modelo.addRow(datos);           
    
             }
@@ -488,6 +539,7 @@ public class crud_banco extends javax.swing.JFrame {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
     
     //PESTAÑA VENTAS
     
@@ -664,7 +716,6 @@ public class crud_banco extends javax.swing.JFrame {
     }
     
     private void BORRAR_RECOMPRA_2(){
-        c_regcom_numfac_field.setText(null);
         c_regcom_rut_field.setText(null);
         c_regcom_prov_combox.setSelectedItem(null);
         c_regcom_fecha_rec.setDate(null);
@@ -673,11 +724,12 @@ public class crud_banco extends javax.swing.JFrame {
         c_regcom_unid_field.setText(null);
         c_regcom_precio_field.setText(null);
         c_regcom_fecha_venc.setDate(null);
+        c_regcom_lote_field.setText(null);
+        c_regcom_preciototal_field.setText(null);
         
         detallefactura1111.setText(null);
         
     }
-    
     
     
     private void Mostrar_LISTADO_FACTURAS(){
@@ -691,10 +743,10 @@ public class crud_banco extends javax.swing.JFrame {
             ResultSet numfact = stc.executeQuery("SELECT SUM(DET_VALORUNIDAD_FACTURA + DET_CANTIDAD) as PRECIOFINAL FROM factura_detalle");
             numfact.next();    
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT factura_detalle.FAC_ID_FACTURA, FAC_FECHA_FACTURA, PRO_RAZON, SUM(DET_VALORTOTAL_FACTURA) FROM factura "
+            ResultSet rs = st.executeQuery("SELECT FAC_NUMERO, FAC_FECHA_FACTURA, PRO_RAZON, SUM(DET_VALORTOTAL_FACTURA) FROM factura "
                     + "INNER JOIN factura_detalle ON factura_detalle.FAC_ID_FACTURA = factura.FAC_ID_FACTURA "
                     + "INNER JOIN proveedor ON proveedor.PRO_ID_PROVEEDOR = factura.PRO_ID_PROVEEDOR "
-                    + "GROUP BY factura_detalle.FAC_ID_FACTURA");
+                    + "GROUP BY factura.FAC_NUMERO");
             while (rs.next()){
                 //datos[0]=numfact.getString(1);
                 datos[0]=rs.getString(1);
@@ -725,7 +777,7 @@ public class crud_banco extends javax.swing.JFrame {
             st = con.createStatement();
             ResultSet rs = st.executeQuery("SELECT ART_CODIGO, ART_NOMBRE, DET_CANTIDAD, DET_VALORUNIDAD_FACTURA FROM factura_detalle "
                     + "INNER JOIN factura ON factura_detalle.FAC_ID_FACTURA = factura.FAC_ID_FACTURA "
-                    + "INNER JOIN articulo ON factura_detalle.ART_ID_ARTICULO = articulo.ART_ID_ARTICULO where factura_detalle.FAC_ID_FACTURA LIKE '"+campo1+"'");
+                    + "INNER JOIN articulo ON factura_detalle.ART_ID_ARTICULO = articulo.ART_ID_ARTICULO where factura.FAC_NUMERO LIKE '"+campo1+"'");
             while (rs.next()){
                 datos[0]=rs.getString(1); 
                 datos[1]=rs.getString(2);
@@ -764,7 +816,7 @@ public class crud_banco extends javax.swing.JFrame {
         if(flag == 1){
             packeditor_list.setListData(lista1);
             packedited_list.setListData(lista2);
-        }
+        }  
     }
     
     private void Editar_listas(String id_pack){
@@ -780,6 +832,33 @@ public class crud_banco extends javax.swing.JFrame {
             lista1.removeAll(lista3);
            
 
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void Editar_listas2(String id_orden, String proveedor){
+        try {
+            lista5.removeAllElements();
+            lista6.removeAllElements();
+            Statement st;
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, o.CANTIDAD FROM orden_compra_detalle o INNER JOIN articulo a ON a.ART_ID_ARTICULO = o.ART_ID_ARTICULO WHERE o.ORC_ID_ORDEN = "+id_orden);
+            while (rs.next()){
+                lista5.add(rs.getString(1)+" ("+rs.getString(2)+")");
+                lista6.add(rs.getString(1));
+            }
+            
+            for(int i = 0; i < ListaArticulos.size();i++){
+                Articulos actual = ListaArticulos.get(i);
+                if(actual.getPro_razon().equals(proveedor) && actual.getEstado().equals("1")){
+                    lista4.add(actual.getNombre());
+                }
+            }
+            
+            lista4.removeAll(lista6);
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -896,8 +975,6 @@ public class crud_banco extends javax.swing.JFrame {
         tab_solpedido = new javax.swing.JPanel();
         jPanel25 = new javax.swing.JPanel();
         jLabel95 = new javax.swing.JLabel();
-        jTextField17 = new javax.swing.JTextField();
-        jButton55 = new javax.swing.JButton();
         jButton56 = new javax.swing.JButton();
         jLabel98 = new javax.swing.JLabel();
         jButton23 = new javax.swing.JButton();
@@ -909,10 +986,11 @@ public class crud_banco extends javax.swing.JFrame {
         jScrollPane26 = new javax.swing.JScrollPane();
         packedited_list1 = new javax.swing.JList<>();
         jDateChooser6 = new com.toedter.calendar.JDateChooser();
+        deactivatepack_button1 = new javax.swing.JButton();
+        jComboBox3 = new javax.swing.JComboBox<>();
         Packs1 = new javax.swing.JLabel();
         jScrollPane27 = new javax.swing.JScrollPane();
         packs_table1 = new javax.swing.JTable();
-        deactivatepack_button1 = new javax.swing.JButton();
         deactivatepack_button2 = new javax.swing.JButton();
         deactivatepack_button3 = new javax.swing.JButton();
         tab_regcompra = new javax.swing.JPanel();
@@ -924,11 +1002,11 @@ public class crud_banco extends javax.swing.JFrame {
         c_regcom_rut_field = new javax.swing.JTextField();
         jLabel105 = new javax.swing.JLabel();
         c_regcom_bt_buscar = new javax.swing.JButton();
-        c_regcom_fecha_rec = new com.toedter.calendar.JDateChooser();
         c_regcom_prov_combox = new javax.swing.JComboBox<>();
         c_regcom_bt_cancelarprov = new javax.swing.JButton();
         c_regcom_bt_guardar = new javax.swing.JButton();
         detallefactura1111 = new javax.swing.JLabel();
+        c_regcom_fecha_rec = new com.toedter.calendar.JDateChooser();
         jPanel31 = new javax.swing.JPanel();
         jLabel107 = new javax.swing.JLabel();
         c_regcom_cod_field = new javax.swing.JTextField();
@@ -941,18 +1019,17 @@ public class crud_banco extends javax.swing.JFrame {
         jLabel115 = new javax.swing.JLabel();
         c_regcom_precio_field = new javax.swing.JTextField();
         jLabel117 = new javax.swing.JLabel();
-        c_regcom_fecha_venc = new com.toedter.calendar.JDateChooser();
         c_regcom_preciototal_field = new javax.swing.JTextField();
         jLabel118 = new javax.swing.JLabel();
         c_regcom_lote_field = new javax.swing.JTextField();
         jLabel119 = new javax.swing.JLabel();
+        c_regcom_fecha_venc = new com.toedter.calendar.JDateChooser();
         jLabel52 = new javax.swing.JLabel();
         Packs2 = new javax.swing.JLabel();
         jScrollPane28 = new javax.swing.JScrollPane();
         c_regcom_tabla = new javax.swing.JTable();
         c_regcom_bt_editar = new javax.swing.JButton();
         c_regcom_bt_eliminar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         tab_revifactura = new javax.swing.JPanel();
         jPanel28 = new javax.swing.JPanel();
         jLabel109 = new javax.swing.JLabel();
@@ -961,8 +1038,8 @@ public class crud_banco extends javax.swing.JFrame {
         Packs3 = new javax.swing.JLabel();
         jScrollPane29 = new javax.swing.JScrollPane();
         c_revfac_tabla_fac = new javax.swing.JTable();
-        deactivatepack_button6 = new javax.swing.JButton();
-        deactivatepack_button7 = new javax.swing.JButton();
+        c_revfac_bt_descargar = new javax.swing.JButton();
+        c_revfac_bt_seleccionar = new javax.swing.JButton();
         Packs4 = new javax.swing.JLabel();
         jScrollPane30 = new javax.swing.JScrollPane();
         c_revfac_tabla_facdet = new javax.swing.JTable();
@@ -1226,6 +1303,7 @@ public class crud_banco extends javax.swing.JFrame {
         usuario_tabla = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         Panel_tab_menu.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Panel_tab_menu.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -2099,23 +2177,7 @@ public class crud_banco extends javax.swing.JFrame {
         jPanel25.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Solicitudes de Pedido", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 18))); // NOI18N
 
         jLabel95.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel95.setText("Número pedido:");
-
-        jTextField17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jTextField17.setText("00012");
-        jTextField17.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField17ActionPerformed(evt);
-            }
-        });
-
-        jButton55.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton55.setText("Guardar");
-        jButton55.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton55ActionPerformed(evt);
-            }
-        });
+        jLabel95.setText("Proveedor:");
 
         jButton56.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jButton56.setText("Cancelar");
@@ -2137,11 +2199,6 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         packeditor_list1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        packeditor_list1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane25.setViewportView(packeditor_list1);
 
         topack_button1.setText(">");
@@ -2159,12 +2216,24 @@ public class crud_banco extends javax.swing.JFrame {
         });
 
         packedited_list1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        packedited_list1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane26.setViewportView(packedited_list1);
+
+        jDateChooser6.setToolTipText("");
+
+        deactivatepack_button1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        deactivatepack_button1.setText("Generar Orden de Compra");
+        deactivatepack_button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deactivatepack_button1ActionPerformed(evt);
+            }
+        });
+
+        jComboBox3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel25Layout = new javax.swing.GroupLayout(jPanel25);
         jPanel25.setLayout(jPanel25Layout);
@@ -2173,27 +2242,29 @@ public class crud_banco extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel25Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton56, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton55, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(99, 99, 99))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(deactivatepack_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel25Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel25Layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
                         .addComponent(jScrollPane25, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
+                        .addGap(100, 100, 100)
                         .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(frompack_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(addunits_spinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(topack_button1, javax.swing.GroupLayout.Alignment.TRAILING))))
+                                .addComponent(topack_button1, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel25Layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
                         .addComponent(jLabel95)
-                        .addGap(41, 41, 41)
-                        .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52)))
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel25Layout.createSequentialGroup()
@@ -2209,12 +2280,13 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jDateChooser6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel98))
+                        .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel98)
+                            .addComponent(jButton23)))
                     .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel95)
-                        .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton23)))
-                .addGap(15, 15, 15)
+                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(17, 17, 17)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel25Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
@@ -2226,10 +2298,10 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jScrollPane25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(24, 24, Short.MAX_VALUE)
+                .addGap(22, 22, Short.MAX_VALUE)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton55)
-                    .addComponent(jButton56))
+                    .addComponent(jButton56)
+                    .addComponent(deactivatepack_button1))
                 .addGap(30, 30, 30))
         );
 
@@ -2242,21 +2314,14 @@ public class crud_banco extends javax.swing.JFrame {
         packs_table1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         packs_table1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Número Pedido", "Fecha Pedido", "Cantidad de artículos", "Selección"
+                "Número Pedido", "Fecha Pedido", "Proveedor", "Selección"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Boolean.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true
@@ -2278,11 +2343,13 @@ public class crud_banco extends javax.swing.JFrame {
         });
         jScrollPane27.setViewportView(packs_table1);
 
-        deactivatepack_button1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        deactivatepack_button1.setText("Generar Orden de Compra");
-
         deactivatepack_button2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         deactivatepack_button2.setText("Ver");
+        deactivatepack_button2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deactivatepack_button2ActionPerformed(evt);
+            }
+        });
 
         deactivatepack_button3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         deactivatepack_button3.setText("Editar");
@@ -2299,12 +2366,11 @@ public class crud_banco extends javax.swing.JFrame {
             .addGroup(tab_solpedidoLayout.createSequentialGroup()
                 .addGroup(tab_solpedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tab_solpedidoLayout.createSequentialGroup()
-                        .addContainerGap(853, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(deactivatepack_button3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
+                        .addGap(56, 56, 56)
                         .addComponent(deactivatepack_button2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(deactivatepack_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(93, 93, 93))
                     .addGroup(tab_solpedidoLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addGroup(tab_solpedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2326,7 +2392,6 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jScrollPane27, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addGroup(tab_solpedidoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(deactivatepack_button1)
                     .addComponent(deactivatepack_button2)
                     .addComponent(deactivatepack_button3))
                 .addGap(319, 319, 319))
@@ -2369,8 +2434,6 @@ public class crud_banco extends javax.swing.JFrame {
                 c_regcom_bt_buscarActionPerformed(evt);
             }
         });
-
-        c_regcom_fecha_rec.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         c_regcom_prov_combox.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         c_regcom_prov_combox.addItemListener(new java.awt.event.ItemListener() {
@@ -2427,20 +2490,19 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel27Layout.createSequentialGroup()
                         .addComponent(c_regcom_bt_cancelarprov, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(c_regcom_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(c_regcom_bt_guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel27Layout.createSequentialGroup()
                         .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel27Layout.createSequentialGroup()
                                 .addComponent(jLabel103, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel27Layout.createSequentialGroup()
                                 .addComponent(jLabel105, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                .addGap(43, 43, 43)))
                         .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(c_regcom_prov_combox, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(c_regcom_fecha_rec, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(57, 57, 57))))
+                            .addComponent(c_regcom_fecha_rec, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel27Layout.setVerticalGroup(
             jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2453,13 +2515,12 @@ public class crud_banco extends javax.swing.JFrame {
                     .addComponent(c_regcom_prov_combox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel105, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel104)
-                            .addComponent(c_regcom_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(c_regcom_fecha_rec, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                    .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel104)
+                        .addComponent(c_regcom_rut_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel105, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(c_regcom_fecha_rec, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(c_regcom_bt_cancelarprov)
                     .addComponent(c_regcom_bt_guardar)
@@ -2588,7 +2649,7 @@ public class crud_banco extends javax.swing.JFrame {
                         .addGap(14, 14, 14)
                         .addComponent(jLabel117)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(c_regcom_fecha_venc, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(c_regcom_fecha_venc, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel31Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
@@ -2599,7 +2660,7 @@ public class crud_banco extends javax.swing.JFrame {
                         .addComponent(jLabel115)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(c_regcom_precio_field, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel118)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(c_regcom_preciototal_field, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2628,14 +2689,14 @@ public class crud_banco extends javax.swing.JFrame {
                     .addComponent(c_regcom_unid_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(c_regcom_fecha_venc, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(c_regcom_bt_cancelarart)
+                        .addComponent(c_regcom_bt_agregar))
                     .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(c_regcom_lote_field, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel119)
                         .addComponent(jLabel117))
-                    .addGroup(jPanel31Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(c_regcom_bt_cancelarart)
-                        .addComponent(c_regcom_bt_agregar)))
+                    .addComponent(c_regcom_fecha_venc, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2652,24 +2713,24 @@ public class crud_banco extends javax.swing.JFrame {
         c_regcom_tabla.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         c_regcom_tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Número Factura", "Código", "Artículo", "Cantidad", "Precio ($)", "Fecha Vencimiento", "Selección"
+                "ID", "Número Factura", "Lote", "Código", "Artículo", "Cantidad", "Precio ($)", "Fecha Vencimiento", "Selección"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, true, true, true
+                false, false, true, false, false, false, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -2706,13 +2767,6 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("RECARGAR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout tab_regcompraLayout = new javax.swing.GroupLayout(tab_regcompra);
         tab_regcompra.setLayout(tab_regcompraLayout);
         tab_regcompraLayout.setHorizontalGroup(
@@ -2726,9 +2780,7 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(tab_regcompraLayout.createSequentialGroup()
                         .addGroup(tab_regcompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(tab_regcompraLayout.createSequentialGroup()
-                                .addGap(264, 264, 264)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(52, 52, 52)
+                                .addGap(430, 430, 430)
                                 .addComponent(Packs2, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane28, javax.swing.GroupLayout.PREFERRED_SIZE, 1194, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(tab_regcompraLayout.createSequentialGroup()
@@ -2736,13 +2788,13 @@ public class crud_banco extends javax.swing.JFrame {
                                 .addComponent(c_regcom_bt_editar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(c_regcom_bt_eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(277, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(tab_regcompraLayout.createSequentialGroup()
                         .addGroup(tab_regcompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel52, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tab_regcompraLayout.createSequentialGroup()
                                 .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 226, Short.MAX_VALUE)))
+                                .addGap(0, 252, Short.MAX_VALUE)))
                         .addGap(48, 48, 48))))
         );
         tab_regcompraLayout.setVerticalGroup(
@@ -2755,16 +2807,14 @@ public class crud_banco extends javax.swing.JFrame {
                 .addGap(1, 1, 1)
                 .addComponent(jPanel31, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(tab_regcompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Packs2)
-                    .addComponent(jButton1))
+                .addComponent(Packs2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane28, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tab_regcompraLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(c_regcom_bt_editar)
                     .addComponent(c_regcom_bt_eliminar))
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addContainerGap(208, Short.MAX_VALUE))
         );
 
         pesta_compras.addTab("Registro Compra", tab_regcompra);
@@ -2857,21 +2907,20 @@ public class crud_banco extends javax.swing.JFrame {
             }
         });
         jScrollPane29.setViewportView(c_revfac_tabla_fac);
-        c_revfac_tabla_fac.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
 
-        deactivatepack_button6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        deactivatepack_button6.setText("Descargar");
-        deactivatepack_button6.addActionListener(new java.awt.event.ActionListener() {
+        c_revfac_bt_descargar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        c_revfac_bt_descargar.setText("Descargar");
+        c_revfac_bt_descargar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deactivatepack_button6ActionPerformed(evt);
+                c_revfac_bt_descargarActionPerformed(evt);
             }
         });
 
-        deactivatepack_button7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        deactivatepack_button7.setText("Mostrar en Tabla");
-        deactivatepack_button7.addActionListener(new java.awt.event.ActionListener() {
+        c_revfac_bt_seleccionar.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        c_revfac_bt_seleccionar.setText("Seleccionar Factura");
+        c_revfac_bt_seleccionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deactivatepack_button7ActionPerformed(evt);
+                c_revfac_bt_seleccionarActionPerformed(evt);
             }
         });
 
@@ -2891,14 +2940,14 @@ public class crud_banco extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Código", "Artículo", "Cantidad", "Precio ($)", "Selección"
+                "Código", "Artículo", "Cantidad", "Precio ($)", "Acción"
             }
         ) {
             Class[] types = new Class [] {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, true
+                false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -2935,16 +2984,16 @@ public class crud_banco extends javax.swing.JFrame {
                         .addGroup(tab_revifacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane30, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(tab_revifacturaLayout.createSequentialGroup()
-                                .addGap(0, 271, Short.MAX_VALUE)
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(Packs4, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(166, 166, 166)
-                                .addComponent(deactivatepack_button7)
+                                .addComponent(c_revfac_bt_seleccionar)
                                 .addGap(47, 47, 47))
                             .addComponent(jScrollPane29))
                         .addGap(421, 421, 421))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tab_revifacturaLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(deactivatepack_button6, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(c_revfac_bt_descargar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(483, 483, 483))
         );
         tab_revifacturaLayout.setVerticalGroup(
@@ -2958,13 +3007,13 @@ public class crud_banco extends javax.swing.JFrame {
                 .addComponent(jScrollPane29, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addGroup(tab_revifacturaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(deactivatepack_button7)
+                    .addComponent(c_revfac_bt_seleccionar)
                     .addComponent(Packs4))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane30, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(deactivatepack_button6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(226, Short.MAX_VALUE))
+                .addComponent(c_revfac_bt_descargar, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pesta_compras.addTab("Revisión de Factura", tab_revifactura);
@@ -5783,7 +5832,16 @@ public class crud_banco extends javax.swing.JFrame {
 
         Panel_tab_menu.addTab("Administrador", tab_administrador);
 
-        getContentPane().add(Panel_tab_menu, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Panel_tab_menu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Panel_tab_menu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -6642,7 +6700,7 @@ public class crud_banco extends javax.swing.JFrame {
         cli_telefono_field.setText(null);
         cli_email_field.setText(null);
         cli_rut_field.setText(null);
-        cli_fec_nacimiento_field.setDate(null);
+        cli_fec_nacimiento_field.setCalendar(fecha_actual);
     }//GEN-LAST:event_cli_bt_cancelarActionPerformed
 //desactivar cliente
     private void cli_bt_desactivarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cli_bt_desactivarActionPerformed
@@ -6803,37 +6861,89 @@ public class crud_banco extends javax.swing.JFrame {
     private void ban_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ban_bt_buscarActionPerformed
         Mostrar_BANCO(ban_buscar_bar.getText());
     }//GEN-LAST:event_ban_bt_buscarActionPerformed
-
-    private void jTextField17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField17ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField17ActionPerformed
-
-    private void jButton55ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton55ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton55ActionPerformed
-
+//cancelar orden de compra
     private void jButton56ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton56ActionPerformed
-        // TODO add your handling code here:
+        lista4.removeAllElements();
+        lista5.removeAllElements();
+        lista6.removeAllElements();
+        packeditor_list1.setListData(lista4);
+        packedited_list1.setListData(lista5);
+        jDateChooser6.setCalendar(fecha_actual);
+        jButton23.setEnabled(true);
+        
     }//GEN-LAST:event_jButton56ActionPerformed
-
+// buscar orden de compra
     private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
-        // TODO add your handling code here:
+        lista4.removeAllElements();
+        lista5.removeAllElements();
+        lista6.removeAllElements();
+        String pro_seleccionado = (String) jComboBox3.getSelectedItem();
+        
+        for(int i = 0; i < ListaArticulos.size();i++){
+            Articulos actual = ListaArticulos.get(i);
+            if(actual.getPro_razon().equals(pro_seleccionado) && actual.getEstado().equals("1")){
+                lista4.add(actual.getNombre());
+            }
+        }
+        packeditor_list1.setListData(lista4);
+        packedited_list1.setListData(lista5);
+       
     }//GEN-LAST:event_jButton23ActionPerformed
-
+//agregar articulo a compra
     private void topack_button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_topack_button1ActionPerformed
-        // TODO add your handling code here:
+        int seleccion = packeditor_list1.getSelectedIndex();
+        int cantidad = (int) addunits_spinner1.getValue();
+        packedited_list1.removeAll();
+        if(cantidad  == 0){
+            lista5.add(lista4.get(seleccion)+ " (1)");
+        }else{
+            lista5.add(lista4.get(seleccion)+ " ("+cantidad+")");
+        }
+        lista6.add(lista4.get(seleccion));
+        lista4.remove(seleccion);
+        packeditor_list1.setListData(lista4);
+        packedited_list1.setListData(lista5);
+        if (lista5.size() > 0){
+            jButton23.setEnabled(false);
+        }
     }//GEN-LAST:event_topack_button1ActionPerformed
-
+//quitar articulo a compra
     private void frompack_button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_frompack_button1ActionPerformed
-        // TODO add your handling code here:
+        int seleccion = packedited_list1.getSelectedIndex();
+        packeditor_list1.removeAll();
+        int borrar = lista5.get(seleccion).indexOf("(");
+        //int y = lista2.get(i).indexOf(")");
+        String temp = lista5.get(seleccion).substring(0, borrar);
+        lista4.add(temp);
+        lista6.remove(seleccion);
+        lista5.remove(seleccion);
+        packeditor_list1.setListData(lista4);
+        packedited_list1.setListData(lista5);
+        if (lista5.isEmpty()){
+            jButton23.setEnabled(true);
+        }
+        
     }//GEN-LAST:event_frompack_button1ActionPerformed
 
     private void packs_table1ComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_packs_table1ComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_packs_table1ComponentAdded
-
+//editar orden de compra
     private void deactivatepack_button3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_button3ActionPerformed
-        // TODO add your handling code here:
+        int cantidad_filas = packs_table1.getRowCount();
+        String id_orden;
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (packs_table1.isCellSelected(i, 3) == true){
+                jComboBox3.setSelectedItem(packs_table1.getValueAt(i,2));
+                jComboBox3.setEnabled(true);
+                id_orden = (String) packs_table1.getValueAt(i,0);
+                id_orden_compra = id_orden;
+                Editar_listas2(id_orden,(String) packs_table1.getValueAt(i,2));
+                packeditor_list1.setListData(lista4);
+                packedited_list1.setListData(lista5);     
+            }
+        }
+        
     }//GEN-LAST:event_deactivatepack_button3ActionPerformed
 //guardar articulo
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
@@ -6917,7 +7027,7 @@ public class crud_banco extends javax.swing.JFrame {
         jTextField5.setText(null);
         jTextField6.setText(null);
         jTextField7.setText(null);
-        jDateChooser1.setDate(null);
+        jDateChooser1.setCalendar(fecha_actual);
     }//GEN-LAST:event_jButton8ActionPerformed
 //desactivar articulo
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -6959,6 +7069,14 @@ private void borrar_pck_art(String id) throws SQLException{
         p.executeUpdate();
         p.close();
         id_pack_actualizar = null;
+    }
+
+private void borrar_orden_art(String id) throws SQLException{
+        PreparedStatement p;
+        p = con.prepareStatement("DELETE FROM `orden_compra_detalle` WHERE `orden_compra_detalle`.`ORC_ID_ORDEN` = ?");
+        p.setString(1, id);
+        p.executeUpdate();
+        p.close();
     }
 
 //guardar pack
@@ -7520,64 +7638,235 @@ private void borrar_pck_art(String id) throws SQLException{
         Mostrar_DESPACHOS_TABLA("");
     }//GEN-LAST:event_ven_con_bt_rependienteActionPerformed
 
-    private void c_revfac_numfac_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_revfac_numfac_fieldActionPerformed
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_c_revfac_numfac_fieldActionPerformed
-
-    private void c_revfac_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_revfac_bt_buscarActionPerformed
-        Mostrar_FACTURA_DETALLE();
-    }//GEN-LAST:event_c_revfac_bt_buscarActionPerformed
-
-    private void c_revfac_tabla_facComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_c_revfac_tabla_facComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_revfac_tabla_facComponentAdded
-
-    private void c_revfac_tabla_facdetComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_c_revfac_tabla_facdetComponentAdded
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_revfac_tabla_facdetComponentAdded
-
-    private void c_regcom_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_editarActionPerformed
-        int cantidad_filas = c_regcom_tabla.getRowCount();
-
-        for (int i = 0; i <= cantidad_filas; i++){
-            if (c_regcom_tabla.isCellSelected(i, 7) == true){
-                detallefactura1111.setText((String) c_regcom_tabla.getValueAt(i,0));
-                c_regcom_numfac_field.setText((String) c_regcom_tabla.getValueAt(i,1));
-                c_regcom_cod_field.setText((String) c_regcom_tabla.getValueAt(i,2));
-                c_regcom_art_combox.setSelectedItem((String) c_regcom_tabla.getValueAt(i,3));
-                c_regcom_unid_field.setText((String) c_regcom_tabla.getValueAt(i,4));
-                c_regcom_precio_field.setText((String) c_regcom_tabla.getValueAt(i,5));
+    }//GEN-LAST:event_jComboBox3ActionPerformed
+//generar orden de compra
+    private void deactivatepack_button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_button1ActionPerformed
+        String campo1 = (String) jComboBox3.getSelectedItem();//nombre proveedor
+        java.util.Date utilDate = (java.util.Date) jDateChooser6.getDate();
+        java.sql.Date fecha = new java.sql.Date(utilDate.getTime());
+        jComboBox3.setEnabled(true);
+        
+        int flag = 1;
+        
+        try {
+            if (packedited_list1.getModel().getSize() == 0){
+                JOptionPane.showMessageDialog(null, "Agrege articulos a la orden de compra");
+            }
+            
+            else {
+                Statement st;
+                st = con.createStatement();
+                ResultSet id_proveedor = st.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor where PRO_RAZON = '"+campo1+"'");
+                id_proveedor.next();
+                String c_articulo;
+                PreparedStatement pps;
                 
-                String fecha = c_regcom_tabla.getValueAt(i,6).toString();
-                SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
+                for(int i = 0; i <= ListaOCompra.size()-1; i++){
+                    if (ListaOCompra.get(i).getId().equals(id_orden_compra)){
+                        pps = con.prepareStatement("update orden_compra set ORC_FECHA_ORDEN = ? where ORC_ID_ORDEN = ?");
+                        pps.setDate(1, fecha);
+                        pps.setString(2, id_orden_compra);
+                        pps.executeUpdate();
+                        pps.close();
+                        borrar_orden_art(id_orden_compra);
+                        flag = 0;                      
+                    }
+                }
+                
+                if(flag == 1){
+                    
+                    pps = con.prepareStatement("INSERT INTO orden_compra (PRO_ID_PROVEEDOR, ORC_FECHA_ORDEN) VALUES (?,?)");
+                    pps.setString(1, id_proveedor.getString(1));
+                    pps.setDate(2, fecha);
+                    pps.executeUpdate();
+                    pps.close();  
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                }
+                else JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                
+                Mostrar_ORDEN_COMPRA();
+                if(flag == 1){
+                    id_orden_compra = ListaOCompra.get(0).getId();    
+                }
+                
+                for(int j = 0; j <= ListaArticulos.size()-1; j++){
+                    for(int k = 0; k <= lista5.size()-1; k++){
+                        if(ListaArticulos.get(j).getNombre().equals(obtener_nombre(lista5.get(k)))){
+                            c_articulo = obtener_cantidad(lista5.get(k));
+                            pps = con.prepareStatement("INSERT INTO orden_compra_detalle (ART_ID_ARTICULO, OCD_CANTIDAD, ORC_ID_ORDEN) VALUES (?,?,?)");
+                            pps.setString(1, ListaArticulos.get(j).getId());
+                            pps.setString(2, c_articulo);
+                            pps.setString(3, id_orden_compra);
+                            pps.executeUpdate();
+                            pps.close();
+                        }
+                    }
+                        
+                    
+                }
+                lista4.removeAllElements();
+                lista5.removeAllElements();
+                lista6.removeAllElements();
+                packeditor_list1.setListData(lista4);
+                packedited_list1.setListData(lista5);
+                jDateChooser6.setCalendar(fecha_actual);
+                jButton23.setEnabled(true);
+                id_orden_compra = null;
+            }    
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "no se pudo crear orden de compra");
+        }        
+    }//GEN-LAST:event_deactivatepack_button1ActionPerformed
+//ver orden de compra
+    private void deactivatepack_button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_button2ActionPerformed
+        int cantidad_filas = packs_table1.getRowCount();
+        String id_orden;
+        String cadena = "Articulos Agregados: \n";
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (packs_table1.isCellSelected(i, 3) == true){
+                id_orden = (String) packs_table1.getValueAt(i, 0);
+                Statement st;
                 try {
-                    c_regcom_fecha_venc.setDate(formatofecha.parse(fecha));
-                } catch (ParseException ex) {
+                    st = con.createStatement();
+                    ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, o.CANTIDAD FROM orden_compra_detalle o INNER JOIN articulo a ON a.ART_ID_ARTICULO = o.ART_ID_ARTICULO WHERE o.ORC_ID_ORDEN = "+ id_orden);
+                    while (rs.next()){
+                        cadena += rs.getString(2)+" - "+rs.getString(1)+"\n";
+                    }
+                } catch (SQLException ex) {
                     Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                
             }
         }
-        String n1 = c_regcom_unid_field.getText();
-        String n2 = c_regcom_precio_field.getText();
-        int num11 = Integer.parseInt(n1);
-        int num22 = Integer.parseInt(n2);
-        c_regcom_preciototal_field.setText(Integer.toString(num22*num11));
-    }//GEN-LAST:event_c_regcom_bt_editarActionPerformed
+        JOptionPane.showMessageDialog(null, cadena);
+    }//GEN-LAST:event_deactivatepack_button2ActionPerformed
 
-    private void c_regcom_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_c_regcom_tablaComponentAdded
+    private void c_regcom_numfac_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_numfac_fieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_tablaComponentAdded
+    }//GEN-LAST:event_c_regcom_numfac_fieldActionPerformed
 
-    private void c_regcom_bt_cancelarartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_cancelarartActionPerformed
-        c_regcom_cod_field.setText(null);
-        c_regcom_art_combox.setSelectedItem(null);
-        c_regcom_unid_field.setText(null);
-        c_regcom_precio_field.setText(null);
+    private void c_regcom_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_rut_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_regcom_rut_fieldActionPerformed
+
+    private void c_regcom_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_buscarActionPerformed
+        Statement st;
+        String campo1 = c_regcom_numfac_field.getText();
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT PRO_RAZON, FAC_FECHA_FACTURA FROM factura "
+                + "INNER JOIN proveedor ON proveedor.PRO_ID_PROVEEDOR = factura.PRO_ID_PROVEEDOR where FAC_NUMERO LIKE '"+campo1+"'");
+
+            while (rs.next()){
+                c_regcom_prov_combox.setSelectedItem(rs.getString(1));
+                c_regcom_fecha_rec.setDate(rs.getDate(2));
+                JOptionPane.showMessageDialog(null, "N° de Factura ENCONTRADO!!");
+                Mostrar_COMPRA_AGREGAR_ART();
+                st.close();
+            }
+
+            JOptionPane.showMessageDialog(null, "¡FACTURA NO EXISTE!");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
+    }//GEN-LAST:event_c_regcom_bt_buscarActionPerformed
+
+    private void c_regcom_prov_comboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_c_regcom_prov_comboxItemStateChanged
+        String campo1 = (String) c_regcom_prov_combox.getSelectedItem();
+        Statement st;
+        try {
+            st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor where PRO_RAZON = '"+campo1+"'");
+            while (rs.next()){
+                c_regcom_rut_field.setText(rs.getString(1));
+            }
+            st.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_c_regcom_prov_comboxItemStateChanged
+
+    private void c_regcom_prov_comboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_prov_comboxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_regcom_prov_comboxActionPerformed
+
+    private void c_regcom_bt_cancelarprovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_cancelarprovActionPerformed
+        c_regcom_numfac_field.setText(null);
+        c_regcom_rut_field.setText(null);
+        c_regcom_prov_combox.setSelectedItem(null);
         c_regcom_fecha_venc.setDate(null);
-        
-        detallefactura1111.setText(null);
-    }//GEN-LAST:event_c_regcom_bt_cancelarartActionPerformed
+    }//GEN-LAST:event_c_regcom_bt_cancelarprovActionPerformed
+
+    private void c_regcom_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_guardarActionPerformed
+        String campo1 = (String) c_regcom_prov_combox.getSelectedItem();
+        String campo2 = c_regcom_rut_field.getText();
+        String campo3 = c_regcom_numfac_field.getText();
+        java.util.Date utilDate = (java.util.Date) c_regcom_fecha_venc.getDate();
+        java.sql.Date c_regcom_fecha_rec1 = new java.sql.Date(utilDate.getTime());
+        int flag = 1;
+        try {
+            if ("".equals(campo1) || "".equals(campo2) || "".equals(campo3)){
+                JOptionPane.showMessageDialog(null, "rellene todos los campos");
+            }
+
+            else {
+                PreparedStatement pps;
+                Statement st;
+                st = con.createStatement();
+                ResultSet rut = st.executeQuery("SELECT FAC_NUMERO FROM factura");
+                while (rut.next()){
+                    if (rut.getString(1).equals(campo3)){
+                        flag = 0;
+                    }
+                }
+
+                if (flag == 0){
+                    Statement stc;
+                    stc = con.createStatement();
+                    ResultSet id_banco = stc.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor WHERE PRO_RAZON = '"+campo1+"'");
+                    id_banco.next();
+                    pps = con.prepareStatement("update factura set PRO_ID_PROVEEDOR = ?, FAC_FECHA_FACTURA = ? where FAC_NUMERO = ?");
+                    pps.setString(1, id_banco.getString(1));
+                    pps.setDate(2, c_regcom_fecha_rec1);
+                    pps.setString(3, campo3);
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
+                    cli_rut_field.setEnabled(true);
+                }
+                else{
+                    Statement stc;
+                    stc = con.createStatement();
+                    ResultSet id_banco = stc.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor WHERE PRO_RAZON = '"+campo1+"'");
+                    id_banco.next();
+                    pps = con.prepareStatement("INSERT INTO factura (FAC_NUMERO, PRO_ID_PROVEEDOR, FAC_FECHA_FACTURA) VALUES (?,?,?)");
+                    pps.setString(1, campo3);
+                    pps.setString(2, id_banco.getString(1));
+                    pps.setDate(3, c_regcom_fecha_rec1);
+                    pps.executeUpdate();
+                    pps.close();
+                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                }
+            }
+            Mostrar_COMPRA_RECOMPRA();
+            BORRAR_RECOMPRA_1();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Codigo no permitido");
+        }
+    }//GEN-LAST:event_c_regcom_bt_guardarActionPerformed
+
+    private void c_regcom_cod_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_cod_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_regcom_cod_fieldActionPerformed
 
     private void c_regcom_bt_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_agregarActionPerformed
         Statement stc;
@@ -7609,11 +7898,11 @@ private void borrar_pck_art(String id) throws SQLException{
                 }
 
                 if (flag == 0){
-                    
+
                     stc= con.createStatement();
                     ResultSet id_banco = stc.executeQuery("SELECT ART_ID_ARTICULO FROM articulo WHERE ART_NOMBRE = '"+campo1+"'");
                     id_banco.next();
-                    
+
                     pps = con.prepareStatement("update factura_detalle set ART_ID_ARTICULO = ?, DET_CANTIDAD = ?, DET_VALORUNIDAD_FACTURA = ?, DET_FECHA_VENCIMIENTO_DATE = ?, DET_VALORTOTAL_FACTURA = ?, FAC_LOTE = ? where DET_ID_DETALLE = ?");
                     pps.setString(1, id_banco.getString(1));
                     pps.setString(2, campo3);
@@ -7650,9 +7939,9 @@ private void borrar_pck_art(String id) throws SQLException{
                     stcc.close();
                 }
                 st.close();
-                
+
                 Mostrar_COMPRA_RECOMPRA();
-                //BORRAR_RECOMPRA_2();
+                BORRAR_RECOMPRA_2();
             }
 
         } catch (SQLException ex) {
@@ -7661,136 +7950,15 @@ private void borrar_pck_art(String id) throws SQLException{
         }
     }//GEN-LAST:event_c_regcom_bt_agregarActionPerformed
 
-    private void c_regcom_cod_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_cod_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_cod_fieldActionPerformed
+    private void c_regcom_bt_cancelarartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_cancelarartActionPerformed
+        c_regcom_cod_field.setText(null);
+        c_regcom_art_combox.setSelectedItem(null);
+        c_regcom_unid_field.setText(null);
+        c_regcom_precio_field.setText(null);
+        c_regcom_fecha_venc.setDate(null);
 
-    private void c_regcom_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_buscarActionPerformed
-        Statement st;
-        String campo1 = c_regcom_numfac_field.getText();
-        try {
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT PRO_RAZON, FAC_FECHA_FACTURA FROM factura "
-                    + "INNER JOIN proveedor ON proveedor.PRO_ID_PROVEEDOR = factura.PRO_ID_PROVEEDOR where FAC_NUMERO LIKE '"+campo1+"'");
-            
-            while (rs.next()){
-                c_regcom_prov_combox.setSelectedItem(rs.getString(1));
-                c_regcom_fecha_rec.setDate(rs.getDate(2));
-                JOptionPane.showMessageDialog(null, "N° de Factura ENCONTRADO!!");
-                Mostrar_COMPRA_AGREGAR_ART();
-                st.close();
-            }
-            
-            JOptionPane.showMessageDialog(null, "¡FACTURA NO EXISTE!");
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-            
-        }
-    }//GEN-LAST:event_c_regcom_bt_buscarActionPerformed
-
-    private void c_regcom_rut_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_rut_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_rut_fieldActionPerformed
-
-    private void c_regcom_numfac_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_numfac_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_numfac_fieldActionPerformed
-
-    private void c_regcom_unid_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_unid_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_unid_fieldActionPerformed
-
-    private void c_regcom_precio_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_precio_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_precio_fieldActionPerformed
-
-    private void c_regcom_bt_cancelarprovActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_cancelarprovActionPerformed
-        c_regcom_numfac_field.setText(null);
-        c_regcom_rut_field.setText(null);
-        c_regcom_prov_combox.setSelectedItem(null);
-        c_regcom_fecha_rec.setDate(null);
-    }//GEN-LAST:event_c_regcom_bt_cancelarprovActionPerformed
-
-    private void c_regcom_bt_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_guardarActionPerformed
-        String campo1 = (String) c_regcom_prov_combox.getSelectedItem();
-        String campo2 = c_regcom_rut_field.getText();
-        String campo3 = c_regcom_numfac_field.getText();
-        java.util.Date utilDate = (java.util.Date) c_regcom_fecha_rec.getDate();
-        java.sql.Date c_regcom_fecha_rec1 = new java.sql.Date(utilDate.getTime());
-        int flag = 1;
-        try {
-            if ("".equals(campo1) || "".equals(campo2) || "".equals(campo3)){
-                JOptionPane.showMessageDialog(null, "rellene todos los campos");
-            }
-            
-            else {
-                PreparedStatement pps;
-                Statement st;
-                st = con.createStatement();
-                ResultSet rut = st.executeQuery("SELECT FAC_NUMERO FROM factura");
-                while (rut.next()){
-                    if (rut.getString(1).equals(campo3)){
-                        flag = 0;
-                    }
-                }
-                
-                if (flag == 0){
-                    Statement stc;
-                    stc = con.createStatement();
-                    ResultSet id_banco = stc.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor WHERE PRO_RAZON = '"+campo1+"'");
-                    id_banco.next();
-                    pps = con.prepareStatement("update factura set PRO_ID_PROVEEDOR = ?, FAC_FECHA_FACTURA = ? where FAC_NUMERO = ?");
-                    pps.setString(1, id_banco.getString(1));
-                    pps.setDate(2, c_regcom_fecha_rec1);
-                    pps.setString(3, campo3);
-                    pps.executeUpdate();
-                    pps.close();
-                    JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
-                    cli_rut_field.setEnabled(true); 
-                }
-                else{
-                    Statement stc;
-                    stc = con.createStatement();
-                    ResultSet id_banco = stc.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor WHERE PRO_RAZON = '"+campo1+"'");
-                    id_banco.next();
-                    pps = con.prepareStatement("INSERT INTO factura (FAC_NUMERO, PRO_ID_PROVEEDOR, FAC_FECHA_FACTURA) VALUES (?,?,?)");
-                    pps.setString(1, campo3);
-                    pps.setString(2, id_banco.getString(1));
-                    pps.setDate(3, c_regcom_fecha_rec1);
-                    pps.executeUpdate();
-                    pps.close();
-                    JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
-                }
-            }
-            Mostrar_COMPRA_RECOMPRA();
-            BORRAR_RECOMPRA_1();
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Codigo no permitido");
-        }
-    }//GEN-LAST:event_c_regcom_bt_guardarActionPerformed
-
-    private void c_regcom_prov_comboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_c_regcom_prov_comboxItemStateChanged
-        String campo1 = (String) c_regcom_prov_combox.getSelectedItem();
-        Statement st;
-        try {
-            st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT PRO_ID_PROVEEDOR FROM proveedor where PRO_RAZON = '"+campo1+"'");
-            while (rs.next()){
-                c_regcom_rut_field.setText(rs.getString(1));
-            }
-            st.close();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_c_regcom_prov_comboxItemStateChanged
-
-    private void c_regcom_prov_comboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_prov_comboxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_prov_comboxActionPerformed
+        detallefactura1111.setText(null);
+    }//GEN-LAST:event_c_regcom_bt_cancelarartActionPerformed
 
     private void c_regcom_art_comboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_c_regcom_art_comboxItemStateChanged
         String campo1 = (String) c_regcom_art_combox.getSelectedItem();
@@ -7808,58 +7976,13 @@ private void borrar_pck_art(String id) throws SQLException{
         }
     }//GEN-LAST:event_c_regcom_art_comboxItemStateChanged
 
-    private void c_regcom_bt_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_eliminarActionPerformed
-        int cantidad_filas = c_regcom_tabla.getRowCount();
-        
-        for (int i = 0; i <= cantidad_filas; i++){
-            if (c_regcom_tabla.isCellSelected(i, 7) == true){
-                try {
-                    PreparedStatement pps;
-                    pps = con.prepareStatement("DELETE FROM factura_detalle WHERE DET_ID_DETALLE = ?;");
-                    pps.setString(1,(String) c_regcom_tabla.getValueAt(i, 0)); 
-                    pps.executeUpdate();
-                    pps.close();
-                   
-                } catch (SQLException ex) {
-                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
-                }       
-            }
-        }
-        Mostrar_COMPRA_RECOMPRA();
-    }//GEN-LAST:event_c_regcom_bt_eliminarActionPerformed
-
     private void c_regcom_art_comboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_art_comboxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_c_regcom_art_comboxActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        //Mostrar_COMPRA_RECOMPRA();
-        Mostrar_COMPRA_AGREGAR_ART();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void deactivatepack_button6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_button6ActionPerformed
-        Mostrar_LISTADO_FACTURAS();// TODO add your handling code here:
-    }//GEN-LAST:event_deactivatepack_button6ActionPerformed
-
-    private void deactivatepack_button7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivatepack_button7ActionPerformed
-        int cantidad_filas = c_revfac_tabla_fac.getRowCount();
-
-        for (int i = 0; i <= cantidad_filas; i++){
-            if (c_revfac_tabla_fac.isCellSelected(i, 4) == true){
-                c_revfac_numfac_field.setText((String) c_revfac_tabla_fac.getValueAt(i,0));
-
-
-            }
-        }
-    }//GEN-LAST:event_deactivatepack_button7ActionPerformed
-
-    private void c_regcom_preciototal_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_preciototal_fieldActionPerformed
+    private void c_regcom_unid_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_unid_fieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_preciototal_fieldActionPerformed
-
-    private void c_regcom_lote_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_lote_fieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_c_regcom_lote_fieldActionPerformed
+    }//GEN-LAST:event_c_regcom_unid_fieldActionPerformed
 
     private void c_regcom_unid_fieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_regcom_unid_fieldKeyReleased
         String n1 = c_regcom_unid_field.getText();
@@ -7870,6 +7993,10 @@ private void borrar_pck_art(String id) throws SQLException{
         // TODO add your handling code here:
     }//GEN-LAST:event_c_regcom_unid_fieldKeyReleased
 
+    private void c_regcom_precio_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_precio_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_regcom_precio_fieldActionPerformed
+
     private void c_regcom_precio_fieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c_regcom_precio_fieldKeyReleased
         String n1 = c_regcom_unid_field.getText();
         String n2 = c_regcom_precio_field.getText();
@@ -7878,6 +8005,103 @@ private void borrar_pck_art(String id) throws SQLException{
         c_regcom_preciototal_field.setText(Integer.toString(num22*num11));
         // TODO add your handling code here:
     }//GEN-LAST:event_c_regcom_precio_fieldKeyReleased
+
+    private void c_regcom_preciototal_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_preciototal_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_regcom_preciototal_fieldActionPerformed
+
+    private void c_regcom_lote_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_lote_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_regcom_lote_fieldActionPerformed
+
+    private void c_regcom_tablaComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_c_regcom_tablaComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_regcom_tablaComponentAdded
+
+    private void c_regcom_bt_editarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_editarActionPerformed
+        int cantidad_filas = c_regcom_tabla.getRowCount();
+
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (c_regcom_tabla.isCellSelected(i, 8) == true){
+                detallefactura1111.setText((String) c_regcom_tabla.getValueAt(i,0));
+                c_regcom_numfac_field.setText((String) c_regcom_tabla.getValueAt(i,1));
+                c_regcom_lote_field.setText((String) c_regcom_tabla.getValueAt(i,2));
+                c_regcom_cod_field.setText((String) c_regcom_tabla.getValueAt(i,3));
+                c_regcom_art_combox.setSelectedItem((String) c_regcom_tabla.getValueAt(i,4));
+                c_regcom_unid_field.setText((String) c_regcom_tabla.getValueAt(i,5));
+                c_regcom_precio_field.setText((String) c_regcom_tabla.getValueAt(i,6));
+
+                String fecha = c_regcom_tabla.getValueAt(i,7).toString();
+                SimpleDateFormat formatofecha = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+                    c_regcom_fecha_venc.setDate(formatofecha.parse(fecha));
+                } catch (ParseException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+        String n1 = c_regcom_unid_field.getText();
+        String n2 = c_regcom_precio_field.getText();
+        int num11 = Integer.parseInt(n1);
+        int num22 = Integer.parseInt(n2);
+        c_regcom_preciototal_field.setText(Integer.toString(num22*num11));
+    }//GEN-LAST:event_c_regcom_bt_editarActionPerformed
+
+    private void c_regcom_bt_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_regcom_bt_eliminarActionPerformed
+        int cantidad_filas = c_regcom_tabla.getRowCount();
+
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (c_regcom_tabla.isCellSelected(i, 8) == true){
+                try {
+                    PreparedStatement pps;
+                    pps = con.prepareStatement("DELETE FROM factura_detalle WHERE DET_ID_DETALLE = ?;");
+                    pps.setString(1,(String) c_regcom_tabla.getValueAt(i, 0));
+                    pps.executeUpdate();
+                    pps.close();
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(crud_banco.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        Mostrar_COMPRA_RECOMPRA();
+    }//GEN-LAST:event_c_regcom_bt_eliminarActionPerformed
+
+    private void c_revfac_numfac_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_revfac_numfac_fieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_revfac_numfac_fieldActionPerformed
+
+    private void c_revfac_bt_buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_revfac_bt_buscarActionPerformed
+        Mostrar_FACTURA_DETALLE();
+    }//GEN-LAST:event_c_revfac_bt_buscarActionPerformed
+
+    private void c_revfac_tabla_facComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_c_revfac_tabla_facComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_revfac_tabla_facComponentAdded
+
+    private void c_revfac_bt_descargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_revfac_bt_descargarActionPerformed
+        Exportar e = new Exportar();
+        String timeStamp = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(Calendar.getInstance().getTime());
+        String archivo = "Informe de Factura Detalle("+timeStamp+")";
+        e.CreatePDF(archivo, c_revfac_tabla_facdet);
+        e.Abrir(archivo);
+    }//GEN-LAST:event_c_revfac_bt_descargarActionPerformed
+
+    private void c_revfac_bt_seleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_c_revfac_bt_seleccionarActionPerformed
+        int cantidad_filas = c_revfac_tabla_fac.getRowCount();
+
+        for (int i = 0; i <= cantidad_filas; i++){
+            if (c_revfac_tabla_fac.isCellSelected(i, 4) == true){
+                c_revfac_numfac_field.setText((String) c_revfac_tabla_fac.getValueAt(i,0));
+
+            }
+        }
+    }//GEN-LAST:event_c_revfac_bt_seleccionarActionPerformed
+
+    private void c_revfac_tabla_facdetComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_c_revfac_tabla_facdetComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_c_revfac_tabla_facdetComponentAdded
 
     /**
      * @param args the command line arguments
@@ -7955,6 +8179,8 @@ private void borrar_pck_art(String id) throws SQLException{
     private javax.swing.JTable c_regcom_tabla;
     private javax.swing.JTextField c_regcom_unid_field;
     private javax.swing.JButton c_revfac_bt_buscar;
+    private javax.swing.JButton c_revfac_bt_descargar;
+    private javax.swing.JButton c_revfac_bt_seleccionar;
     private javax.swing.JTextField c_revfac_numfac_field;
     private javax.swing.JTable c_revfac_tabla_fac;
     private javax.swing.JTable c_revfac_tabla_facdet;
@@ -7998,8 +8224,6 @@ private void borrar_pck_art(String id) throws SQLException{
     private javax.swing.JButton deactivatepack_button1;
     private javax.swing.JButton deactivatepack_button2;
     private javax.swing.JButton deactivatepack_button3;
-    private javax.swing.JButton deactivatepack_button6;
-    private javax.swing.JButton deactivatepack_button7;
     private javax.swing.JLabel detallefactura1111;
     private javax.swing.JButton editpack_button;
     private javax.swing.JButton frompack_button;
@@ -8038,7 +8262,6 @@ private void borrar_pck_art(String id) throws SQLException{
     private javax.swing.JTextField inf_ven_field_buscar_bar;
     private javax.swing.JTextField inf_ven_rut;
     private javax.swing.JTable inf_ven_tabla;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton17;
@@ -8060,13 +8283,13 @@ private void borrar_pck_art(String id) throws SQLException{
     private javax.swing.JButton jButton49;
     private javax.swing.JButton jButton50;
     private javax.swing.JButton jButton51;
-    private javax.swing.JButton jButton55;
     private javax.swing.JButton jButton56;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser6;
     private javax.swing.JFormattedTextField jFormattedTextField10;
@@ -8228,7 +8451,6 @@ private void borrar_pck_art(String id) throws SQLException{
     private javax.swing.JTable jTable4;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;

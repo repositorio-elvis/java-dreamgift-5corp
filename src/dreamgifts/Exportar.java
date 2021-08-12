@@ -21,7 +21,7 @@ public class Exportar {
          
     private static final Font categoryFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
     private static final Font subcategoryFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.NORMAL);
-    private final String ruta = "/Users/Usuario/OneDrive/Escritorio/Informes/";
+    private final String ruta = "/informes/";
     /**
      *
      * @param nombre_archivo

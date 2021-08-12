@@ -17,11 +17,12 @@ public class Articulos {
     private String marca;
     private String descripcion;
     private String stock;
+    
     private String fecha_vencimiento;
     private String estado;
     private String pro_razon;
     private String id_categoria;
-    
+        
     public Articulos(String a, String b, String c, String d, String e, String f, String h, String j, String k, String l){
         id = a;
         nombre = b;
@@ -90,7 +91,6 @@ public class Articulos {
     public void setStock(String stock) {
         this.stock = stock;
     }
-
 
     public String getFecha_vencimiento() {
         return fecha_vencimiento;
