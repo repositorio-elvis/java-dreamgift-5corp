@@ -19,7 +19,7 @@ public class Articulos {
     private String stock;
     private String fecha_vencimiento;
     private String estado;
-    private String id_proveedor;
+    private String pro_razon;
     private String id_categoria;
     
     public Articulos(String a, String b, String c, String d, String e, String f, String h, String j, String k, String l){
@@ -31,8 +31,16 @@ public class Articulos {
         stock = f;
         fecha_vencimiento = h; 
         estado = j;
-        id_proveedor = k;
+        pro_razon = k;
         id_categoria = l;
+    }
+
+    public String getPro_razon() {
+        return pro_razon;
+    }
+
+    public void setPro_razon(String pro_razon) {
+        this.pro_razon = pro_razon;
     }
     
     public String getId() {
@@ -98,14 +106,6 @@ public class Articulos {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    public String getId_proveedor() {
-        return id_proveedor;
-    }
-
-    public void setId_proveedor(String id_proveedor) {
-        this.id_proveedor = id_proveedor;
     }
 
     public String getId_categoria() {
