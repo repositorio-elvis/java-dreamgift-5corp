@@ -185,8 +185,7 @@ public class crud_banco extends javax.swing.JFrame {
                 }
                 else datos[7]= "desactivado";
                 modelo.addRow(datos);
-                if(valor.equals("")){  
-                    modelo.addRow(datos);  
+                if(valor.equals("")){    
                     Articulos temporal;
                     temporal = new Articulos(rs.getString(9),rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(10), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8));
                     ListaArticulos.add(i, temporal);
@@ -843,7 +842,7 @@ public class crud_banco extends javax.swing.JFrame {
             lista6.removeAllElements();
             Statement st;
             st = con.createStatement();
-            ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, o.CANTIDAD FROM orden_compra_detalle o INNER JOIN articulo a ON a.ART_ID_ARTICULO = o.ART_ID_ARTICULO WHERE o.ORC_ID_ORDEN = "+id_orden);
+            ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, o.OCD_CANTIDAD FROM orden_compra_detalle o INNER JOIN articulo a ON a.ART_ID_ARTICULO = o.ART_ID_ARTICULO WHERE o.ORC_ID_ORDEN = "+id_orden);
             while (rs.next()){
                 lista5.add(rs.getString(1)+" ("+rs.getString(2)+")");
                 lista6.add(rs.getString(1));
@@ -2250,21 +2249,20 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel25Layout.createSequentialGroup()
                         .addGap(100, 100, 100)
                         .addComponent(jScrollPane25, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(100, 100, 100)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(frompack_button1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(addunits_spinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(topack_button1, javax.swing.GroupLayout.Alignment.TRAILING)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(topack_button1, javax.swing.GroupLayout.Alignment.TRAILING))))
                     .addGroup(jPanel25Layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addComponent(jLabel95)
                         .addGap(30, 30, 30)
                         .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 111, Short.MAX_VALUE)
+                        .addComponent(jButton23, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(52, 52, 52)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel25Layout.createSequentialGroup()
@@ -2286,19 +2284,20 @@ public class crud_banco extends javax.swing.JFrame {
                     .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel95)
                         .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(17, 17, 17)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel25Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel25Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
                         .addComponent(topack_button1)
                         .addGap(14, 14, 14)
                         .addComponent(addunits_spinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(frompack_button1))
-                    .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane26, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(22, 22, Short.MAX_VALUE)
+                        .addComponent(frompack_button1)))
+                .addGap(17, 17, 17)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton56)
                     .addComponent(deactivatepack_button1))
@@ -2933,21 +2932,21 @@ public class crud_banco extends javax.swing.JFrame {
         c_revfac_tabla_facdet.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         c_revfac_tabla_facdet.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Código", "Artículo", "Cantidad", "Precio ($)", "Acción"
+                "Código", "Artículo", "Cantidad", "Precio ($)"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, true
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -6995,6 +6994,8 @@ public class crud_banco extends javax.swing.JFrame {
                     pps.close();
                     JOptionPane.showMessageDialog(null, "Datos actualizados exitosamente");
                     jTextField7.setEnabled(true); 
+                    Mostrar_ARTICULO("");
+                    cargarLista1(1);
                 }
                 else{
                     
@@ -7011,9 +7012,10 @@ public class crud_banco extends javax.swing.JFrame {
                     pps.executeUpdate();
                     pps.close();
                     JOptionPane.showMessageDialog(null, "Datos guardados exitosamente");
+                    Mostrar_ARTICULO("");
+                    cargarLista1(1);
                 }
-                Mostrar_ARTICULO("");
-                cargarLista1(1);
+                
             }
             
         } catch (SQLException ex) {
@@ -7732,7 +7734,7 @@ private void borrar_orden_art(String id) throws SQLException{
                 Statement st;
                 try {
                     st = con.createStatement();
-                    ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, o.CANTIDAD FROM orden_compra_detalle o INNER JOIN articulo a ON a.ART_ID_ARTICULO = o.ART_ID_ARTICULO WHERE o.ORC_ID_ORDEN = "+ id_orden);
+                    ResultSet rs = st.executeQuery("SELECT a.ART_NOMBRE, o.OCD_CANTIDAD FROM orden_compra_detalle o INNER JOIN articulo a ON a.ART_ID_ARTICULO = o.ART_ID_ARTICULO WHERE o.ORC_ID_ORDEN = "+ id_orden);
                     while (rs.next()){
                         cadena += rs.getString(2)+" - "+rs.getString(1)+"\n";
                     }
