@@ -61,7 +61,7 @@ public class Exportar {
             Paragraph paragraph = new Paragraph("",subcategoryFont);
             paragraph.add("Informe creado el "+fecha+" a las "+ hora+":"+minutos+" hrs.");
             
-            Integer numColumns = jtable.getColumnCount()-1;
+            Integer numColumns = jtable.getColumnCount();
             Integer numRows = jtable.getRowCount();
             
             PdfPTable table = new PdfPTable(numColumns); 
