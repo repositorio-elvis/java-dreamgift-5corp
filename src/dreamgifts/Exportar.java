@@ -33,7 +33,7 @@ public class Exportar {
      * @param nombre_archivo
      * @param jtable
      */
-    public void CreatePDF(String nombre_archivo, JTable jtable){
+    public void CreatePDF(String nombre_archivo, JTable jtable, int tipo){
         try {
             Document document = new Document();
             String a = ruta+nombre_archivo+".pdf";
@@ -61,7 +61,7 @@ public class Exportar {
             Paragraph paragraph = new Paragraph("",subcategoryFont);
             paragraph.add("Informe creado el "+fecha+" a las "+ hora+":"+minutos+" hrs.");
             
-            Integer numColumns = jtable.getColumnCount();
+            Integer numColumns = jtable.getColumnCount()-tipo;
             Integer numRows = jtable.getRowCount();
             
             PdfPTable table = new PdfPTable(numColumns); 
